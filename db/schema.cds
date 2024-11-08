@@ -1,5 +1,6 @@
-namespace com.strada;
+//namespace com.strada;
 
+context com.strada {
 entity Books {
   key ID    : Integer;
       title : String;
@@ -53,7 +54,24 @@ entity VP_WAGETYPE_MAPPING {
                        };
   companyCode        : String(16);
   operator           : String(3);
-  delimitIndicator   : hana.TINYINT;
-  cust_frequency     : String(255);
-  cust_frequency_txt : String(64);
 };
+}
+
+@cds.persistence.exists 
+@cds.persistence.calcview 
+Entity CV_WAGETYPES {
+key     ID: String(255)  @title: 'ID: ID' ; 
+        IS_ACTIVE: UInt8  @title: 'IS_ACTIVE: IS_ACTIVE' ; 
+        STARTDATE: Date  @title: 'STARTDATE: STARTDATE' ; 
+        ENDDATE: Date  @title: 'ENDDATE: ENDDATE' ; 
+        IS_AMOUNTTYPE: String(5)  @title: 'IS_AMOUNTTYPE: IS_AMOUNTTYPE' ; 
+        UOM: String(5)  @title: 'UOM: UOM' ; 
+        IS_SPECIALRECOGNITIONTYPE: UInt8  @title: 'IS_SPECIALRECOGNITIONTYPE: IS_SPECIALRECOGNITIONTYPE' ; 
+        WAGETYPE: String(255)  @title: 'WAGETYPE: WAGETYPE' ; 
+        ISINDEVAL: UInt8  @title: 'ISINDEVAL: ISINDEVAL' ; 
+        CURRENCY: String(16)  @title: 'CURRENCY: CURRENCY' ; 
+        IS_QUOTACOMPENSATION: UInt8  @title: 'IS_QUOTACOMPENSATION: IS_QUOTACOMPENSATION' ; 
+        SUB_INFOTYPE: String(10)  @title: 'SUB_INFOTYPE: SUB_INFOTYPE' ; 
+        LANGUAGE: String(5)  @title: 'LANGUAGE: LANGUAGE' ; 
+        DESCRIPTION: String(255)  @title: 'DESCRIPTION: DESCRIPTION' ; 
+}
