@@ -59,6 +59,11 @@ context com.strada {
                     };
     companyCode   : String(16);
     operator      : String(3);
+    /*
+      delimitIndicator : hana.TINYINT;  
+      cust_frequency :	String(255);
+      cust_frequency_txt:String(64);
+    */
   };
 
   entity VP_CURRENCY {
