@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOG" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_AUDIT_LOG"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_AUDIT_LOG">
+    <resourceUri>COM_STRADA_VP_AUDIT_LOG</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_LOG_ACTION_TEXT">
+    <resourceUri>COM_STRADA_VP_LOG_ACTION_TEXT</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="EXTERNALCODE"/>
+      <viewAttribute id="ACTION_ID"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="ADDITIONALINFO"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_AUDIT_LOG"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="LANGUAGE"/>
+      <viewAttribute id="DESCRIPTION"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_LOG_ACTION_TEXT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="EXTERNALCODE"/>
+      <viewAttribute id="ACTION_ID"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="ADDITIONALINFO"/>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="LANGUAGE"/>
+      <viewAttribute hidden="true" id="JOIN$ACTION_ID$ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EXTERNALCODE" source="EXTERNALCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ACTION_ID" source="ACTION_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ADDITIONALINFO" source="ADDITIONALINFO"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTTYPE" source="REQUESTTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ACTION_ID$ID" source="ACTION_ID"/>
+    </input>
+    <input node="Projection_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ACTION_ID$ID" source="ID"/>
+    </input>
+    <joinAttribute name="JOIN$ACTION_ID$ID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="ID"/>
+    </attribute>
+    <attribute id="EXTERNALCODE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EXTERNALCODE"/>
+      <keyMapping columnObjectName="Join_1" columnName="EXTERNALCODE"/>
+    </attribute>
+    <attribute id="ACTION_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ACTION_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="ACTION_ID"/>
+    </attribute>
+    <attribute id="CREATEDAT" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="Join_1" columnName="CREATEDAT"/>
+    </attribute>
+    <attribute id="CREATEDBY" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="Join_1" columnName="CREATEDBY"/>
+    </attribute>
+    <attribute id="REQUESTTYPE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REQUESTTYPE"/>
+      <keyMapping columnObjectName="Join_1" columnName="REQUESTTYPE"/>
+    </attribute>
+    <attribute id="ADDITIONALINFO" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ADDITIONALINFO"/>
+      <keyMapping columnObjectName="Join_1" columnName="ADDITIONALINFO"/>
+    </attribute>
+    <attribute id="DESCRIPTION" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DESCRIPTION"/>
+      <keyMapping columnObjectName="Join_1" columnName="DESCRIPTION"/>
+    </attribute>
+    <attribute id="LANGUAGE" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LANGUAGE"/>
+      <keyMapping columnObjectName="Join_1" columnName="LANGUAGE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-118" y="319"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="334" y="324"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="209"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="178"/>
+    </shape>
+    <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="161"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_WF_CONFIG" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_WF_CONFIG"/>
+<localVariables>
+  <variable id="IP_WORKFLOW_ID" parameter="true">
+    <descriptions defaultDescription="IP_WORKFLOW_ID"/>
+    <variableProperties datatype="NVARCHAR" length="16" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_WORKFLOW_CONFIG">
+    <resourceUri>COM_STRADA_VP_WORKFLOW_CONFIG</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="TRIGGERWORKFLOW"/>
+      <viewAttribute id="SEQUENCE"/>
+      <viewAttribute id="AGENTROLE"/>
+      <viewAttribute id="MAXFORWARDS"/>
+      <viewAttribute id="TRIGGEREMAILNOTIFICATION"/>
+      <viewAttribute id="NOTIFICATIONAGENT_ROLE"/>
+      <viewAttribute id="EMAILTEMPLATE_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_WORKFLOW_CONFIG"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Projection_1">
+  <attributes>
+    <attribute id="WOKFLOW_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WOKFLOW_ID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="ID"/>
+    </attribute>
+    <attribute id="TRIGGERWORKFLOW" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TRIGGERWORKFLOW"/>
+      <keyMapping columnObjectName="Projection_1" columnName="TRIGGERWORKFLOW"/>
+    </attribute>
+    <attribute id="SEQUENCE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SEQUENCE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="SEQUENCE"/>
+    </attribute>
+    <attribute id="AGENTROLE" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AGENTROLE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="AGENTROLE"/>
+    </attribute>
+    <attribute id="MAXFORWARDS" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MAXFORWARDS"/>
+      <keyMapping columnObjectName="Projection_1" columnName="MAXFORWARDS"/>
+    </attribute>
+    <attribute id="TRIGGEREMAILNOTIFICATION" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TRIGGEREMAILNOTIFICATION"/>
+      <keyMapping columnObjectName="Projection_1" columnName="TRIGGEREMAILNOTIFICATION"/>
+    </attribute>
+    <attribute id="NOTIFICATIONAGENT_ROLE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NOTIFICATIONAGENT_ROLE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="NOTIFICATIONAGENT_ROLE"/>
+    </attribute>
+    <attribute id="EMAILTEMPLATE_ID" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EMAILTEMPLATE_ID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="EMAILTEMPLATE_ID"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="105" y="226"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

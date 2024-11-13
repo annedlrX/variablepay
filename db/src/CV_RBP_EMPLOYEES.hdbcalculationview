@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_RBP_EMPLOYEES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_RBP_EMPLOYEES"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_RBP_EMPLOYEES">
+    <resourceUri>COM_STRADA_VP_RBP_EMPLOYEES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews/>
+
+<logicalModel id="COM_STRADA_VP_RBP_EMPLOYEES">
+  <attributes>
+    <attribute id="USERID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="USERID"/>
+      <keyMapping columnObjectName="COM_STRADA_VP_RBP_EMPLOYEES" columnName="USERID"/>
+    </attribute>
+    <attribute id="ID_GROUPID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID_GROUPID"/>
+      <keyMapping columnObjectName="COM_STRADA_VP_RBP_EMPLOYEES" columnName="ID_GROUPID"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  </shapes>
+</layout>
+</Calculation:scenario>

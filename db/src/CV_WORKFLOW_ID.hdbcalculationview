@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_WORKFLOW_ID" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_WORKFLOW_ID"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_WAGETYPE_MAPPING">
+    <resourceUri>COM_STRADA_VP_WAGETYPE_MAPPING</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_WORKFLOW_CONFIG">
+    <resourceUri>COM_STRADA_VP_WORKFLOW_CONFIG</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="INFOTYPE"/>
+      <viewAttribute id="PAYCOMPONENT_ID"/>
+      <viewAttribute id="INITIATORROLE"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="TRIGGERWORKFLOW"/>
+      <viewAttribute id="SEQUENCE"/>
+      <viewAttribute id="AGENTROLE"/>
+      <viewAttribute id="MAXFORWARDS"/>
+      <viewAttribute id="TRIGGEREMAILNOTIFICATION"/>
+      <viewAttribute id="NOTIFICATIONAGENT_ROLE"/>
+      <viewAttribute id="EMAILTEMPLATE_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_WORKFLOW_CONFIG"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="PAYCOMPONENT_ID"/>
+      <viewAttribute id="TRIGGERWORKFLOW"/>
+      <viewAttribute id="SEQUENCE"/>
+      <viewAttribute id="AGENTROLE"/>
+      <viewAttribute id="MAXFORWARDS"/>
+      <viewAttribute id="TRIGGEREMAILNOTIFICATION"/>
+      <viewAttribute id="NOTIFICATIONAGENT_ROLE"/>
+      <viewAttribute id="EMAILTEMPLATE_ID"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute hidden="true" id="JOIN$WORKFLOW_ID$ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$WORKFLOW_ID$ID" source="WORKFLOW_ID"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="TRIGGERWORKFLOW" source="TRIGGERWORKFLOW"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SEQUENCE" source="SEQUENCE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AGENTROLE" source="AGENTROLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MAXFORWARDS" source="MAXFORWARDS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TRIGGEREMAILNOTIFICATION" source="TRIGGEREMAILNOTIFICATION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NOTIFICATIONAGENT_ROLE" source="NOTIFICATIONAGENT_ROLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EMAILTEMPLATE_ID" source="EMAILTEMPLATE_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$WORKFLOW_ID$ID" source="ID"/>
+    </input>
+    <joinAttribute name="JOIN$WORKFLOW_ID$ID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="PAYCOMPONENT_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PAYCOMPONENT_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="PAYCOMPONENT_ID"/>
+    </attribute>
+    <attribute id="WORKFLOW_ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WORKFLOW_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="WORKFLOW_ID"/>
+    </attribute>
+    <attribute id="TRIGGERWORKFLOW" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TRIGGERWORKFLOW"/>
+      <keyMapping columnObjectName="Join_1" columnName="TRIGGERWORKFLOW"/>
+    </attribute>
+    <attribute id="SEQUENCE" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SEQUENCE"/>
+      <keyMapping columnObjectName="Join_1" columnName="SEQUENCE"/>
+    </attribute>
+    <attribute id="AGENTROLE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AGENTROLE"/>
+      <keyMapping columnObjectName="Join_1" columnName="AGENTROLE"/>
+    </attribute>
+    <attribute id="MAXFORWARDS" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MAXFORWARDS"/>
+      <keyMapping columnObjectName="Join_1" columnName="MAXFORWARDS"/>
+    </attribute>
+    <attribute id="TRIGGEREMAILNOTIFICATION" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TRIGGEREMAILNOTIFICATION"/>
+      <keyMapping columnObjectName="Join_1" columnName="TRIGGEREMAILNOTIFICATION"/>
+    </attribute>
+    <attribute id="NOTIFICATIONAGENT_ROLE" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NOTIFICATIONAGENT_ROLE"/>
+      <keyMapping columnObjectName="Join_1" columnName="NOTIFICATIONAGENT_ROLE"/>
+    </attribute>
+    <attribute id="EMAILTEMPLATE_ID" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EMAILTEMPLATE_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="EMAILTEMPLATE_ID"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-65" y="294"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="199" y="288"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="179"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="194.99560546875"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="245.91357421875"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

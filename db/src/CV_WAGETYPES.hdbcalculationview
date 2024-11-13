@@ -133,11 +133,11 @@
     </shape>
     <shape modelObjectName="COM_STRADA_VP_WAGETYPE" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="127" y="92"/>
-      <rectangleSize width="255.318359375"/>
+      <rectangleSize width="255"/>
     </shape>
     <shape modelObjectName="COM_STRADA_VP_WAGETYPE_TEXT" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="283.375"/>
+      <rectangleSize width="283"/>
     </shape>
   </shapes>
 </layout>

@@ -59,11 +59,11 @@ context com.strada {
                     };
     companyCode   : String(16);
     operator      : String(3);
-    /*
-      delimitIndicator : hana.TINYINT;  
-      cust_frequency :	String(255);
-      cust_frequency_txt:String(64);
-    */
+  /*
+    delimitIndicator : hana.TINYINT;
+    cust_frequency :	String(255);
+    cust_frequency_txt:String(64);
+  */
   };
 
   entity VP_CURRENCY {
@@ -215,7 +215,6 @@ context com.strada {
         nextAgent         : String(500);
         notificationAgent : String(64);
   };
-  
   entity VP_REQUEST_STATUS {
     key id          : Integer;
         description : String(64);
@@ -252,6 +251,20 @@ context com.strada {
                     };
   };
 
+     entity VP_RBP_GROUPS {
+        key groupID   : String(32);
+            groupName : String(64);
+        key userID    : String(128);
+            today     : Integer; 
+            next      : Integer; 
+            role      : String(32);
+    };
+    entity VP_RBP_EMPLOYEES  {
+        key id      : Association[1] to VP_RBP_GROUPS{
+                        groupID 
+                    };
+        key userID  : String(128); 
+    };
 }
 
 @cds.persistence.exists

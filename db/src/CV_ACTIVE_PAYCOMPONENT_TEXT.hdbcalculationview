@@ -141,12 +141,12 @@
       <upperLeftCorner x="-15" y="546"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape expanded="true" modelObjectName="WT" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-15" y="388"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
     <shape expanded="false" modelObjectName="WT_Texts" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="296" y="406"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="WT" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-15" y="388"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
@@ -155,11 +155,11 @@
     </shape>
     <shape modelObjectName="WT" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="40" y="37"/>
-      <rectangleSize width="255.318359375"/>
+      <rectangleSize width="255"/>
     </shape>
     <shape modelObjectName="WT_Texts" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="469" y="49"/>
-      <rectangleSize width="194.99560546875"/>
+      <rectangleSize width="194"/>
     </shape>
   </shapes>
 </layout>
