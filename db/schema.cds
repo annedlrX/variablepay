@@ -46,24 +46,23 @@ context com.strada {
   };
 
   entity VP_WAGETYPE_MAPPING {
-    infoType      : String(5) not null;
-    country       : Association[1] to VP_COUNTRIES {
-                      id
-                    } not null;
-    payComponent  : Association[1] to VP_WAGETYPE {
-                      id
-                    };
-    initiatorRole : String(32);
-    workflow      : Association[1] to VP_WORKFLOW {
-                      id
-                    };
-    companyCode   : String(16);
-    operator      : String(3);
-  /*
-    delimitIndicator : hana.TINYINT;
-    cust_frequency :	String(255);
-    cust_frequency_txt:String(64);
-  */
+    infoType           : String(5) not null;
+    country            : Association[1] to VP_COUNTRIES {
+                           id
+                         } not null;
+    payComponent       : Association[1] to VP_WAGETYPE {
+                           id
+                         };
+    initiatorRole      : String(32);
+    workflow           : Association[1] to VP_WORKFLOW {
+                           id
+                         };
+    companyCode        : String(16);
+    operator           : String(3);
+    delimitIndicator   : hana.TINYINT;
+    cust_frequency     : String(255);
+    cust_frequency_txt : String(64);
+
   };
 
   entity VP_CURRENCY {
