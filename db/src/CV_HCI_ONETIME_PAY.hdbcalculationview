@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_HCI_ONETIME_PAY" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_HCI_ONETIME_PAY"/>
+<localVariables>
+  <variable id="IP_STATUS" parameter="true">
+    <descriptions defaultDescription="IP_STATUS"/>
+    <variableProperties datatype="INTEGER" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_AVAILABILITY">
+    <resourceUri>COM_STRADA_VP_AVAILABILITY</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="AUTOAPPROVED"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CUST_CUSTOMSTRING"/>
+      <viewAttribute id="CUST_CUSTOMVAR1"/>
+      <viewAttribute id="CUST_CUSTOMVAR2"/>
+      <viewAttribute id="CUST_CUSTOMVAR3"/>
+      <viewAttribute id="CUST_CUSTOMVAR4"/>
+      <viewAttribute id="CUST_CUSTOMVAR5"/>
+      <viewAttribute id="CUST_CUSTOMVAR6"/>
+      <viewAttribute id="CUST_DAILYWORKSCHEDULE"/>
+      <viewAttribute id="CUST_DAILYWORKSCHEDULETXT"/>
+      <viewAttribute id="CUST_DWSGROUPING"/>
+      <viewAttribute id="CUST_DWSGROUPINGTXT"/>
+      <viewAttribute id="CUST_ENDDATE"/>
+      <viewAttribute id="CUST_ENDTIME"/>
+      <viewAttribute id="CUST_EXISTINGCODE"/>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
+      <viewAttribute id="CUST_NOTES"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="CUST_STARTTIME"/>
+      <viewAttribute id="CUST_USERID"/>
+      <viewAttribute id="CUST_WSVARIANT"/>
+      <viewAttribute id="CUST_WSVARIANTTXT"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+      <viewAttribute id="EFFECTIVESTARTDATE"/>
+      <viewAttribute id="INITIATORLANGUAGE"/>
+      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="STATUS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_AVAILABILITY"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Projection_1">
+  <attributes>
+    <attribute id="AUTOAPPROVED" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AUTOAPPROVED"/>
+      <keyMapping columnObjectName="Projection_1" columnName="AUTOAPPROVED"/>
+    </attribute>
+    <attribute id="COUNTRY_ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY_ID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="COUNTRY_ID"/>
+    </attribute>
+    <attribute id="CREATEDBY" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CREATEDBY"/>
+    </attribute>
+    <attribute id="CREATEDBYUSER" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBYUSER"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CREATEDBYUSER"/>
+    </attribute>
+    <attribute id="CREATEDAT" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CREATEDAT"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMSTRING" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMSTRING"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMSTRING"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMVAR1" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMVAR1"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMVAR1"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMVAR2" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMVAR2"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMVAR2"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMVAR3" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMVAR3"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMVAR3"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMVAR4" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMVAR4"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMVAR4"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMVAR5" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMVAR5"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMVAR5"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMVAR6" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMVAR6"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMVAR6"/>
+    </attribute>
+    <attribute id="CUST_DAILYWORKSCHEDULE" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_DAILYWORKSCHEDULE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_DAILYWORKSCHEDULE"/>
+    </attribute>
+    <attribute id="CUST_DAILYWORKSCHEDULETXT" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_DAILYWORKSCHEDULETXT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_DAILYWORKSCHEDULETXT"/>
+    </attribute>
+    <attribute id="CUST_DWSGROUPING" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_DWSGROUPING"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_DWSGROUPING"/>
+    </attribute>
+    <attribute id="CUST_DWSGROUPINGTXT" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_DWSGROUPINGTXT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_DWSGROUPINGTXT"/>
+    </attribute>
+    <attribute id="CUST_ENDDATE" order="17" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_ENDDATE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_ENDDATE"/>
+    </attribute>
+    <attribute id="CUST_ENDTIME" order="18" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_ENDTIME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_ENDTIME"/>
+    </attribute>
+    <attribute id="CUST_EXISTINGCODE" order="19" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_EXISTINGCODE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_EXISTINGCODE"/>
+    </attribute>
+    <attribute id="CUST_EXTERNALCODE" order="20" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_EXTERNALCODE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_EXTERNALCODE"/>
+    </attribute>
+    <attribute id="CUST_NOTES" order="21" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_NOTES"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_NOTES"/>
+    </attribute>
+    <attribute id="CUST_PAYCOMPONENT_ID" order="22" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPONENT_ID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_PAYCOMPONENT_ID"/>
+    </attribute>
+    <attribute id="CUST_PAYCOMPONENT_TXT" order="23" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPONENT_TXT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_PAYCOMPONENT_TXT"/>
+    </attribute>
+    <attribute id="CUST_STARTTIME" order="24" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_STARTTIME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_STARTTIME"/>
+    </attribute>
+    <attribute id="CUST_USERID" order="25" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_USERID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_USERID"/>
+    </attribute>
+    <attribute id="CUST_WSVARIANT" order="26" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_WSVARIANT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_WSVARIANT"/>
+    </attribute>
+    <attribute id="CUST_WSVARIANTTXT" order="27" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_WSVARIANTTXT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_WSVARIANTTXT"/>
+    </attribute>
+    <attribute id="DELIMITINDICATOR" order="28" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DELIMITINDICATOR"/>
+      <keyMapping columnObjectName="Projection_1" columnName="DELIMITINDICATOR"/>
+    </attribute>
+    <attribute id="EFFECTIVESTARTDATE" order="29" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EFFECTIVESTARTDATE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="EFFECTIVESTARTDATE"/>
+    </attribute>
+    <attribute id="INITIATORLANGUAGE" order="30" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INITIATORLANGUAGE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="INITIATORLANGUAGE"/>
+    </attribute>
+    <attribute id="MODIFIEDAT" order="31" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDAT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="MODIFIEDAT"/>
+    </attribute>
+    <attribute id="STATUS" order="32" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS"/>
+      <keyMapping columnObjectName="Projection_1" columnName="STATUS"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="106" y="208"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
