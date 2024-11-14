@@ -124,7 +124,7 @@
     <calculatedViewAttributes/>
     <input node="Join_1"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_2" cardinality="CN_N" joinType="leftOuter">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_2" joinType="leftOuter">
     <viewAttributes>
       <viewAttribute id="DESCRIPTION"/>
       <viewAttribute id="INFOTYPE"/>
