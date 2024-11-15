@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ONETIMEPAY_ALL_COMMENTS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_ONETIMEPAY_ALL_COMMENTS"/>
+<localVariables>
+  <variable id="IP_EXTERNAL_CODE" parameter="true">
+    <descriptions defaultDescription="IP_EXTERNAL_CODE"/>
+    <variableProperties datatype="NVARCHAR" length="100" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_ONETIME_PAY">
+    <resourceUri>COM_STRADA_VP_ONETIME_PAY</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_REQUEST_FLOW">
+    <resourceUri>COM_STRADA_VP_REQUEST_FLOW</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_REQUEST_STATUS_TEXT">
+    <resourceUri>COM_STRADA_VP_REQUEST_STATUS_TEXT</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_AUDIT_LOG">
+    <resourceUri>COM_STRADA_VP_AUDIT_LOG</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
+      <viewAttribute id="CUST_USERID"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
+      <viewAttribute id="EFFECTIVESTARTDATE"/>
+      <viewAttribute id="CUST_PAYCOMPVALUE"/>
+      <viewAttribute id="CUST_CURRENCYCODE"/>
+      <viewAttribute id="CUST_CUSTOMSTRING"/>
+      <viewAttribute id="CUST_SEQUENCENUMBER"/>
+      <viewAttribute id="CUST_NUMBER"/>
+      <viewAttribute id="CUST_UNIT"/>
+      <viewAttribute id="CUST_NOTES"/>
+      <viewAttribute id="CUST_EXISTINGCODE"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="LASTMODIFIED"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="AUTOAPPROVED"/>
+      <viewAttribute id="CUST_CALCULATEDAMOUNT"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="INITIATORLANGUAGE"/>
+      <viewAttribute id="CUST_USER"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <viewAttribute id="CUST_UNIT_TXT"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="SPECIALRECOGNITION"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_ONETIME_PAY">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXTERNALCODE" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="MODIFIEDAT"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="WORKFLOWSEQUENCE"/>
+      <viewAttribute id="FORWARDSEQUENCE"/>
+      <viewAttribute id="AGENT"/>
+      <viewAttribute id="NEXTAGENT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="CHANGEDBYUSER"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="NOTIFICATIONAGENT"/>
+      <viewAttribute id="EXTERNALCODE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_REQUEST_FLOW">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHANGEDBYUSER" source="CREATEDBYUSER"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="LANGUAGE"/>
+      <viewAttribute id="DESCRIPTION"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_4">
+    <viewAttributes>
+      <viewAttribute id="EXTERNALCODE"/>
+      <viewAttribute id="ACTION_ID"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="ADDITIONALINFO"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_AUDIT_LOG"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="WORKFLOWSEQUENCE"/>
+      <viewAttribute id="FORWARDSEQUENCE"/>
+      <viewAttribute id="AGENT"/>
+      <viewAttribute id="NEXTAGENT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="CHANGEDBYUSER"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="NOTIFICATIONAGENT"/>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
+      <viewAttribute id="CUST_USERID"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
+      <viewAttribute id="EFFECTIVESTARTDATE"/>
+      <viewAttribute id="CUST_PAYCOMPVALUE"/>
+      <viewAttribute id="CUST_CURRENCYCODE"/>
+      <viewAttribute id="CUST_CUSTOMSTRING"/>
+      <viewAttribute id="CUST_SEQUENCENUMBER"/>
+      <viewAttribute id="CUST_NUMBER"/>
+      <viewAttribute id="CUST_UNIT"/>
+      <viewAttribute id="CUST_NOTES"/>
+      <viewAttribute id="CUST_EXISTINGCODE"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="LASTMODIFIED"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="AUTOAPPROVED"/>
+      <viewAttribute id="CUST_CALCULATEDAMOUNT"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="INITIATORLANGUAGE"/>
+      <viewAttribute id="CUST_USER"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <viewAttribute id="CUST_UNIT_TXT"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="SPECIALRECOGNITION"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+      <viewAttribute hidden="true" id="JOIN$CUST_EXTERNALCODE$EXTERNALCODE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXTERNALCODE" source="CUST_EXTERNALCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USERID" source="CUST_USERID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_ID" source="CUST_PAYCOMPONENT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPVALUE" source="CUST_PAYCOMPVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CURRENCYCODE" source="CUST_CURRENCYCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMSTRING" source="CUST_CUSTOMSTRING"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_SEQUENCENUMBER" source="CUST_SEQUENCENUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_NUMBER" source="CUST_NUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT" source="CUST_UNIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_NOTES" source="CUST_NOTES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXISTINGCODE" source="CUST_EXISTINGCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ALTERNATIVECOSTCENTER" source="CUST_ALTERNATIVECOSTCENTER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTOAPPROVED" source="AUTOAPPROVED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CALCULATEDAMOUNT" source="CUST_CALCULATEDAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USER" source="CUST_USER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ALTERNATIVECOSTCENTER_TXT" source="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT_TXT" source="CUST_UNIT_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_TXT" source="CUST_PAYCOMPONENT_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SPECIALRECOGNITION" source="SPECIALRECOGNITION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$EXTERNALCODE" source="CUST_EXTERNALCODE"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTTYPE" source="REQUESTTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOWSEQUENCE" source="WORKFLOWSEQUENCE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="FORWARDSEQUENCE" source="FORWARDSEQUENCE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHANGEDBYUSER" source="CHANGEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NOTIFICATIONAGENT" source="NOTIFICATIONAGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$EXTERNALCODE" source="EXTERNALCODE"/>
+    </input>
+    <joinAttribute name="JOIN$CUST_EXTERNALCODE$EXTERNALCODE"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_2" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="WORKFLOWSEQUENCE"/>
+      <viewAttribute id="FORWARDSEQUENCE"/>
+      <viewAttribute id="AGENT"/>
+      <viewAttribute id="NEXTAGENT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="CHANGEDBYUSER"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="NOTIFICATIONAGENT"/>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
+      <viewAttribute id="CUST_USERID"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
+      <viewAttribute id="EFFECTIVESTARTDATE"/>
+      <viewAttribute id="CUST_PAYCOMPVALUE"/>
+      <viewAttribute id="CUST_CURRENCYCODE"/>
+      <viewAttribute id="CUST_CUSTOMSTRING"/>
+      <viewAttribute id="CUST_SEQUENCENUMBER"/>
+      <viewAttribute id="CUST_NUMBER"/>
+      <viewAttribute id="CUST_UNIT"/>
+      <viewAttribute id="CUST_NOTES"/>
+      <viewAttribute id="CUST_EXISTINGCODE"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="LASTMODIFIED"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="AUTOAPPROVED"/>
+      <viewAttribute id="CUST_CALCULATEDAMOUNT"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="INITIATORLANGUAGE"/>
+      <viewAttribute id="CUST_USER"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <viewAttribute id="CUST_UNIT_TXT"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="SPECIALRECOGNITION"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+      <viewAttribute hidden="true" id="JOIN$STATUS$ID"/>
+      <viewAttribute hidden="true" id="JOIN$INITIATORLANGUAGE$LANGUAGE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTTYPE" source="REQUESTTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOWSEQUENCE" source="WORKFLOWSEQUENCE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="FORWARDSEQUENCE" source="FORWARDSEQUENCE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHANGEDBYUSER" source="CHANGEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NOTIFICATIONAGENT" source="NOTIFICATIONAGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXTERNALCODE" source="CUST_EXTERNALCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USERID" source="CUST_USERID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_ID" source="CUST_PAYCOMPONENT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPVALUE" source="CUST_PAYCOMPVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CURRENCYCODE" source="CUST_CURRENCYCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMSTRING" source="CUST_CUSTOMSTRING"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_SEQUENCENUMBER" source="CUST_SEQUENCENUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_NUMBER" source="CUST_NUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT" source="CUST_UNIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_NOTES" source="CUST_NOTES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXISTINGCODE" source="CUST_EXISTINGCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ALTERNATIVECOSTCENTER" source="CUST_ALTERNATIVECOSTCENTER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTOAPPROVED" source="AUTOAPPROVED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CALCULATEDAMOUNT" source="CUST_CALCULATEDAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USER" source="CUST_USER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ALTERNATIVECOSTCENTER_TXT" source="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT_TXT" source="CUST_UNIT_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_TXT" source="CUST_PAYCOMPONENT_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SPECIALRECOGNITION" source="SPECIALRECOGNITION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$INITIATORLANGUAGE$LANGUAGE" source="INITIATORLANGUAGE"/>
+    </input>
+    <input node="Projection_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$INITIATORLANGUAGE$LANGUAGE" source="LANGUAGE"/>
+    </input>
+    <joinAttribute name="JOIN$STATUS$ID"/>
+    <joinAttribute name="JOIN$INITIATORLANGUAGE$LANGUAGE"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_3" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="WORKFLOWSEQUENCE"/>
+      <viewAttribute id="FORWARDSEQUENCE"/>
+      <viewAttribute id="AGENT"/>
+      <viewAttribute id="NEXTAGENT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="CHANGEDBYUSER"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="NOTIFICATIONAGENT"/>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
+      <viewAttribute id="CUST_USERID"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
+      <viewAttribute id="EFFECTIVESTARTDATE"/>
+      <viewAttribute id="CUST_PAYCOMPVALUE"/>
+      <viewAttribute id="CUST_CURRENCYCODE"/>
+      <viewAttribute id="CUST_CUSTOMSTRING"/>
+      <viewAttribute id="CUST_SEQUENCENUMBER"/>
+      <viewAttribute id="CUST_NUMBER"/>
+      <viewAttribute id="CUST_UNIT"/>
+      <viewAttribute id="CUST_NOTES"/>
+      <viewAttribute id="CUST_EXISTINGCODE"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="LASTMODIFIED"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="AUTOAPPROVED"/>
+      <viewAttribute id="CUST_CALCULATEDAMOUNT"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="INITIATORLANGUAGE"/>
+      <viewAttribute id="CUST_USER"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <viewAttribute id="CUST_UNIT_TXT"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="SPECIALRECOGNITION"/>
+      <viewAttribute id="ADDITIONALINFO"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+      <viewAttribute hidden="true" id="JOIN$REQUESTTYPE$REQUESTTYPE"/>
+      <viewAttribute hidden="true" id="JOIN$CUST_EXTERNALCODE$EXTERNALCODE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTTYPE" source="REQUESTTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOWSEQUENCE" source="WORKFLOWSEQUENCE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="FORWARDSEQUENCE" source="FORWARDSEQUENCE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CHANGEDBYUSER" source="CHANGEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="NOTIFICATIONAGENT" source="NOTIFICATIONAGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXTERNALCODE" source="CUST_EXTERNALCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USERID" source="CUST_USERID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_ID" source="CUST_PAYCOMPONENT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPVALUE" source="CUST_PAYCOMPVALUE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CURRENCYCODE" source="CUST_CURRENCYCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMSTRING" source="CUST_CUSTOMSTRING"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_SEQUENCENUMBER" source="CUST_SEQUENCENUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_NUMBER" source="CUST_NUMBER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT" source="CUST_UNIT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_NOTES" source="CUST_NOTES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXISTINGCODE" source="CUST_EXISTINGCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ALTERNATIVECOSTCENTER" source="CUST_ALTERNATIVECOSTCENTER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTOAPPROVED" source="AUTOAPPROVED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CALCULATEDAMOUNT" source="CUST_CALCULATEDAMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USER" source="CUST_USER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ALTERNATIVECOSTCENTER_TXT" source="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT_TXT" source="CUST_UNIT_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_TXT" source="CUST_PAYCOMPONENT_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="SPECIALRECOGNITION" source="SPECIALRECOGNITION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$REQUESTTYPE$REQUESTTYPE" source="REQUESTTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$EXTERNALCODE" source="CUST_EXTERNALCODE"/>
+    </input>
+    <input node="Projection_4">
+      <mapping xsi:type="Calculation:AttributeMapping" target="ADDITIONALINFO" source="ADDITIONALINFO"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$REQUESTTYPE$REQUESTTYPE" source="REQUESTTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$EXTERNALCODE" source="EXTERNALCODE"/>
+    </input>
+    <joinAttribute name="JOIN$REQUESTTYPE$REQUESTTYPE"/>
+    <joinAttribute name="JOIN$CUST_EXTERNALCODE$EXTERNALCODE"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_5">
+    <viewAttributes>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="WORKFLOWSEQUENCE"/>
+      <viewAttribute id="FORWARDSEQUENCE"/>
+      <viewAttribute id="AGENT"/>
+      <viewAttribute id="NEXTAGENT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="CHANGEDBYUSER"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="NOTIFICATIONAGENT"/>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
+      <viewAttribute id="CUST_USERID"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
+      <viewAttribute id="EFFECTIVESTARTDATE"/>
+      <viewAttribute id="CUST_PAYCOMPVALUE"/>
+      <viewAttribute id="CUST_CURRENCYCODE"/>
+      <viewAttribute id="CUST_CUSTOMSTRING"/>
+      <viewAttribute id="CUST_SEQUENCENUMBER"/>
+      <viewAttribute id="CUST_NUMBER"/>
+      <viewAttribute id="CUST_UNIT"/>
+      <viewAttribute id="CUST_NOTES"/>
+      <viewAttribute id="CUST_EXISTINGCODE"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="LASTMODIFIED"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="AUTOAPPROVED"/>
+      <viewAttribute id="CUST_CALCULATEDAMOUNT"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="INITIATORLANGUAGE"/>
+      <viewAttribute id="CUST_USER"/>
+      <viewAttribute id="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <viewAttribute id="CUST_UNIT_TXT"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="SPECIALRECOGNITION"/>
+      <viewAttribute id="ADDITIONALINFO"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_3"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Projection_5">
+  <attributes>
+    <attribute id="CUST_CUSTOMSTRING" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMSTRING"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_CUSTOMSTRING"/>
+    </attribute>
+    <attribute id="CUST_SEQUENCENUMBER" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_SEQUENCENUMBER"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_SEQUENCENUMBER"/>
+    </attribute>
+    <attribute id="CUST_EXTERNALCODE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_EXTERNALCODE"/>
+    </attribute>
+    <attribute id="CUST_USERID" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_USERID"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_USERID"/>
+    </attribute>
+    <attribute id="CUST_PAYCOMPONENT_ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPONENT_ID"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_PAYCOMPONENT_ID"/>
+    </attribute>
+    <attribute id="EFFECTIVESTARTDATE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EFFECTIVESTARTDATE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="EFFECTIVESTARTDATE"/>
+    </attribute>
+    <attribute id="CUST_PAYCOMPVALUE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPVALUE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_PAYCOMPVALUE"/>
+    </attribute>
+    <attribute id="CUST_CURRENCYCODE" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CURRENCYCODE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_CURRENCYCODE"/>
+    </attribute>
+    <attribute id="CUST_NUMBER" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_NUMBER"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_NUMBER"/>
+    </attribute>
+    <attribute id="CUST_UNIT" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_UNIT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_UNIT"/>
+    </attribute>
+    <attribute id="CUST_NOTES" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_NOTES"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_NOTES"/>
+    </attribute>
+    <attribute id="CUST_EXISTINGCODE" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_EXISTINGCODE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_EXISTINGCODE"/>
+    </attribute>
+    <attribute id="CUST_ALTERNATIVECOSTCENTER" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_ALTERNATIVECOSTCENTER"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_ALTERNATIVECOSTCENTER"/>
+    </attribute>
+    <attribute id="STATUS" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS"/>
+      <keyMapping columnObjectName="Projection_5" columnName="STATUS"/>
+    </attribute>
+    <attribute id="DESCRIPTION" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DESCRIPTION"/>
+      <keyMapping columnObjectName="Projection_5" columnName="DESCRIPTION"/>
+    </attribute>
+    <attribute id="LASTMODIFIED" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDAT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="LASTMODIFIED"/>
+    </attribute>
+    <attribute id="CREATEDBY" order="17" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CREATEDBY"/>
+    </attribute>
+    <attribute id="CREATEDAT" order="18" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CREATEDAT"/>
+    </attribute>
+    <attribute id="AUTOAPPROVED" order="19" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AUTOAPPROVED"/>
+      <keyMapping columnObjectName="Projection_5" columnName="AUTOAPPROVED"/>
+    </attribute>
+    <attribute id="CUST_CALCULATEDAMOUNT" order="20" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CALCULATEDAMOUNT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_CALCULATEDAMOUNT"/>
+    </attribute>
+    <attribute id="CREATEDBYUSER" order="21" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBYUSER"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CREATEDBYUSER"/>
+    </attribute>
+    <attribute id="INITIATORLANGUAGE" order="22" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INITIATORLANGUAGE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="INITIATORLANGUAGE"/>
+    </attribute>
+    <attribute id="CUST_USER" order="23" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_USER"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_USER"/>
+    </attribute>
+    <attribute id="CUST_ALTERNATIVECOSTCENTER_TXT" order="24" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_ALTERNATIVECOSTCENTER_TXT"/>
+    </attribute>
+    <attribute id="CUST_UNIT_TXT" order="25" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_UNIT_TXT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_UNIT_TXT"/>
+    </attribute>
+    <attribute id="CUST_PAYCOMPONENT_TXT" order="26" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPONENT_TXT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CUST_PAYCOMPONENT_TXT"/>
+    </attribute>
+    <attribute id="COUNTRY_ID" order="27" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY_ID"/>
+      <keyMapping columnObjectName="Projection_5" columnName="COUNTRY_ID"/>
+    </attribute>
+    <attribute id="SPECIALRECOGNITION" order="28" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="SPECIALRECOGNITION"/>
+      <keyMapping columnObjectName="Projection_5" columnName="SPECIALRECOGNITION"/>
+    </attribute>
+    <attribute id="REQUESTTYPE" order="29" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REQUESTTYPE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="REQUESTTYPE"/>
+    </attribute>
+    <attribute id="WORKFLOWSEQUENCE" order="30" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WORKFLOWSEQUENCE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="WORKFLOWSEQUENCE"/>
+    </attribute>
+    <attribute id="FORWARDSEQUENCE" order="31" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="FORWARDSEQUENCE"/>
+      <keyMapping columnObjectName="Projection_5" columnName="FORWARDSEQUENCE"/>
+    </attribute>
+    <attribute id="AGENT" order="32" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AGENT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="AGENT"/>
+    </attribute>
+    <attribute id="NEXTAGENT" order="33" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NEXTAGENT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="NEXTAGENT"/>
+    </attribute>
+    <attribute id="MODIFIEDBY" order="34" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDBY"/>
+      <keyMapping columnObjectName="Projection_5" columnName="MODIFIEDBY"/>
+    </attribute>
+    <attribute id="CHANGEDBYUSER" order="35" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBYUSER"/>
+      <keyMapping columnObjectName="Projection_5" columnName="CHANGEDBYUSER"/>
+    </attribute>
+    <attribute id="WORKFLOW_ID" order="36" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WORKFLOW_ID"/>
+      <keyMapping columnObjectName="Projection_5" columnName="WORKFLOW_ID"/>
+    </attribute>
+    <attribute id="NOTIFICATIONAGENT" order="37" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="NOTIFICATIONAGENT"/>
+      <keyMapping columnObjectName="Projection_5" columnName="NOTIFICATIONAGENT"/>
+    </attribute>
+    <attribute id="ADDITIONALINFO" order="38" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ADDITIONALINFO"/>
+      <keyMapping columnObjectName="Projection_5" columnName="ADDITIONALINFO"/>
+    </attribute>
+    <attribute id="DELIMITINDICATOR" order="39" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DELIMITINDICATOR"/>
+      <keyMapping columnObjectName="Projection_5" columnName="DELIMITINDICATOR"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="5" y="719"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="311" y="719"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-5" y="567"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="404" y="24"/>
+      <rectangleSize width="213.72998046875"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="275" y="563"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-5" y="421"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Join_1" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="473" y="30"/>
+      <rectangleSize width="161.173828125"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="285" y="421"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="115" y="271"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Join_2" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_4" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="504" y="52"/>
+      <rectangleSize width="178.2861328125"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_5" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="170"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
