@@ -170,7 +170,7 @@
     </shape>
     <shape modelObjectName="WT" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="40" y="37"/>
-      <rectangleSize width="255"/>
+      <rectangleSize width="100"/>
     </shape>
     <shape modelObjectName="WT_Texts" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="469" y="49"/>
