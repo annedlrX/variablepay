@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_HCI_RECURRING_PAY" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_HCI_RECURRING_PAY"/>
+<localVariables>
+  <variable id="IP_STATUS" parameter="true">
+    <descriptions defaultDescription="IP_STATUS"/>
+    <variableProperties datatype="INTEGER" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_RECURRING_PAY">
+    <resourceUri>COM_STRADA_VP_RECURRING_PAY</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
+      <viewAttribute id="CUST_USERID"/>
+      <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
+      <viewAttribute id="CUST_EVENTREASON"/>
+      <viewAttribute id="EFFECTIVESTARTDATE"/>
+      <viewAttribute id="CUST_ENDDATE"/>
+      <viewAttribute id="CUST_PAYCOMPVALUE"/>
+      <viewAttribute id="CUST_CURRENCYCODE"/>
+      <viewAttribute id="CUST_FREQUENCY"/>
+      <viewAttribute id="CUST_CALCULATEDAMOUNT"/>
+      <viewAttribute id="CUST_CUSTOMSTRING"/>
+      <viewAttribute id="CUST_NUMBER"/>
+      <viewAttribute id="CUST_UNIT"/>
+      <viewAttribute id="CUST_NOTES"/>
+      <viewAttribute id="CUST_EXISTINGCODE"/>
+      <viewAttribute id="CUST_PAYGROUP"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_RECURRING_PAY"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Projection_1">
+  <attributes>
+    <attribute id="CUST_EXTERNALCODE" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_EXTERNALCODE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_EXTERNALCODE"/>
+    </attribute>
+    <attribute id="CUST_USERID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_USERID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_USERID"/>
+    </attribute>
+    <attribute id="CUST_PAYCOMPONENT_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPONENT_ID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_PAYCOMPONENT_ID"/>
+    </attribute>
+    <attribute id="CUST_EVENTREASON" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_EVENTREASON"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_EVENTREASON"/>
+    </attribute>
+    <attribute id="EFFECTIVESTARTDATE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EFFECTIVESTARTDATE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="EFFECTIVESTARTDATE"/>
+    </attribute>
+    <attribute id="CUST_ENDDATE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_ENDDATE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_ENDDATE"/>
+    </attribute>
+    <attribute id="CUST_PAYCOMPVALUE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPVALUE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_PAYCOMPVALUE"/>
+    </attribute>
+    <attribute id="CUST_CURRENCYCODE" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CURRENCYCODE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CURRENCYCODE"/>
+    </attribute>
+    <attribute id="CUST_FREQUENCY" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_FREQUENCY"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_FREQUENCY"/>
+    </attribute>
+    <attribute id="CUST_CALCULATEDAMOUNT" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CALCULATEDAMOUNT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CALCULATEDAMOUNT"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMSTRING" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_CUSTOMSTRING"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMSTRING"/>
+    </attribute>
+    <attribute id="CUST_NUMBER" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_NUMBER"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_NUMBER"/>
+    </attribute>
+    <attribute id="CUST_UNIT" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_UNIT"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_UNIT"/>
+    </attribute>
+    <attribute id="CUST_NOTES" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_NOTES"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_NOTES"/>
+    </attribute>
+    <attribute id="CUST_EXISTINGCODE" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_EXISTINGCODE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_EXISTINGCODE"/>
+    </attribute>
+    <attribute id="CUST_PAYGROUP" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYGROUP"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUST_PAYGROUP"/>
+    </attribute>
+    <attribute id="DELIMITINDICATOR" order="17" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DELIMITINDICATOR"/>
+      <keyMapping columnObjectName="Projection_1" columnName="DELIMITINDICATOR"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="260"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
