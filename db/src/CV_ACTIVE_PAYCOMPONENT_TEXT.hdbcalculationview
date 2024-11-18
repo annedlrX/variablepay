@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_PAYCOMPONENT_TEXT" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
 <descriptions defaultDescription="CV_ACTIVE_PAYCOMPONENT_TEXT"/>
-<localVariables/>
+<localVariables>
+  <variable id="IP_PAY_COMPONENT" parameter="true">
+    <descriptions defaultDescription="IP_PAY_COMPONENT"/>
+    <variableProperties datatype="NVARCHAR" length="255" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_LANGUAGE" parameter="true">
+    <descriptions defaultDescription="IP_LANGUAGE"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_WAGETYPE">
@@ -32,10 +47,10 @@
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts">
     <viewAttributes>
-      <viewAttribute id="PAYCOMPONENT_ID"/>
-      <viewAttribute id="LANGUAGE"/>
       <viewAttribute id="DESCRIPTION"/>
-    </viewAttributes>
+    
+      <viewAttribute id="LANGUAGE"/>
+      <viewAttribute id="PAYCOMPONENT_ID"/></viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_TEXT"/>
   </calculationView>
@@ -155,7 +170,7 @@
     </shape>
     <shape modelObjectName="WT" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="40" y="37"/>
-      <rectangleSize width="255"/>
+      <rectangleSize width="100"/>
     </shape>
     <shape modelObjectName="WT_Texts" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="469" y="49"/>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_EMPLOYEE_SELECTION" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_EMPLOYEE_SELECTION"/>
+<localVariables>
+  <variable id="IP_USERID" parameter="true">
+    <descriptions defaultDescription="IP_USERID"/>
+    <variableProperties datatype="NVARCHAR" length="32" mandatory="true" defaultValue="undefined">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_RBP_GROUPS">
+    <resourceUri>COM_STRADA_VP_RBP_GROUPS</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_RBP_EMPLOYEES">
+    <resourceUri>COM_STRADA_VP_RBP_EMPLOYEES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
+    <viewAttributes>
+      <viewAttribute id="GROUPID"/>
+      <viewAttribute id="ROLE"/>
+      <viewAttribute id="GROUPNAME"/>
+      <viewAttribute id="USERID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_RBP_GROUPS"/>
+  
+    <filter>&quot;USERID&quot;='$$IP_USERID$$'</filter>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="USERID"/>
+      <viewAttribute id="ID_GROUPID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_RBP_EMPLOYEES"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="GROUPID"/>
+      <viewAttribute id="ROLE"/>
+      <viewAttribute id="GROUPNAME"/>
+      <viewAttribute id="USERID"/>
+      <viewAttribute hidden="true" id="JOIN$GROUPID$ID_GROUPID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="GROUPID" source="GROUPID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ROLE" source="ROLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GROUPNAME" source="GROUPNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$GROUPID$ID_GROUPID" source="GROUPID"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="USERID" source="USERID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$GROUPID$ID_GROUPID" source="ID_GROUPID"/>
+    </input>
+    <joinAttribute name="JOIN$GROUPID$ID_GROUPID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="GROUPID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GROUPID"/>
+      <keyMapping columnObjectName="Join_1" columnName="GROUPID"/>
+    </attribute>
+    <attribute id="GROUPNAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="GROUPNAME"/>
+      <keyMapping columnObjectName="Join_1" columnName="GROUPNAME"/>
+    </attribute>
+    <attribute id="USERID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="USERID"/>
+      <keyMapping columnObjectName="Join_1" columnName="USERID"/>
+    </attribute>
+    <attribute id="ROLE" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ROLE"/>
+      <keyMapping columnObjectName="Join_1" columnName="ROLE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="-393" y="1381"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-479" y="358"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-306" y="358"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-383" y="224"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

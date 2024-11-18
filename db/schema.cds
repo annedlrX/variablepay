@@ -46,24 +46,23 @@ context com.strada {
   };
 
   entity VP_WAGETYPE_MAPPING {
-    infoType      : String(5) not null;
-    country       : Association[1] to VP_COUNTRIES {
-                      id
-                    } not null;
-    payComponent  : Association[1] to VP_WAGETYPE {
-                      id
-                    };
-    initiatorRole : String(32);
-    workflow      : Association[1] to VP_WORKFLOW {
-                      id
-                    };
-    companyCode   : String(16);
-    operator      : String(3);
-  /*
-    delimitIndicator : hana.TINYINT;
-    cust_frequency :	String(255);
-    cust_frequency_txt:String(64);
-  */
+    infoType           : String(5) not null;
+    country            : Association[1] to VP_COUNTRIES {
+                           id
+                         } not null;
+    payComponent       : Association[1] to VP_WAGETYPE {
+                           id
+                         };
+    initiatorRole      : String(32);
+    workflow           : Association[1] to VP_WORKFLOW {
+                           id
+                         };
+    companyCode        : String(16);
+    operator           : String(3);
+    delimitIndicator   : hana.TINYINT;
+    cust_frequency     : String(255);
+    cust_frequency_txt : String(64);
+
   };
 
   entity VP_CURRENCY {
@@ -112,6 +111,7 @@ context com.strada {
         cust_existingCode         : String(255);
         status                    : Integer;
         autoApproved              : hana.TINYINT;
+        createdByUser             : String(128);
         country                   : Association[1] to VP_COUNTRIES {
                                       id
                                     };
@@ -151,6 +151,7 @@ context com.strada {
         status                         : Integer;
         autoApproved                   : hana.TINYINT;
         cust_calculatedAmount          : DecimalFloat;
+        createdByUser                  : String(128);
         cust_user                      : String(128);
         country                        : Association[1] to VP_COUNTRIES {
                                            id
@@ -198,9 +199,11 @@ context com.strada {
                          } not null;
         requestType    : String(5);
         additionalInfo : String(5000);
+        createdByUser  : String(128);
   };
 
   entity VP_REQUEST_FLOW : cuid, managed {
+
     key externalCode      : String(100) not null;
         requestType       : String(5) not null;
         workflow          : Association[1] to VP_WORKFLOW {
@@ -214,7 +217,9 @@ context com.strada {
         agent             : String(500);
         nextAgent         : String(500);
         notificationAgent : String(64);
+        createdByUser     : String(128);
   };
+
   entity VP_REQUEST_STATUS {
     key id          : Integer;
         description : String(64);
@@ -251,20 +256,92 @@ context com.strada {
                     };
   };
 
-     entity VP_RBP_GROUPS {
-        key groupID   : String(32);
-            groupName : String(64);
-        key userID    : String(128);
-            today     : Integer; 
-            next      : Integer; 
-            role      : String(32);
-    };
-    entity VP_RBP_EMPLOYEES  {
-        key id      : Association[1] to VP_RBP_GROUPS{
-                        groupID 
-                    };
-        key userID  : String(128); 
-    };
+  entity VP_RBP_GROUPS {
+    key groupID   : String(32);
+        groupName : String(64);
+    key userID    : String(128);
+        today     : Integer;
+        next      : Integer;
+        role      : String(32);
+  };
+
+  entity VP_RBP_EMPLOYEES {
+    key id     : Association[1] to VP_RBP_GROUPS {
+                   groupID
+                 };
+    key userID : String(128);
+  };
+
+  entity VP_EMPJOB : managed {
+    key userID           : String(128);
+        countryOfCompany : String(3);
+        company          : String(5);
+
+  };
+
+  entity VP_RECURRING_PAY : managed {
+    key cust_externalCode     : String(100);
+        cust_userId           : String(128) not null;
+        cust_payComponent     : Association[1] to VP_WAGETYPE {
+                                  id
+                                } not null;
+        cust_eventReason      : String(255) not null;
+        effectiveStartDate    : Date not null;
+        cust_endDate          : Date;
+        cust_paycompvalue     : DecimalFloat;
+        cust_currencyCode     : String(64) not null;
+        cust_frequency        : String(255) not null;
+        cust_calculatedAmount : DecimalFloat;
+        cust_customString     : String(255);
+        cust_number           : DecimalFloat;
+        cust_unit             : String(255);
+        cust_notes            : String(255);
+        cust_existingCode     : String(255);
+        cust_payGroup         : String(255) not null;
+        status                : Integer;
+        // lastModified :	UTCTimestamp;
+        createdBy             : String(128);
+        //createdOn :	UTCTimestamp;
+        autoApproved          : hana.TINYINT;
+        createdByUser         : String(128);
+        cust_user             : String(128);
+        country               : Association[1] to VP_COUNTRIES {
+                                  id
+                                };
+        initiatorLanguage     : String(5);
+        cust_payGroup_txt     : String(64);
+        cust_frequency_txt    : String(64);
+        cust_unit_txt         : String(32);
+        cust_payComponent_txt : String(128);
+        delimitIndicator      : hana.TINYINT;
+        displayAmount         : String(20);
+  };
+
+  entity VP_USER : managed {
+    key userID        : String(128);
+        userName      : String(128) not null;
+        employeeID    : String(128);
+        firstName     : String(128);
+        lastName      : String(128);
+        middleName    : String(128);
+        email         : String(100);
+        custom15      : String(100);
+        defaultLocale : String(5);
+        status        : String(1);
+        customManager : String(128);
+        hr            : String(128);
+        manager       : String(128);
+        //  lastModified: UTCTimestamp;
+        timeKeeper    : String(128);
+  };
+
+  entity VP_TIMEKEEPER {
+    key id         : Association[1] to VP_USER {
+                       userID
+                     };
+    key timeKeeper : String(128);
+  };
+
 }
 
 @cds.persistence.exists

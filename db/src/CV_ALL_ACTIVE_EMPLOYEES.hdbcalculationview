@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ALL_ACTIVE_EMPLOYEES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_ALL_ACTIVE_EMPLOYEES"/>
+<localVariables>
+  <variable id="IP_USERID" parameter="true">
+    <descriptions defaultDescription="IP_USERID"/>
+    <variableProperties datatype="NVARCHAR" length="128" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="COM_STRADA_VP_USER">
+    <resourceUri>COM_STRADA_VP_USER</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="USERID"/>
+      <viewAttribute id="USERNAME"/>
+      <viewAttribute id="FIRSTNAME"/>
+      <viewAttribute id="LASTNAME"/>
+      <viewAttribute id="MIDDLENAME"/>
+      <viewAttribute id="EMAIL"/>
+      <viewAttribute id="CUSTOM15"/>
+      <viewAttribute id="DEFAULTLOCALE"/>
+      <viewAttribute id="STATUS"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_USER"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Projection_1">
+  <attributes>
+    <attribute id="USERID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="USERID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="USERID"/>
+    </attribute>
+    <attribute id="USERNAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="USERNAME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="USERNAME"/>
+    </attribute>
+    <attribute id="FIRSTNAME" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="FIRSTNAME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="FIRSTNAME"/>
+    </attribute>
+    <attribute id="LASTNAME" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LASTNAME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="LASTNAME"/>
+    </attribute>
+    <attribute id="MIDDLENAME" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MIDDLENAME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="MIDDLENAME"/>
+    </attribute>
+    <attribute id="EMAIL" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EMAIL"/>
+      <keyMapping columnObjectName="Projection_1" columnName="EMAIL"/>
+    </attribute>
+    <attribute id="CUSTOM15" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUSTOM15"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CUSTOM15"/>
+    </attribute>
+    <attribute id="DEFAULTLOCALE" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DEFAULTLOCALE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="DEFAULTLOCALE"/>
+    </attribute>
+    <attribute id="STATUS" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS"/>
+      <keyMapping columnObjectName="Projection_1" columnName="STATUS"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="233"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

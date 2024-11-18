@@ -1,37 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_ACTIVE_WAGETYPES"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_MASS_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_MASS_WAGETYPES"/>
 <localVariables>
-  <variable id="IP_COMPANY_CODE" parameter="true">
-    <descriptions defaultDescription="IP_COMPANY_CODE"/>
-    <variableProperties datatype="NVARCHAR" length="16" mandatory="true" defaultValue="">
-      <valueDomain type="empty"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
   <variable id="IP_INFOTYPE" parameter="true">
     <descriptions defaultDescription="IP_INFOTYPE"/>
-    <variableProperties datatype="NVARCHAR" length="5" mandatory="true" defaultValue="">
-      <valueDomain type="empty"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
-  <variable id="IP_COUNTRY" parameter="true">
-    <descriptions defaultDescription="IP_COUNTRY"/>
-    <variableProperties datatype="NVARCHAR" length="3" mandatory="false" defaultValue="">
-      <valueDomain type="empty"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
-  <variable id="IP_INITIATOR" parameter="true">
-    <descriptions defaultDescription="IP_INITIATOR"/>
-    <variableProperties datatype="NVARCHAR" length="32" mandatory="false" defaultValue="">
-      <valueDomain type="empty"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
-  <variable id="IP_LANGUAGE" parameter="true">
-    <descriptions defaultDescription="IP_LANGUAGE"/>
     <variableProperties datatype="NVARCHAR" length="5" mandatory="true" defaultValue="">
       <valueDomain type="empty"/>
       <selection multiLine="false" type="SingleValue"/>
@@ -91,7 +63,7 @@
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_TEXT"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_2" joinType="inner">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="inner">
     <viewAttributes>
       <viewAttribute id="INFOTYPE"/>
       <viewAttribute id="PAYCOMPONENT_ID"/>
@@ -102,6 +74,10 @@
       <viewAttribute id="WAGETYPE"/>
       <viewAttribute id="ISINDEVAL"/>
       <viewAttribute id="CURRENCY"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="INITIATORROLE"/>
+      <viewAttribute id="COMPANYCODE"/>
+      <viewAttribute id="OPERATOR"/>
       <viewAttribute id="IS_QUOTACOMPENSATION"/>
       <viewAttribute hidden="true" id="JOIN$PAYCOMPONENT_ID$ID"/>
     </viewAttributes>
@@ -110,6 +86,10 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="INFOTYPE" source="INFOTYPE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORROLE" source="INITIATORROLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COMPANYCODE" source="COMPANYCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OPERATOR" source="OPERATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PAYCOMPONENT_ID$ID" source="PAYCOMPONENT_ID"/>
     </input>
     <input node="Projection_2">
@@ -135,12 +115,16 @@
       <viewAttribute id="WAGETYPE"/>
       <viewAttribute id="ISINDEVAL"/>
       <viewAttribute id="CURRENCY"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="INITIATORROLE"/>
+      <viewAttribute id="COMPANYCODE"/>
+      <viewAttribute id="OPERATOR"/>
       <viewAttribute id="IS_QUOTACOMPENSATION"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="Join_2"/>
+    <input node="Join_1"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_2" joinType="leftOuter">
     <viewAttributes>
       <viewAttribute id="DESCRIPTION"/>
       <viewAttribute id="INFOTYPE"/>
@@ -152,6 +136,10 @@
       <viewAttribute id="WAGETYPE"/>
       <viewAttribute id="ISINDEVAL"/>
       <viewAttribute id="CURRENCY"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="INITIATORROLE"/>
+      <viewAttribute id="COMPANYCODE"/>
+      <viewAttribute id="OPERATOR"/>
       <viewAttribute id="IS_QUOTACOMPENSATION"/>
       <viewAttribute hidden="true" id="JOIN$PAYCOMPONENT_ID$PAYCOMPONENT_ID"/>
     </viewAttributes>
@@ -166,6 +154,10 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="WAGETYPE" source="WAGETYPE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="ISINDEVAL" source="ISINDEVAL"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORROLE" source="INITIATORROLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COMPANYCODE" source="COMPANYCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OPERATOR" source="OPERATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="IS_QUOTACOMPENSATION" source="IS_QUOTACOMPENSATION"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PAYCOMPONENT_ID$PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
     </input>
@@ -177,51 +169,67 @@
   </calculationView>
 </calculationViews>
 
-<logicalModel id="Join_1">
+<logicalModel id="Join_2">
   <attributes>
     <attribute id="INFOTYPE" order="1" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="INFOTYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="INFOTYPE"/>
+      <keyMapping columnObjectName="Join_2" columnName="INFOTYPE"/>
     </attribute>
     <attribute id="PAYCOMPONENT_ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="PAYCOMPONENT_ID"/>
-      <keyMapping columnObjectName="Join_1" columnName="PAYCOMPONENT_ID"/>
+      <keyMapping columnObjectName="Join_2" columnName="PAYCOMPONENT_ID"/>
     </attribute>
     <attribute id="WORKFLOW_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="WORKFLOW_ID"/>
-      <keyMapping columnObjectName="Join_1" columnName="WORKFLOW_ID"/>
+      <keyMapping columnObjectName="Join_2" columnName="WORKFLOW_ID"/>
     </attribute>
     <attribute id="DESCRIPTION" order="4" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="DESCRIPTION"/>
-      <keyMapping columnObjectName="Join_1" columnName="DESCRIPTION"/>
+      <keyMapping columnObjectName="Join_2" columnName="DESCRIPTION"/>
     </attribute>
     <attribute id="IS_AMOUNTTYPE" order="5" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="IS_AMOUNTTYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="IS_AMOUNTTYPE"/>
+      <keyMapping columnObjectName="Join_2" columnName="IS_AMOUNTTYPE"/>
     </attribute>
     <attribute id="UOM" order="6" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="UOM"/>
-      <keyMapping columnObjectName="Join_1" columnName="UOM"/>
+      <keyMapping columnObjectName="Join_2" columnName="UOM"/>
     </attribute>
     <attribute id="IS_SPECIALRECOGNITIONTYPE" order="7" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="IS_SPECIALRECOGNITIONTYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="IS_SPECIALRECOGNITIONTYPE"/>
+      <keyMapping columnObjectName="Join_2" columnName="IS_SPECIALRECOGNITIONTYPE"/>
     </attribute>
     <attribute id="WAGETYPE" order="8" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="WAGETYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="WAGETYPE"/>
+      <keyMapping columnObjectName="Join_2" columnName="WAGETYPE"/>
     </attribute>
     <attribute id="ISINDEVAL" order="9" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ISINDEVAL"/>
-      <keyMapping columnObjectName="Join_1" columnName="ISINDEVAL"/>
+      <keyMapping columnObjectName="Join_2" columnName="ISINDEVAL"/>
     </attribute>
     <attribute id="CURRENCY" order="10" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CURRENCY"/>
-      <keyMapping columnObjectName="Join_1" columnName="CURRENCY"/>
+      <keyMapping columnObjectName="Join_2" columnName="CURRENCY"/>
     </attribute>
-    <attribute id="IS_QUOTACOMPENSATION" order="11" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="COUNTRY_ID" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY_ID"/>
+      <keyMapping columnObjectName="Join_2" columnName="COUNTRY_ID"/>
+    </attribute>
+    <attribute id="INITIATORROLE" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INITIATORROLE"/>
+      <keyMapping columnObjectName="Join_2" columnName="INITIATORROLE"/>
+    </attribute>
+    <attribute id="COMPANYCODE" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COMPANYCODE"/>
+      <keyMapping columnObjectName="Join_2" columnName="COMPANYCODE"/>
+    </attribute>
+    <attribute id="OPERATOR" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="OPERATOR"/>
+      <keyMapping columnObjectName="Join_2" columnName="OPERATOR"/>
+    </attribute>
+    <attribute id="IS_QUOTACOMPENSATION" order="15" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="IS_QUOTACOMPENSATION"/>
-      <keyMapping columnObjectName="Join_1" columnName="IS_QUOTACOMPENSATION"/>
+      <keyMapping columnObjectName="Join_2" columnName="IS_QUOTACOMPENSATION"/>
     </attribute>
   </attributes>
   <calculatedAttributes/>
@@ -232,52 +240,50 @@
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="110" y="105"/>
-    
-      <rectangleSize width="160"/>
+      <upperLeftCorner x="40" y="85"/>
     </shape>
+    
+  
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-98" y="513"/>
+      <upperLeftCorner x="-47" y="560"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="180" y="513"/>
+      <upperLeftCorner x="265" y="550"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-47" y="412"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="194.99560546875"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="255.318359375"/>
+    </shape>
+    <shape expanded="true" modelObjectName="WT" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-47" y="301"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="WT_Texts" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="197" y="287"/>
+      <upperLeftCorner x="273" y="308"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-  
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-18" y="376"/>
+      <upperLeftCorner x="100" y="182"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+    <shape modelObjectName="WT" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="194"/>
+      <rectangleSize width="250"/>
     </shape>
-    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+    <shape modelObjectName="WT_Texts" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="255"/>
+      <rectangleSize width="250"/>
     </shape>
-    <shape expanded="true" modelObjectName="WT" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-23" y="287"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
-    
-  
-    <shape expanded="false" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="110" y="194"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
-    <shape modelObjectName="WT" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="255"/>
-    </shape>
-    <shape modelObjectName="WT_Texts" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="620" y="30"/>
-      <rectangleSize width="194"/>
-    </shape></shapes>
+  </shapes>
 </layout>
 </Calculation:scenario>
