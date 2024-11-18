@@ -1,0 +1,10 @@
+FUNCTION "GET_UUID"( )
+    RETURNS ev_uuid VARCHAR(100)
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    /*****************************
+        Write your function logic
+    ****************************/
+    SELECT SYSUUID INTO ev_uuid from dummy;
+END;

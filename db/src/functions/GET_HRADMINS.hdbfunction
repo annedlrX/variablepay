@@ -1,0 +1,27 @@
+FUNCTION "GET_HRADMINS"( iv_country NVARCHAR(3) )
+    RETURNS TABLE(
+        "USERID" NVARCHAR(128)
+        )
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    /*****************************
+        Write your function logic
+    ****************************/
+    DECLARE lc_role_admin NVARCHAR(32) := 'HRADMIN';
+	
+	RETURN 
+	    SELECT "USERID" FROM 
+	        (   SELECT IFNULL(B."ID",'') as "ID",A."USERID" 
+	            FROM 
+	               (
+	                     SELECT SUBSTR_REGEXPR('(?<=\- HR Payroll )(.*?)(?=\ [–-] Granted)' IN "GROUPNAME") as "NAME1",
+	                   SUBSTR_REGEXPR('(?<=\- HR Payroll - )(.*?)(?=\ [–-] Granted)' IN "GROUPNAME") as "NAME2",
+	                           "USERID" 
+    	                    FROM "COM_STRADA_VP_RBP_GROUPS" 
+    	                    WHERE "ROLE" = lc_role_admin
+    	            ) A
+    	       LEFT OUTER JOIN "COM_STRADA_VP_COUNTRIES" AS B
+    	       ON A."NAME1" = B."NAME" or  A."NAME2" = B."NAME")
+            WHERE "ID" = :iv_country;
+END;

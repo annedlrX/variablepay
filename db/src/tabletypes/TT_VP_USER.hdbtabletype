@@ -1,0 +1,16 @@
+TYPE "TT_VP_USER" AS TABLE (
+    userID NVARCHAR(128),
+    userName NVARCHAR(128),
+    employeeID NVARCHAR(128),
+    firstName NVARCHAR(128),
+    lastName NVARCHAR(128),
+    middleName NVARCHAR(128),
+    email NVARCHAR(100),
+    custom15 NVARCHAR(100),
+    defaultLocale NVARCHAR(5),
+    status NVARCHAR(1),
+    customManager NVARCHAR(128),
+    hr NVARCHAR(128),
+    manager NVARCHAR(128),
+    lastModified TIMESTAMP
+ )

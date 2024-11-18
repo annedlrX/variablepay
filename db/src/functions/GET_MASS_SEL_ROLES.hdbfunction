@@ -1,0 +1,29 @@
+FUNCTION "GET_MASS_SEL_ROLES"( iv_user NVARCHAR(128) )
+    RETURNS TABLE(
+        "ROLE" NVARCHAR(32)
+     )
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    /*****************************
+        Write your function logic
+    ****************************/
+    -- Get all users belonging to the group of the input user    
+    lt_rbp_roles = SELECT DISTINCT "ROLE" FROM "COM_STRADA_VP_RBP_GROUPS"
+                            WHERE "USERID" = :iv_user;
+                
+    lt_user_roles = SELECT DISTINCT CASE WHEN "HR" = :iv_user THEN 'HRGBU'
+                                        WHEN "CUSTOMMANAGER" = :iv_user THEN 'HRSITE'
+                                        WHEN "MANAGER" = :iv_user THEN 'MANAGER'
+                                        WHEN TK."TIMEKEEPER" = :iv_user THEN 'TIMKP' END AS "ROLE"
+                            FROM "COM_STRADA_VP_USER" as U
+                            left join "COM_STRADA_VP_TIMEKEEPER" as TK on U."USERID"=TK."ID_USERID"
+                                WHERE "HR" = :iv_user OR "CUSTOMMANAGER" = :iv_user
+                                        OR "MANAGER" = :iv_user OR TK."TIMEKEEPER" = :iv_user AND "USERID" != :iv_user;
+                    
+	RETURN 
+	
+		SELECT "ROLE" FROM :lt_user_roles UNION
+		    SELECT "ROLE" FROM :lt_rbp_roles;
+               
+END;

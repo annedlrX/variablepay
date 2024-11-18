@@ -1,0 +1,8 @@
+TYPE "TT_HCI_LOGS" AS TABLE (
+    iv_id NVARCHAR(255), 
+    externalCode NVARCHAR(100),
+    requestType NVARCHAR(5),
+    status INTEGER,
+    action INTEGER,
+    comments NVARCHAR(5000)
+)

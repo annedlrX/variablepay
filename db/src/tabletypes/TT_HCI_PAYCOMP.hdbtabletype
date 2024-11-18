@@ -1,0 +1,3 @@
+TYPE "TT_HCI_PAYCOMP" AS TABLE ( 
+    payComponent NVARCHAR(255)
+)

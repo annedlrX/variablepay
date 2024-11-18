@@ -1,0 +1,23 @@
+FUNCTION "GET_COUNTRIES"( iv_user NVARCHAR(128) )
+    RETURNS TABLE(
+        "ID" NVARCHAR(3),
+        "NAME" NVARCHAR(64)
+     )
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    /*****************************
+        Write your function logic
+    ****************************/
+    DECLARE lc_role_admin NVARCHAR(32) := 'HRADMIN';
+
+    RETURN 
+	    SELECT IFNULL(B."ID",'') as "ID",A."NAME" FROM (
+	                SELECT SUBSTR_REGEXPR('(?<=\- HR Payroll )(.*?)(?=\ [–-] Granted)' IN "GROUPNAME") as "NAME",
+	                SUBSTR_REGEXPR('(?<=\- HR Payroll )(.*?)(?=\ [–-] Granted)' IN "GROUPNAME") as "NAME2"
+    	            FROM "COM_STRADA_VP_RBP_GROUPS" 
+    	            WHERE "USERID" = iv_user 
+                    AND "ROLE" = lc_role_admin) A
+                    LEFT OUTER JOIN "COM_STRADA_VP_COUNTRIES" AS B
+    	       ON A."NAME" = B."NAME" or  A."NAME2" = B."NAME";
+END;

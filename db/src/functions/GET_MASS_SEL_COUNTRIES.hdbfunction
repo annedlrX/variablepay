@@ -1,0 +1,49 @@
+FUNCTION "GET_MASS_SEL_COUNTRIES"( iv_user NVARCHAR(128), iv_role NVARCHAR(32))
+    RETURNS TABLE(
+        "ID" NVARCHAR(3),
+        "NAME" NVARCHAR(64)
+     )
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    /*****************************
+        Write your function logic
+    ****************************/
+    DECLARE lc_role_admin NVARCHAR(32) := 'HRADMIN';
+	
+    lt_rbp_users = SELECT B."USERID",A."ROLE" FROM (SELECT "GROUPID","ROLE" 
+                        FROM "COM_STRADA_VP_RBP_GROUPS"
+                            WHERE "USERID" = :iv_user AND "ROLE" = :iv_role) A
+                        INNER JOIN 
+                        (SELECT "USERID","ID_GROUPID" 
+                            FROM "COM_STRADA_VP_RBP_EMPLOYEES"
+                            ) B
+                        ON  A."GROUPID" = B."ID_GROUPID";
+
+    lt_users =SELECT "USERID",
+	                CASE WHEN "HR" = :iv_user THEN 'HRGBU'
+                    WHEN "CUSTOMMANAGER" = :iv_user THEN 'HRSITE'
+                    WHEN "MANAGER" = :iv_user THEN 'MANAGER' 
+                    WHEN TK."TIMEKEEPER" = :iv_user THEN 'TIMKP' END AS "ROLE"
+                    FROM "COM_STRADA_VP_USER" as U
+                     left join "COM_STRADA_VP_TIMEKEEPER" as TK on U."USERID"=TK."ID_USERID"
+                        WHERE "HR" = :iv_user OR "CUSTOMMANAGER" = :iv_user
+                        OR "MANAGER" = :iv_user OR TK."TIMEKEEPER" = :iv_user;
+                        
+    lt_all_users =  SELECT "USERID" FROM :lt_rbp_users 
+                        UNION
+                    SELECT "USERID" FROM :lt_users WHERE "ROLE" = :iv_role;
+    
+    lt_user_countries = SELECT DISTINCT B."COUNTRYOFCOMPANY" FROM :lt_all_users AS A
+                            INNER JOIN
+                        "COM_STRADA_VP_EMPJOB" AS B
+                            ON B."USERID" = A."USERID";
+                    
+	RETURN 
+	
+		SELECT A."COUNTRYOFCOMPANY" AS "ID",B."NAME" 
+            FROM :lt_user_countries AS A
+                LEFT OUTER JOIN
+                    "COM_STRADA_VP_COUNTRIES" AS B
+                    ON A."COUNTRYOFCOMPANY" = B."ID";
+END;

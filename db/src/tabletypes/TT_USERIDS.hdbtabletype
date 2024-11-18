@@ -1,0 +1,3 @@
+TYPE "TT_USERIDS" AS TABLE ( 
+    userID NVARCHAR(32)
+)

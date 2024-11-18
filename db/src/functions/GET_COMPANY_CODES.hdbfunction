@@ -1,0 +1,20 @@
+FUNCTION "GET_COMPANY_CODES"( 	iv_infotype NVARCHAR(5), iv_country NVARCHAR(3), iv_role NVARCHAR(32) )
+    RETURNS  TABLE(
+        "COMPANYCODE" NVARCHAR(16)
+     )
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    /*****************************
+        Write your function logic
+    ****************************/
+
+    RETURN 
+	
+		SELECT DISTINCT "COMPANYCODE" FROM 
+            "COM_STRADA_VP_WAGETYPE_MAPPING"
+            WHERE "INFOTYPE"= iv_infotype
+            AND "COUNTRY_ID" = iv_country
+            AND "INITIATORROLE" = iv_role;
+	
+END;

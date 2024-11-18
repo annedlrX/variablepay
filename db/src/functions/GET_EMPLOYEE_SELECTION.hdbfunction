@@ -1,0 +1,89 @@
+FUNCTION "GET_EMPLOYEE_SELECTION"( iv_user NVARCHAR(128), iv_status NVARCHAR(1) )
+    RETURNS TABLE(
+        "USERID" NVARCHAR(128),
+        "FIRSTNAME" NVARCHAR(128), 
+        "MIDDLENAME" NVARCHAR(128), 
+        "LASTNAME" NVARCHAR(128), 
+        "COUNTRY" NVARCHAR(3), 
+        "ROLE" NVARCHAR(128), 
+        "STATUS" NVARCHAR(1),
+        "COMPANY" NVARCHAR(5),
+        "CURRENCY" NVARCHAR(4),
+        "DEFAULTLOCALE" NVARCHAR(5)
+     )
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER AS
+BEGIN
+    /*****************************
+        Write your function logic
+    ****************************/
+
+        lt_rbp_roles = SELECT B."USERID",A."ROLE" FROM (SELECT "GROUPID","ROLE" 
+                        FROM "COM_STRADA_VP_RBP_GROUPS"
+                            WHERE "USERID" = :iv_user) A
+                        INNER JOIN 
+                        (SELECT "USERID","ID_GROUPID" 
+                            FROM "COM_STRADA_VP_RBP_EMPLOYEES"
+                            ) B
+                        ON  A."GROUPID" = B."ID_GROUPID";
+                        
+    IF iv_status != '' THEN
+                
+        lt_users = SELECT A."USERID",A."COUNTRY",A."STATUS",A."FIRSTNAME",A."LASTNAME",A."MIDDLENAME",
+	                CASE WHEN A."HR" = :iv_user THEN 'HRGBU'
+                    WHEN A."CUSTOMMANAGER" = :iv_user THEN 'HRSITE'
+                    WHEN A."MANAGER" = :iv_user THEN 'MANAGER' 
+                    WHEN A."TIMEKEEPER" = :iv_user THEN 'TIMKP' END AS "ROLE",
+	                A."COMPANY", A."DEFAULTLOCALE" 
+                    FROM "CV_USER_INFO" A
+                        WHERE A."STATUS" = :iv_status AND (A."HR" = :iv_user OR A."CUSTOMMANAGER" = :iv_user
+                        OR A."MANAGER" = :iv_user OR A."TIMEKEEPER" = :iv_user);
+        
+        lt_rbp_users = SELECT A."USERID",B."FIRSTNAME",B."LASTNAME",B."MIDDLENAME",B."COUNTRY",B."STATUS", A."ROLE",
+                            B."COMPANY",B."DEFAULTLOCALE" FROM :lt_rbp_roles AS A
+                            INNER JOIN 
+                            (SELECT "USERID","FIRSTNAME","LASTNAME","MIDDLENAME","COUNTRY","STATUS","COMPANY","DEFAULTLOCALE"
+                                FROM "CV_USER_INFO"
+                                    WHERE "STATUS" = :iv_status) B
+                                ON A."USERID" = B."USERID";
+                                
+    ELSE
+        lt_users = SELECT A."USERID",A."COUNTRY",A."STATUS",A."FIRSTNAME",A."LASTNAME",A."MIDDLENAME",
+	                CASE WHEN A."HR" = :iv_user THEN 'HRGBU'
+                    WHEN A."CUSTOMMANAGER" = :iv_user THEN 'HRSITE'
+                    WHEN A."MANAGER" = :iv_user THEN 'MANAGER' 
+                    WHEN A."TIMEKEEPER" = :iv_user THEN 'TIMKP' END AS "ROLE",
+	                A."COMPANY", A."DEFAULTLOCALE" 
+                    FROM "CV_USER_INFO" A
+                        WHERE (A."STATUS" = 't' OR A."STATUS" = 'f') AND (A."HR" = :iv_user OR A."CUSTOMMANAGER" = :iv_user
+                        OR A."MANAGER" = :iv_user OR A."TIMEKEEPER" = :iv_user); 
+                
+        lt_rbp_users = SELECT A."USERID",B."FIRSTNAME",B."LASTNAME",B."MIDDLENAME",B."COUNTRY",B."STATUS", A."ROLE",
+                        B."COMPANY",B."DEFAULTLOCALE" FROM :lt_rbp_roles AS A
+                    INNER JOIN 
+                    (SELECT "USERID","FIRSTNAME","LASTNAME","MIDDLENAME","COUNTRY","STATUS","COMPANY","DEFAULTLOCALE" 
+                        FROM "CV_USER_INFO"
+                            WHERE "STATUS" = 't' OR "STATUS" = 'f') B
+                            ON A."USERID" = B."USERID";
+                                
+    END IF;
+    
+    lt_all_roles = SELECT "USERID","FIRSTNAME","MIDDLENAME","LASTNAME","COUNTRY","ROLE","STATUS","COMPANY","DEFAULTLOCALE" 
+                        FROM :lt_users 
+                    UNION
+                    SELECT "USERID","FIRSTNAME","MIDDLENAME","LASTNAME","COUNTRY","ROLE","STATUS","COMPANY","DEFAULTLOCALE" 
+                        FROM :lt_rbp_users;
+                    
+	RETURN 
+	
+		SELECT IFNULL("USERID",'') as "USERID",IFNULL("FIRSTNAME",'') as "FIRSTNAME",IFNULL("MIDDLENAME",'') as "MIDDLENAME",
+		       IFNULL("LASTNAME",'') as "LASTNAME", IFNULL("COUNTRY",'') as "COUNTRY","ROLE",
+		       IFNULL("STATUS",'') as "STATUS",IFNULL("COMPANY",'') as "COMPANY",IFNULL(B."CURRENCY_ID",'') AS "CURRENCY",
+		       IFNULL("DEFAULTLOCALE",'') as "DEFAULTLOCALE"
+            FROM :lt_all_roles
+                LEFT OUTER JOIN
+                    "COM_STRADA_VP_MAP_CURRENCY_COUNTRY" AS B
+                    ON "COUNTRY" = B."COUNTRY_ID";
+               
+
+END;

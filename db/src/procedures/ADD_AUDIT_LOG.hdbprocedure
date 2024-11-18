@@ -1,0 +1,27 @@
+PROCEDURE "ADD_AUDIT_LOG"(
+    IN iv_externalCode NVARCHAR(100),
+    IN iv_action INTEGER,
+    IN iv_requestType NVARCHAR(5),
+    IN iv_createdBy NVARCHAR(100),
+    IN iv_add_info NVARCHAR(5000) DEFAULT '',
+    OUT ev_response NVARCHAR(800)
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
+        ev_response := ev_response || '  External Code: ' || :iv_externalCode;
+    END;
+ 
+ev_response = '';
+ 
+INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID","CREATEDAT","CREATEDBY","REQUESTTYPE","ADDITIONALINFO" )
+        VALUES ("LOGGER".NEXTVAL,iv_externalCode,iv_action,CURRENT_UTCTIMESTAMP,iv_createdBy,iv_requestType,iv_add_info);
+END

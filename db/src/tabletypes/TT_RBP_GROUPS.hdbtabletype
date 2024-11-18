@@ -1,0 +1,3 @@
+TYPE "TT_RBP_GROUPS" AS TABLE ( 
+    groupID NVARCHAR(32)
+)

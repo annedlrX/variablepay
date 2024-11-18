@@ -1,0 +1,31 @@
+PROCEDURE "GET_WT_TEST"(
+    IN it_infotype TT_HCI_PAYCOMP,
+    OUT et_infoType_15 TT_HCI_PAYCOMP,
+    OUT et_infoType_None TT_HCI_PAYCOMP,
+    OUT ev_response NVARCHAR(500)
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   READS SQL DATA AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    /*BEGIN
+        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM "SYS_DUMMY";
+    END;*/
+
+    ev_response = '';
+
+    lt_infoType = SELECT A."PAYCOMPONENT" as "PAYCOMPONENT",IFNULL(B."INFOTYPE",'NO') as "INFOTYPE"
+        FROM :it_infoType AS A
+        LEFT OUTER JOIN "COM_STRADA_VP_WAGETYPE_MAPPING" AS B
+        ON A."PAYCOMPONENT" = B."PAYCOMPONENT_ID";
+
+        et_infoType_15 = SELECT "PAYCOMPONENT" FROM :lt_infoType WHERE "INFOTYPE" = 'IT15';
+        et_infoType_None = SELECT "PAYCOMPONENT" FROM :lt_infoType WHERE "INFOTYPE" = 'NO';
+
+END

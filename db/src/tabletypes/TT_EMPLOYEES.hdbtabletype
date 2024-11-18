@@ -1,0 +1,12 @@
+TYPE "TT_EMPLOYEES" AS TABLE (
+    userID NVARCHAR(128),
+    firstName NVARCHAR(128),
+    middleName NVARCHAR(128),
+    lastName NVARCHAR(128),
+    country NVARCHAR(3),
+    role NVARCHAR(128),
+    status NVARCHAR(1),
+    company NVARCHAR(5),
+    currency NVARCHAR(4),
+    defaultLocale NVARCHAR(5)
+ )
