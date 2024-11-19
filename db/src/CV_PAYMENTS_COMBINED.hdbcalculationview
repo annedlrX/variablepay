@@ -40,11 +40,7 @@
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY_ID"/>
     </viewAttributes>
-    <calculatedViewAttributes>
-      <calculatedViewAttribute id="cust_endDate" datatype="DATE" expressionLanguage="COLUMN_ENGINE">
-        <formula>&quot;effectiveStartDate&quot;</formula>
-      </calculatedViewAttribute>
-    </calculatedViewAttributes>
+    <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_ONETIME_PAY"/>
     <filter>&quot;STATUS&quot;=2 or &quot;STATUS&quot;=4 or &quot;STATUS&quot;=5</filter>
   </calculationView>
@@ -100,7 +96,6 @@
       <viewAttribute id="CUST_USER"/>
       <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
       <viewAttribute id="CUST_CALCULATEDAMOUNT" aggregationType="sum"/>
-      <viewAttribute id="cust_endDate"/>
       <viewAttribute id="CUST_UNIT_TXT"/>
       <viewAttribute id="MODIFIEDAT" aggregationType="min"/>
       <viewAttribute id="CREATEDBYUSER"/>
@@ -132,9 +127,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AUTOAPPROVED" source="AUTOAPPROVED"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="cust_endDate" source="cust_endDate"/>
-    </input>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/></input>
     <input node="RecurringPay" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="CUST_EXTERNALCODE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USERID" source="CUST_USERID"/>
@@ -156,9 +149,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AUTOAPPROVED" source="AUTOAPPROVED"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="cust_endDate" source="CUST_ENDDATE"/>
-    </input>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/></input>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
     <viewAttributes>
@@ -176,7 +167,6 @@
       <viewAttribute id="CUST_USER"/>
       <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
       <viewAttribute id="CUST_CALCULATEDAMOUNT" aggregationType="sum"/>
-      <viewAttribute id="cust_endDate"/>
       <viewAttribute id="CUST_UNIT_TXT"/>
       <viewAttribute id="MODIFIEDAT" aggregationType="min"/>
       <viewAttribute id="CREATEDBYUSER"/>
@@ -203,7 +193,6 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USER" source="CUST_USER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_TXT" source="CUST_PAYCOMPONENT_TXT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CALCULATEDAMOUNT" source="CUST_CALCULATEDAMOUNT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="cust_endDate" source="cust_endDate"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT_TXT" source="CUST_UNIT_TXT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
@@ -269,27 +258,23 @@
       <descriptions defaultDescription="CUST_PAYCOMPONENT_TXT"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_PAYCOMPONENT_TXT"/>
     </attribute>
-    <attribute id="cust_endDate" order="15" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="cust_endDate"/>
-      <keyMapping columnObjectName="Join_1" columnName="cust_endDate"/>
-    </attribute>
-    <attribute id="CUST_UNIT_TXT" order="16" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_UNIT_TXT" order="15" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_UNIT_TXT"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_UNIT_TXT"/>
     </attribute>
-    <attribute id="CREATEDBYUSER" order="18" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CREATEDBYUSER" order="17" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBYUSER"/>
       <keyMapping columnObjectName="Join_1" columnName="CREATEDBYUSER"/>
     </attribute>
-    <attribute id="CREATEDBY" order="19" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CREATEDBY" order="18" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBY"/>
       <keyMapping columnObjectName="Join_1" columnName="CREATEDBY"/>
     </attribute>
-    <attribute id="statusTextLanguage" order="23" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="statusTextLanguage" order="22" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="statusTextLanguage"/>
       <keyMapping columnObjectName="Join_1" columnName="LANGUAGE"/>
     </attribute>
-    <attribute id="COUNTRY_ID" order="24" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="COUNTRY_ID" order="23" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="COUNTRY_ID"/>
       <keyMapping columnObjectName="Join_1" columnName="COUNTRY_ID"/>
     </attribute>
@@ -311,22 +296,22 @@
       <measureMapping columnObjectName="Join_1" columnName="CUST_CALCULATEDAMOUNT"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="MODIFIEDAT" order="17" aggregationType="min" measureType="simple">
+    <measure id="MODIFIEDAT" order="16" aggregationType="min" measureType="simple">
       <descriptions defaultDescription="MODIFIEDAT"/>
       <measureMapping columnObjectName="Join_1" columnName="MODIFIEDAT"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="CREATEDAT" order="20" aggregationType="min" measureType="simple">
+    <measure id="CREATEDAT" order="19" aggregationType="min" measureType="simple">
       <descriptions defaultDescription="CREATEDAT"/>
       <measureMapping columnObjectName="Join_1" columnName="CREATEDAT"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="STATUS" order="21" aggregationType="sum" measureType="simple">
+    <measure id="STATUS" order="20" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="STATUS"/>
       <measureMapping columnObjectName="Join_1" columnName="STATUS"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="AUTOAPPROVED" order="22" aggregationType="sum" measureType="simple">
+    <measure id="AUTOAPPROVED" order="21" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="AUTOAPPROVED"/>
       <measureMapping columnObjectName="Join_1" columnName="AUTOAPPROVED"/>
       <exceptionAggregationMetadata/>

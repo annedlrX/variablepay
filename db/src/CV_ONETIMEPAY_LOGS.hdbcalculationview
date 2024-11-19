@@ -81,11 +81,7 @@
       <viewAttribute id="COUNTRY_ID"/>
       <viewAttribute id="SPECIALRECOGNITION"/>
       <viewAttribute id="DELIMITINDICATOR"/></viewAttributes>
-    <calculatedViewAttributes>
-      <calculatedViewAttribute id="cust_endDate" datatype="DATE" expressionLanguage="COLUMN_ENGINE">
-        <formula>&quot;effectiveStartDate&quot;</formula>
-      </calculatedViewAttribute>
-    </calculatedViewAttributes>
+    <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_ONETIME_PAY"/>
     <filter>(&quot;STATUS&quot;=2 or &quot;STATUS&quot;=4 or &quot;STATUS&quot;=5) and ((&quot;CREATEDAT&quot; &gt;= '$$IP_START_DATE$$') and (&quot;CREATEDAT&quot; &lt;= '$$IP_END_DATE$$' ))</filter>
   </calculationView>
@@ -129,7 +125,6 @@
       <viewAttribute id="CREATEDAT" aggregationType="min"/>
       <viewAttribute id="STATUS" aggregationType="sum"/>
       <viewAttribute id="AUTOAPPROVED" aggregationType="sum"/>
-      <viewAttribute id="cust_endDate"/>
       <viewAttribute id="CUST_ALTERNATIVECOSTCENTER"/>
       <viewAttribute id="CUST_EXISTINGCODE"/>
       <viewAttribute id="CUST_SEQUENCENUMBER" aggregationType="sum"/>
@@ -168,7 +163,6 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="SPECIALRECOGNITION" source="SPECIALRECOGNITION"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="cust_endDate" source="cust_endDate"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="STATUS"/>
     </input>
     <input node="Projection_2">
@@ -209,7 +203,6 @@
       <viewAttribute id="CREATEDAT" aggregationType="min"/>
       <viewAttribute id="STATUS" aggregationType="sum"/>
       <viewAttribute id="AUTOAPPROVED" aggregationType="sum"/>
-      <viewAttribute id="cust_endDate"/>
       <viewAttribute id="CUST_ALTERNATIVECOSTCENTER"/>
       <viewAttribute id="CUST_EXISTINGCODE"/>
       <viewAttribute id="CUST_SEQUENCENUMBER" aggregationType="sum"/>
@@ -242,7 +235,6 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AUTOAPPROVED" source="AUTOAPPROVED"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="cust_endDate" source="cust_endDate"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ALTERNATIVECOSTCENTER" source="CUST_ALTERNATIVECOSTCENTER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXISTINGCODE" source="CUST_EXISTINGCODE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_SEQUENCENUMBER" source="CUST_SEQUENCENUMBER"/>
@@ -354,23 +346,19 @@
       <descriptions defaultDescription="CREATEDBY"/>
       <keyMapping columnObjectName="Join_3" columnName="CREATEDBY"/>
     </attribute>
-    <attribute id="cust_endDate" order="31" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="cust_endDate"/>
-      <keyMapping columnObjectName="Join_3" columnName="cust_endDate"/>
-    </attribute>
-    <attribute id="CUST_ALTERNATIVECOSTCENTER" order="32" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_ALTERNATIVECOSTCENTER" order="31" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_ALTERNATIVECOSTCENTER"/>
       <keyMapping columnObjectName="Join_3" columnName="CUST_ALTERNATIVECOSTCENTER"/>
     </attribute>
-    <attribute id="CUST_EXISTINGCODE" order="33" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_EXISTINGCODE" order="32" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_EXISTINGCODE"/>
       <keyMapping columnObjectName="Join_3" columnName="CUST_EXISTINGCODE"/>
     </attribute>
-    <attribute id="CUST_ALTERNATIVECOSTCENTER_TXT" order="35" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_ALTERNATIVECOSTCENTER_TXT" order="34" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_ALTERNATIVECOSTCENTER_TXT"/>
       <keyMapping columnObjectName="Join_3" columnName="CUST_ALTERNATIVECOSTCENTER_TXT"/>
     </attribute>
-    <attribute id="COUNTRY_ID" order="36" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="COUNTRY_ID" order="35" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="COUNTRY_ID"/>
       <keyMapping columnObjectName="Join_3" columnName="COUNTRY_ID"/>
     </attribute>
@@ -422,17 +410,17 @@
       <measureMapping columnObjectName="Join_3" columnName="AUTOAPPROVED"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="CUST_SEQUENCENUMBER" order="34" aggregationType="sum" measureType="simple">
+    <measure id="CUST_SEQUENCENUMBER" order="33" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="CUST_SEQUENCENUMBER"/>
       <measureMapping columnObjectName="Join_3" columnName="CUST_SEQUENCENUMBER"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="SPECIALRECOGNITION" order="37" aggregationType="sum" measureType="simple">
+    <measure id="SPECIALRECOGNITION" order="36" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="SPECIALRECOGNITION"/>
       <measureMapping columnObjectName="Join_3" columnName="SPECIALRECOGNITION"/>
       <exceptionAggregationMetadata/>
     </measure>
-    <measure id="DELIMITINDICATOR" order="38" aggregationType="sum" measureType="simple">
+    <measure id="DELIMITINDICATOR" order="37" aggregationType="sum" measureType="simple">
       <descriptions defaultDescription="DELIMITINDICATOR"/>
       <measureMapping columnObjectName="Join_3" columnName="DELIMITINDICATOR"/>
       <exceptionAggregationMetadata/>
@@ -457,6 +445,11 @@
       <upperLeftCorner x="-23" y="453"/>
       <rectangleSize height="30" width="160"/>
     </shape>
+  
+    <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="358"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="77" y="324"/>
       <rectangleSize height="30" width="160"/>
@@ -469,23 +462,18 @@
       <upperLeftCorner x="367" y="297"/>
       <rectangleSize width="161"/>
     </shape>
-  
-    <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="302" y="358"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
     <shape expanded="true" modelObjectName="Join_3" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="111" y="184"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Join_2" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="298.287109375"/>
+      <rectangleSize width="298"/>
     </shape>
     <shape modelObjectName="Projection_4" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="400" y="30"/>
-      <rectangleSize width="182.98046875"/>
+      <rectangleSize width="182"/>
     </shape>
   </shapes>
 </layout>
-</Calculation:scenario>  
+</Calculation:scenario>
