@@ -51,7 +51,7 @@
       <viewAttribute id="STATUS_ID"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="MODIFIEDAT"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -126,7 +126,7 @@
       <viewAttribute id="STATUS_ID"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="MODIFIEDAT"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -143,7 +143,7 @@
       <viewAttribute id="STATUS_ID"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="MODIFIEDAT"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -154,14 +154,14 @@
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="WORKFLOWSEQUENCE" aggregationType="sum"/>
-      <viewAttribute id="CUST_EXTERNALCODE"/>
       <viewAttribute id="REQUESTTYPE"/>
       <viewAttribute id="FORWARDSEQUENCE" aggregationType="sum"/>
       <viewAttribute id="STATUS_ID" aggregationType="sum"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="MODIFIEDAT" aggregationType="min"/>
+      <viewAttribute id="CUST_EXTERNALCODE"/>
       <viewAttribute id="CUST_USERID"/>
       <viewAttribute id="CUST_PAYCOMPONENT_ID"/>
       <viewAttribute id="EFFECTIVESTARTDATE"/>
@@ -189,8 +189,8 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS_ID" source="STATUS_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$EXTERNALCODE$ID" source="EXTERNALCODE"/>
     </input>
     <input node="Projection_2">
@@ -224,7 +224,7 @@
       <viewAttribute id="STATUS_ID" aggregationType="sum"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="MODIFIEDAT" aggregationType="min"/>
       <viewAttribute id="CUST_EXTERNALCODE"/>
       <viewAttribute id="CUST_USERID"/>
@@ -254,8 +254,8 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS_ID" source="STATUS_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$EXTERNALCODE$CUST_EXTERNALCODE" source="EXTERNALCODE"/>
     </input>
     <input node="Projection_3">
@@ -289,7 +289,7 @@
       <viewAttribute id="STATUS_ID" aggregationType="sum"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="MODIFIEDAT" aggregationType="min"/>
       <viewAttribute id="CUST_EXTERNALCODE"/>
       <viewAttribute id="CUST_USERID"/>
@@ -319,7 +319,6 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS_ID" source="STATUS_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USERID" source="CUST_USERID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_ID" source="CUST_PAYCOMPONENT_ID"/>
@@ -337,6 +336,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER_1" source="CREATEDBYUSER_1"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
     </input>
     <input node="Join_2" emptyUnionBehavior="NO_ROW">
       <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
@@ -347,7 +347,6 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS_ID" source="STATUS_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USERID" source="CUST_USERID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_ID" source="CUST_PAYCOMPONENT_ID"/>
@@ -365,6 +364,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER_1" source="CREATEDBYUSER_1"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
     </input>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_3" joinType="leftOuter">
@@ -376,7 +376,7 @@
       <viewAttribute id="STATUS_ID" aggregationType="sum"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="MODIFIEDAT" aggregationType="min"/>
       <viewAttribute id="CUST_EXTERNALCODE"/>
       <viewAttribute id="CUST_USERID"/>
@@ -407,7 +407,6 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS_ID" source="STATUS_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXTERNALCODE" source="CUST_EXTERNALCODE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_USERID" source="CUST_USERID"/>
@@ -426,6 +425,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER_1" source="CREATEDBYUSER_1"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_PAYCOMPONENT_ID$PAYCOMPONENT_ID" source="CUST_PAYCOMPONENT_ID"/>
     </input>
     <input node="Projection_4">
@@ -486,9 +486,9 @@
       <descriptions defaultDescription="NEXTAGENT"/>
       <keyMapping columnObjectName="Join_3" columnName="NEXTAGENT"/>
     </attribute>
-    <attribute id="CREATEDBYUSER" order="18" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CREATEDBYUSER"/>
-      <keyMapping columnObjectName="Join_3" columnName="CREATEDBYUSER"/>
+    <attribute id="MODIFIEDBY" order="18" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDBY"/>
+      <keyMapping columnObjectName="Join_3" columnName="MODIFIEDBY"/>
     </attribute>
     <attribute id="CUST_PAYCOMPONENT_TXT" order="20" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_PAYCOMPONENT_TXT"/>

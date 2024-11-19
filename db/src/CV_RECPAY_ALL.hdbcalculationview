@@ -76,7 +76,7 @@
       <viewAttribute id="REQFORWARDSEQUENCE"/>
       <viewAttribute id="REQAGENT"/>
       <viewAttribute id="REQNEXTAGENT"/>
-      <viewAttribute id="REQCREATEDBY"/>
+      <viewAttribute id="REQMODIFIEDBY"/>
       <viewAttribute id="REQCREATEDBYUSER"/>
       <viewAttribute id="REQWORKFLOW_ID"/>
       <viewAttribute id="REQNOTIFICATIONAGENT"/>
@@ -84,7 +84,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_REQUEST_FLOW">
-      <mapping xsi:type="Calculation:AttributeMapping" target="REQCREATEDBY" source="CREATEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQEXTERNALCODE" source="EXTERNALCODE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQREQUESTTYPE" source="REQUESTTYPE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQWORKFLOW_ID" source="WORKFLOW_ID"/>
@@ -94,6 +93,8 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="REQNEXTAGENT" source="NEXTAGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQNOTIFICATIONAGENT" source="NOTIFICATIONAGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQCREATEDBYUSER" source="CREATEDBYUSER"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQMODIFIEDBY" source="MODIFIEDBY"/>
     </input>
     <filter>&quot;REQEXTERNALCODE&quot;='$$IP_EXTERNAL_CODE$$' AND &quot;REQREQUESTTYPE&quot;='$$IP_REQUEST_TYPE$$'</filter>
   </calculationView>
@@ -144,7 +145,7 @@
       <viewAttribute id="FORWARDSEQUENCE" aggregationType="sum"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBY_1"/>
+      <viewAttribute id="REQMODIFIEDBY"/>
       <viewAttribute id="CREATEDBYUSER_1"/>
       <viewAttribute id="WORKFLOW_ID"/>
       <viewAttribute id="NOTIFICATIONAGENT"/>
@@ -193,10 +194,10 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="FORWARDSEQUENCE" source="REQFORWARDSEQUENCE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="REQAGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="REQNEXTAGENT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY_1" source="REQCREATEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER_1" source="REQCREATEDBYUSER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="REQWORKFLOW_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NOTIFICATIONAGENT" source="REQNOTIFICATIONAGENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQMODIFIEDBY" source="REQMODIFIEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$REQEXTERNALCODE" source="REQEXTERNALCODE"/>
     </input>
     <joinAttribute name="JOIN$CUST_EXTERNALCODE$REQEXTERNALCODE"/>
@@ -238,7 +239,7 @@
       <viewAttribute id="FORWARDSEQUENCE" aggregationType="sum"/>
       <viewAttribute id="AGENT"/>
       <viewAttribute id="NEXTAGENT"/>
-      <viewAttribute id="CREATEDBY_1"/>
+      <viewAttribute id="REQMODIFIEDBY"/>
       <viewAttribute id="CREATEDBYUSER_1"/>
       <viewAttribute id="WORKFLOW_ID"/>
       <viewAttribute id="NOTIFICATIONAGENT"/>
@@ -283,12 +284,12 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="FORWARDSEQUENCE" source="FORWARDSEQUENCE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="AGENT" source="AGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NEXTAGENT" source="NEXTAGENT"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY_1" source="CREATEDBY_1"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER_1" source="CREATEDBYUSER_1"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="NOTIFICATIONAGENT" source="NOTIFICATIONAGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQMODIFIEDBY" source="REQMODIFIEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$INITIATORLANGUAGE$LANGUAGE" source="INITIATORLANGUAGE"/>
     </input>
@@ -408,9 +409,9 @@
       <descriptions defaultDescription="NEXTAGENT"/>
       <keyMapping columnObjectName="Join_2" columnName="NEXTAGENT"/>
     </attribute>
-    <attribute id="CREATEDBY_1" order="36" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CREATEDBY"/>
-      <keyMapping columnObjectName="Join_2" columnName="CREATEDBY_1"/>
+    <attribute id="REQMODIFIEDBY" order="36" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDBY"/>
+      <keyMapping columnObjectName="Join_2" columnName="REQMODIFIEDBY"/>
     </attribute>
     <attribute id="CREATEDBYUSER_1" order="37" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBYUSER"/>
