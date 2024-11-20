@@ -12,7 +12,7 @@
 <calculationViews>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes>
-      <viewAttribute id="ID"/>
+      <viewAttribute id="WORKFLOW_ID"/>
       <viewAttribute id="TRIGGERWORKFLOW"/>
       <viewAttribute id="SEQUENCE"/>
       <viewAttribute id="AGENTROLE"/>
@@ -22,15 +22,17 @@
       <viewAttribute id="EMAILTEMPLATE_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_WORKFLOW_CONFIG"/>
+    <input node="COM_STRADA_VP_WORKFLOW_CONFIG">
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="ID"/>
+    </input>
   </calculationView>
 </calculationViews>
 
 <logicalModel id="Projection_1">
   <attributes>
-    <attribute id="ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="ID"/>
-      <keyMapping columnObjectName="Projection_1" columnName="ID"/>
+    <attribute id="WORKFLOW_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WORKFLOW_ID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="WORKFLOW_ID"/>
     </attribute>
     <attribute id="TRIGGERWORKFLOW" order="2" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="TRIGGERWORKFLOW"/>
