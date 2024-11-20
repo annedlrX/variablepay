@@ -18,7 +18,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="CUST_EXTERNALCODE"/>
       <viewAttribute id="CUST_USERID"/>
@@ -41,6 +41,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_RECURRING_PAY"/>
+  
+    <filter>(&quot;STATUS&quot; =$$IP_STATUS$$)</filter>
   </calculationView>
 </calculationViews>
 

@@ -97,7 +97,6 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="REQNOTIFICATIONAGENT" source="NOTIFICATIONAGENT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQCREATEDBYUSER" source="CREATEDBYUSER"/>
     </input>
-  
     <filter>&quot;REQEXTERNALCODE&quot;='$$IP_EXTERNAL_CODE$$' AND &quot;REQREQUESTTYPE&quot;='$$IP_REQUEST_TYPE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
@@ -616,9 +615,9 @@
       <descriptions defaultDescription="COUNTRY_ID"/>
       <keyMapping columnObjectName="Projection_5" columnName="COUNTRY_ID"/>
     </attribute>
-    <attribute id="ADDITIONALINFO" order="40" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="ADDITIONALINFO"/>
-      <keyMapping columnObjectName="Projection_5" columnName="ADDITIONALINFO"/>
+    <attribute id="additionalInfo" order="40" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="rejectionComments"/>
+      <keyMapping columnObjectName="Projection_5" columnName="rejectionComments"/>
     </attribute>
     <attribute id="DELIMITINDICATOR" order="41" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="DELIMITINDICATOR"/>
@@ -633,31 +632,31 @@
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="100" y="105"/>
+      <upperLeftCorner x="437.5530788994278" y="112"/>
     
       <rectangleSize width="160"/>
     </shape>
     
   
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-337" y="676"/>
+      <upperLeftCorner x="92" y="821.9999952316284"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-123" y="676"/>
+      <upperLeftCorner x="302" y="821.9999952316284"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-7" y="550"/>
+      <upperLeftCorner x="384.1628101026035" y="661.9999964237213"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="47" y="418"/>
+      <upperLeftCorner x="489.7302622179559" y="501.9999976158142"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-257" y="547"/>
+      <upperLeftCorner x="118.66666666666663" y="661.9999964237213"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
@@ -669,31 +668,31 @@
       <rectangleSize width="250"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-193" y="418"/>
+      <upperLeftCorner x="145.33333333333326" y="501.9999976158142"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Join_1" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="241.64892578125"/>
+      <rectangleSize width="241"/>
     </shape>
     <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="307" y="373"/>
-      <rectangleSize width="158.32177734375"/>
+      <rectangleSize width="158"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_3" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-67" y="311"/>
+      <upperLeftCorner x="425.3219061762591" y="341.9999988079071"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Join_2" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="241.64892578125"/>
+      <rectangleSize width="241"/>
     </shape>
     <shape modelObjectName="Projection_4" modelObjectNameSpace="Join_3" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="178.2861328125"/>
+      <rectangleSize width="178"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_5" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="27" y="211"/>
+      <upperLeftCorner x="425.32190617625906" y="236.9999988079071"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>

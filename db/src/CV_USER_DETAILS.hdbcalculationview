@@ -122,7 +122,7 @@
       <viewAttribute id="MANAGER"/>
       <viewAttribute id="COUNTRY"/>
       <viewAttribute id="COMPANY"/>
-      <viewAttribute id="CURRENCY_ID"/>
+      <viewAttribute id="CURRENCY"/>
       <viewAttribute hidden="true" id="JOIN$COUNTRY$COUNTRY_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -145,7 +145,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$COUNTRY$COUNTRY_ID" source="COUNTRY"/>
     </input>
     <input node="Projection_2">
-      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY_ID" source="CURRENCY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$COUNTRY$COUNTRY_ID" source="COUNTRY_ID"/>
     </input>
     <joinAttribute name="JOIN$COUNTRY$COUNTRY_ID"/>
@@ -216,7 +216,7 @@
     </attribute>
     <attribute id="CURRENCY" order="16" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CURRENCY_ID"/>
-      <keyMapping columnObjectName="Join_1" columnName="CURRENCY_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="CURRENCY"/>
     </attribute>
   </attributes>
   <calculatedAttributes/>

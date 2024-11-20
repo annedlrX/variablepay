@@ -21,7 +21,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="USERID"/>
       <viewAttribute id="USERNAME"/>
@@ -39,15 +39,19 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_USER"/>
+  
+    <filter>&quot;USERID&quot;!='$$IP_USERID$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
       <viewAttribute id="USERID"/>
-      <viewAttribute id="COUNTRYOFCOMPANY"/>
+      <viewAttribute id="COUNTRY"/>
       <viewAttribute id="COMPANY"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_EMPJOB"/>
+    <input node="COM_STRADA_VP_EMPJOB">
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRYOFCOMPANY"/>
+    </input>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
     <viewAttributes>
@@ -64,7 +68,7 @@
       <viewAttribute id="CUSTOMMANAGER"/>
       <viewAttribute id="HR"/>
       <viewAttribute id="MANAGER"/>
-      <viewAttribute id="COUNTRYOFCOMPANY"/>
+      <viewAttribute id="COUNTRY"/>
       <viewAttribute id="COMPANY"/>
       <viewAttribute hidden="true" id="JOIN$USERID$USERID"/>
     </viewAttributes>
@@ -86,7 +90,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$USERID$USERID" source="USERID"/>
     </input>
     <input node="Projection_2">
-      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRYOFCOMPANY" source="COUNTRYOFCOMPANY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="COMPANY" source="COMPANY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$USERID$USERID" source="USERID"/>
     </input>
@@ -148,9 +152,9 @@
       <descriptions defaultDescription="MANAGER"/>
       <keyMapping columnObjectName="Join_1" columnName="MANAGER"/>
     </attribute>
-    <attribute id="COUNTRYOFCOMPANY" order="14" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="COUNTRY" order="14" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="COUNTRYOFCOMPANY"/>
-      <keyMapping columnObjectName="Join_1" columnName="COUNTRYOFCOMPANY"/>
+      <keyMapping columnObjectName="Join_1" columnName="COUNTRY"/>
     </attribute>
     <attribute id="COMPANY" order="15" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="COMPANY"/>
@@ -183,11 +187,11 @@
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="189.08203125"/>
+      <rectangleSize width="189"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="210.265625"/>
+      <rectangleSize width="210"/>
     </shape>
   </shapes>
 </layout>

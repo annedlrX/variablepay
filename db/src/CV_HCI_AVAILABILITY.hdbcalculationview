@@ -4,7 +4,7 @@
 <localVariables>
   <variable id="IP_STATUS" parameter="true">
     <descriptions defaultDescription="IP_STATUS"/>
-    <variableProperties datatype="INTEGER" mandatory="false" defaultValue="">
+    <variableProperties datatype="INTEGER" mandatory="false" defaultValue="undefined" defaultExpressionLanguage="SQL">
       <valueDomain type="empty"/>
       <selection multiLine="false" type="SingleValue"/>
     </variableProperties>
@@ -18,7 +18,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY_ID"/>
@@ -57,6 +57,9 @@
     <input node="COM_STRADA_VP_AVAILABILITY">
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="MODIFIEDAT"/>
     </input>
+  
+    <filter>(&quot;STATUS&quot; =$$IP_STATUS$$)
+</filter>
   </calculationView>
 </calculationViews>
 
