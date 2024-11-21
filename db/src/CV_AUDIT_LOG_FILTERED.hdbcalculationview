@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOG_FILTERED" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_AUDIT_LOG_FILTERED"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOG_FILTERED" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_AUDIT_LOG"/>
 <localVariables>
   <variable id="IP_LANGUAGE" parameter="true">
     <descriptions defaultDescription="IP_LANGUAGE"/>
@@ -142,11 +142,11 @@
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="182.98046875"/>
+      <rectangleSize width="182"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="161.173828125"/>
+      <rectangleSize width="161"/>
     </shape>
   </shapes>
 </layout>
