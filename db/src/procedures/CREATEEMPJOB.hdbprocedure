@@ -1,0 +1,24 @@
+PROCEDURE "CREATEEMPJOB"(
+    IN it_empjob "COM_STRADA_VP_EMPJOB",
+    OUT et_error "TT_ERROR"
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        et_error = SELECT ::SQL_ERROR_CODE AS http_status_code,::SQL_ERROR_MESSAGE  AS error_message, '' AS detail  
+                        FROM DUMMY;
+    END;
+
+    UPSERT "COM_STRADA_VP_EMPJOB"(
+    "USERID","COUNTRYOFCOMPANY","COMPANY","MODIFIEDAT")
+            SELECT  "USERID","COUNTRYOFCOMPANY","COMPANY","MODIFIEDAT"
+                FROM :it_empjob; 
+END

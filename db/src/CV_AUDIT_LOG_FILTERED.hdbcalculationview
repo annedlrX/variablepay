@@ -142,11 +142,11 @@
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="182.98046875"/>
+      <rectangleSize width="182"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="161.173828125"/>
+      <rectangleSize width="161"/>
     </shape>
   </shapes>
 </layout>

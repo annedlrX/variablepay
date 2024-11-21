@@ -1,4 +1,4 @@
-PROCEDURE "ADD_AUDIT_LOG"(
+PROCEDURE "GET_PENDINGAPPROVAL_COUNT"(
     IN iv_externalCode NVARCHAR(100),
     IN iv_action INTEGER,
     IN iv_requestType NVARCHAR(5),
@@ -20,8 +20,9 @@ BEGIN
         ev_response := ev_response || '  External Code: ' || :iv_externalCode;
     END;
  
-ev_response = ''; 
+ev_response = '';
  
 INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID","CREATEDAT","CREATEDBY","REQUESTTYPE","ADDITIONALINFO" )
         VALUES ("LOGGER".NEXTVAL,iv_externalCode,iv_action,CURRENT_UTCTIMESTAMP,iv_createdBy,iv_requestType,iv_add_info);
+
 END

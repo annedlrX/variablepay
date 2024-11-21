@@ -12,5 +12,5 @@ TYPE "TT_VP_USER" AS TABLE (
     customManager NVARCHAR(128),
     hr NVARCHAR(128),
     manager NVARCHAR(128),
-    lastModified TIMESTAMP
+    modifiedat TIMESTAMP
  )
