@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_WAGETYPES_TEXT_V1_1" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_ACTIVE_WAGETYPES_TEXT_V1_1"/>
+<descriptions defaultDescription="CV_WAGETYPES"/>
 <localVariables/>
 <variableMappings/>
 <dataSources>
@@ -215,6 +215,10 @@
       <upperLeftCorner x="309" y="588"/>
       <rectangleSize height="30" width="160"/>
     </shape>
+    <shape expanded="true" modelObjectName="WT_Texts" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="314" y="368"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="107" y="476"/>
       <rectangleSize height="30" width="160"/>
@@ -229,10 +233,6 @@
     </shape>
     <shape expanded="true" modelObjectName="WT" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="85" y="368"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
-    <shape expanded="true" modelObjectName="WT_Texts" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="314" y="368"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
