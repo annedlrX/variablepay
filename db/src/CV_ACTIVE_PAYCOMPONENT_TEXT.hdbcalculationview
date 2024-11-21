@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_PAYCOMPONENT_TEXT" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_ACTIVE_PAYCOMPONENT_TEXT"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_PAYCOMPONENT_TEXT" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_WAGETYPES"/>
 <localVariables>
   <variable id="IP_PAY_COMPONENT" parameter="true">
     <descriptions defaultDescription="IP_PAY_COMPONENT"/>
@@ -103,12 +103,12 @@
 
 <logicalModel id="Join_1">
   <attributes>
-    <attribute id="cust_payComponent" order="1" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="cust_payComponent"/>
+    <attribute id="CUST_PAYCOMPONENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPONENT"/>
       <keyMapping columnObjectName="Join_1" columnName="ID"/>
     </attribute>
-    <attribute id="cust_payComponent_txt" order="2" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="cust_payComponent_txt"/>
+    <attribute id="CUST_PAYCOMPONENT_TXT" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_PAYCOMPONENT_TXT"/>
       <keyMapping columnObjectName="Join_1" columnName="DESCRIPTION"/>
     </attribute>
     <attribute id="IS_AMOUNTTYPE" order="3" displayAttribute="false" attributeHierarchyActive="false">
