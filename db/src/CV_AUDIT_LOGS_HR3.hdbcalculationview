@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOGS_HR3" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_AUDIT_LOGS_HR3"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOGS_HR3" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_PENDING_APPROVAL"/>
 <localVariables>
   <variable id="IP_LANGUAGE" parameter="true">
     <descriptions defaultDescription="IP_LANGUAGE"/>
@@ -70,7 +70,11 @@
       <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
       <viewAttribute id="SPECIALRECOGNITION"/>
     </viewAttributes>
-    <calculatedViewAttributes/>
+    <calculatedViewAttributes>
+      <calculatedViewAttribute id="CUST_ENDDATE" datatype="DATE" expressionLanguage="COLUMN_ENGINE">
+        <formula>&quot;EFFECTIVESTARTDATE&quot;</formula>
+      </calculatedViewAttribute>
+    </calculatedViewAttributes>
     <input node="GET_ONETIME_PAY"/>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
@@ -124,6 +128,7 @@
       <viewAttribute id="COUNTRY"/>
       <viewAttribute id="CUST_UNIT_TXT"/>
       <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="CUST_ENDDATE"/>
       <viewAttribute id="SPECIALRECOGNITION"/>
       <viewAttribute hidden="true" id="JOIN$STATUS$ID"/>
     </viewAttributes>
@@ -151,6 +156,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT_TXT" source="CUST_UNIT_TXT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_TXT" source="CUST_PAYCOMPONENT_TXT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="SPECIALRECOGNITION" source="SPECIALRECOGNITION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ENDDATE" source="CUST_ENDDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="STATUS"/>
     </input>
     <input node="Projection_2">
@@ -191,6 +197,7 @@
       <viewAttribute id="COUNTRY"/>
       <viewAttribute id="CUST_UNIT_TXT"/>
       <viewAttribute id="CUST_PAYCOMPONENT_TXT"/>
+      <viewAttribute id="CUST_ENDDATE"/>
       <viewAttribute id="SPECIALRECOGNITION"/>
       <viewAttribute hidden="true" id="JOIN$CUST_EXTERNALCODE$EXTERNALCODE"/>
     </viewAttributes>
@@ -219,6 +226,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_UNIT_TXT" source="CUST_UNIT_TXT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_PAYCOMPONENT_TXT" source="CUST_PAYCOMPONENT_TXT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="SPECIALRECOGNITION" source="SPECIALRECOGNITION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_ENDDATE" source="CUST_ENDDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$EXTERNALCODE" source="CUST_EXTERNALCODE"/>
     </input>
     <input node="Projection_3">
@@ -326,39 +334,43 @@
       <descriptions defaultDescription="CUST_PAYCOMPONENT_TXT"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_PAYCOMPONENT_TXT"/>
     </attribute>
-    <attribute id="LOGID" order="23" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_ENDDATE" order="23" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_ENDDATE"/>
+      <keyMapping columnObjectName="Join_2" columnName="CUST_ENDDATE"/>
+    </attribute>
+    <attribute id="LOGID" order="24" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ID"/>
       <keyMapping columnObjectName="Join_2" columnName="LOGID"/>
     </attribute>
-    <attribute id="LOGACTION_ID" order="24" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="LOGACTION_ID" order="25" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ACTION_ID"/>
       <keyMapping columnObjectName="Join_2" columnName="LOGACTION_ID"/>
     </attribute>
-    <attribute id="LOGCREATEDON" order="25" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="LOGCREATEDON" order="26" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDAT"/>
       <keyMapping columnObjectName="Join_2" columnName="LOGCREATEDON"/>
     </attribute>
-    <attribute id="LOGCREATEDBY" order="26" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="LOGCREATEDBY" order="27" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBY"/>
       <keyMapping columnObjectName="Join_2" columnName="LOGCREATEDBY"/>
     </attribute>
-    <attribute id="REQUESTTYPE" order="27" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="REQUESTTYPE" order="28" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="REQUESTTYPE"/>
       <keyMapping columnObjectName="Join_2" columnName="REQUESTTYPE"/>
     </attribute>
-    <attribute id="ADDITIONALINFO" order="28" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="ADDITIONALINFO" order="29" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ADDITIONALINFO"/>
       <keyMapping columnObjectName="Join_2" columnName="ADDITIONALINFO"/>
     </attribute>
-    <attribute id="LOGCREATEDBYUSER" order="29" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="LOGCREATEDBYUSER" order="30" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBYUSER"/>
       <keyMapping columnObjectName="Join_2" columnName="LOGCREATEDBYUSER"/>
     </attribute>
-    <attribute id="ACTIONDESC" order="30" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="ACTIONDESC" order="31" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="DESCRIPTION"/>
       <keyMapping columnObjectName="Join_2" columnName="ACTIONDESC"/>
     </attribute>
-    <attribute id="SPECIALRECOGNITION" order="31" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="SPECIALRECOGNITION" order="32" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="SPECIALRECOGNITION"/>
       <keyMapping columnObjectName="Join_2" columnName="SPECIALRECOGNITION"/>
     </attribute>
@@ -383,21 +395,21 @@
       <upperLeftCorner x="293" y="527"/>
       <rectangleSize height="30" width="160"/>
     </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="225" y="376"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="-23" y="385"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Onetimepay" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="241.64892578125"/>
+      <rectangleSize width="241"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="161.173828125"/>
-    </shape>
-    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="225" y="376"/>
-      <rectangleSize height="30" width="160"/>
+      <rectangleSize width="161"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="93" y="236"/>
