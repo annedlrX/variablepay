@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_WAGETYPES_TEXT" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_ACTIVE_WAGETYPES_TEXT"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_WAGETYPES_TEXT" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_WAGETYPES"/>
 <localVariables>
   <variable id="IP_COMPANY_CODE" parameter="true">
     <descriptions defaultDescription="IP_COMPANY_CODE"/>
@@ -100,6 +100,9 @@
       <viewAttribute id="ISINDEVAL"/>
       <viewAttribute id="CURRENCY"/>
       <viewAttribute id="IS_QUOTACOMPENSATION"/>
+      <viewAttribute id="CUST_FREQUENCY"/>
+      <viewAttribute id="CUST_FREQUENCY_TXT"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
       <viewAttribute hidden="true" id="JOIN$PAYCOMPONENT_ID$ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -107,6 +110,9 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="INFOTYPE" source="INFOTYPE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_FREQUENCY" source="CUST_FREQUENCY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_FREQUENCY_TXT" source="CUST_FREQUENCY_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PAYCOMPONENT_ID$ID" source="PAYCOMPONENT_ID"/>
     </input>
     <input node="Projection_2">
@@ -133,6 +139,10 @@
       <viewAttribute id="ISINDEVAL"/>
       <viewAttribute id="CURRENCY"/>
       <viewAttribute id="IS_QUOTACOMPENSATION"/>
+    
+      <viewAttribute id="CUST_FREQUENCY"/>
+      <viewAttribute id="CUST_FREQUENCY_TXT"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="Join_1"/>
@@ -150,6 +160,10 @@
       <viewAttribute id="ISINDEVAL"/>
       <viewAttribute id="CURRENCY"/>
       <viewAttribute id="IS_QUOTACOMPENSATION"/>
+      <viewAttribute id="LANGUAGE"/>
+      <viewAttribute id="CUST_FREQUENCY"/>
+      <viewAttribute id="CUST_FREQUENCY_TXT"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
       <viewAttribute hidden="true" id="JOIN$PAYCOMPONENT_ID$PAYCOMPONENT_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -164,10 +178,14 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="ISINDEVAL" source="ISINDEVAL"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="IS_QUOTACOMPENSATION" source="IS_QUOTACOMPENSATION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_FREQUENCY" source="CUST_FREQUENCY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_FREQUENCY_TXT" source="CUST_FREQUENCY_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PAYCOMPONENT_ID$PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
     </input>
     <input node="WT_Texts">
       <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$PAYCOMPONENT_ID$PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
     </input>
     <joinAttribute name="JOIN$PAYCOMPONENT_ID$PAYCOMPONENT_ID"/>
@@ -219,7 +237,24 @@
     <attribute id="IS_QUOTACOMPENSATION" order="11" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="IS_QUOTACOMPENSATION"/>
       <keyMapping columnObjectName="Join_2" columnName="IS_QUOTACOMPENSATION"/>
-    </attribute></attributes>
+    </attribute>
+    <attribute id="LANGUAGE" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LANGUAGE"/>
+      <keyMapping columnObjectName="Join_2" columnName="LANGUAGE"/>
+    </attribute>
+    <attribute id="CUST_FREQUENCY" order="13" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_FREQUENCY"/>
+      <keyMapping columnObjectName="Join_2" columnName="CUST_FREQUENCY"/>
+    </attribute>
+    <attribute id="CUST_FREQUENCY_TXT" order="14" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CUST_FREQUENCY_TXT"/>
+      <keyMapping columnObjectName="Join_2" columnName="CUST_FREQUENCY_TXT"/>
+    </attribute>
+    <attribute id="DELIMITINDICATOR" order="15" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DELIMITINDICATOR"/>
+      <keyMapping columnObjectName="Join_2" columnName="DELIMITINDICATOR"/>
+    </attribute>
+  </attributes>
   <calculatedAttributes/>
   <baseMeasures/>
   <calculatedMeasures/>
@@ -228,7 +263,9 @@
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="40" y="85"/>
+      <upperLeftCorner x="94" y="105"/>
+    
+      <rectangleSize width="160"/>
     </shape>
     
   
@@ -245,7 +282,7 @@
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="49" y="434"/>
+      <upperLeftCorner x="50" y="459"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
@@ -257,7 +294,7 @@
       <rectangleSize width="255"/>
     </shape>
     <shape expanded="true" modelObjectName="WT" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-110" y="314"/>
+      <upperLeftCorner x="-109" y="352"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
