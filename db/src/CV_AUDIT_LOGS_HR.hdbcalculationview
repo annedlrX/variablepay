@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOGS_HR" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_AUDIT_LOGS_HR"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOGS_HR" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_PENDING_APPROVAL"/>
 <localVariables>
   <variable id="IP_LANGUAGE" parameter="true">
     <descriptions defaultDescription="IP_LANGUAGE"/>
@@ -252,53 +252,53 @@
 
 <logicalModel id="Join_2">
   <attributes>
-    <attribute id="STATUSDESC" order="1" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="STATUSDESC"/>
-      <keyMapping columnObjectName="Join_2" columnName="STATUSDESC"/>
-    </attribute>
-    <attribute id="CUST_EXTERNALCODE" order="2" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_EXTERNALCODE" order="1" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_EXTERNALCODE"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_EXTERNALCODE"/>
     </attribute>
-    <attribute id="CUST_USERID" order="3" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_USERID" order="2" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_USERID"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_USERID"/>
     </attribute>
-    <attribute id="CUST_PAYCOMPONENT" order="4" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_PAYCOMPONENT" order="3" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_PAYCOMPONENT"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_PAYCOMPONENT"/>
     </attribute>
-    <attribute id="EFFECTIVESTARTDATE" order="5" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="EFFECTIVESTARTDATE" order="4" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="EFFECTIVESTARTDATE"/>
       <keyMapping columnObjectName="Join_2" columnName="EFFECTIVESTARTDATE"/>
     </attribute>
-    <attribute id="CUST_PAYCOMPVALUE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_PAYCOMPVALUE" order="5" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_PAYCOMPVALUE"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_PAYCOMPVALUE"/>
     </attribute>
-    <attribute id="CUST_CURRENCYCODE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CURRENCYCODE" order="6" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CURRENCYCODE"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_CURRENCYCODE"/>
     </attribute>
-    <attribute id="CUST_CUSTOMSTRING" order="8" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CUSTOMSTRING" order="7" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMSTRING"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_CUSTOMSTRING"/>
     </attribute>
-    <attribute id="CUST_NUMBER" order="9" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_NUMBER" order="8" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_NUMBER"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_NUMBER"/>
     </attribute>
-    <attribute id="CUST_UNIT" order="10" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_UNIT" order="9" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_UNIT"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_UNIT"/>
     </attribute>
-    <attribute id="CUST_NOTES" order="11" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_NOTES" order="10" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_NOTES"/>
       <keyMapping columnObjectName="Join_2" columnName="CUST_NOTES"/>
     </attribute>
-    <attribute id="STATUS" order="12" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="STATUS" order="11" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="STATUS"/>
       <keyMapping columnObjectName="Join_2" columnName="STATUS"/>
+    </attribute>
+    <attribute id="STATUSDESC" order="12" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUSDESC"/>
+      <keyMapping columnObjectName="Join_2" columnName="STATUSDESC"/>
     </attribute>
     <attribute id="LASTMODIFIED" order="13" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="LASTMODIFIED"/>
