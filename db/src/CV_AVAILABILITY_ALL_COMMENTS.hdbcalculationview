@@ -218,8 +218,8 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$REQEXTERNALCODE$CUST_EXTERNALCODE" source="CUST_EXTERNALCODE"/>
     </input>
     <joinAttribute name="JOIN$REQEXTERNALCODE$CUST_EXTERNALCODE"/>
@@ -270,7 +270,7 @@
       <viewAttribute id="ID"/>
       <viewAttribute id="LANGUAGE"/>
       <viewAttribute id="STATUSDESC"/>
-      <viewAttribute hidden="true" id="JOIN$STATUS$STATUSDESC"/>
+      <viewAttribute hidden="true" id="JOIN$STATUS$ID"/>
       <viewAttribute hidden="true" id="JOIN$INITIATORLANGUAGE$LANGUAGE"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -314,19 +314,19 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$STATUSDESC" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$INITIATORLANGUAGE$LANGUAGE" source="INITIATORLANGUAGE"/>
     </input>
     <input node="Projection_3">
       <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="STATUSDESC"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$STATUSDESC" source="STATUSDESC"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$INITIATORLANGUAGE$LANGUAGE" source="LANGUAGE"/>
     </input>
-    <joinAttribute name="JOIN$STATUS$STATUSDESC"/>
+    <joinAttribute name="JOIN$STATUS$ID"/>
     <joinAttribute name="JOIN$INITIATORLANGUAGE$LANGUAGE"/>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_3" joinType="leftOuter">
