@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AVAILABILITY_LOGS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_AVAILABILITY_LOGS"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AVAILABILITY_LOGS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_PENDING_APPROVAL"/>
 <localVariables>
   <variable id="IP_LANGUAGE" parameter="true">
     <descriptions defaultDescription="IP_LANGUAGE"/>
@@ -102,11 +102,13 @@
       <viewAttribute id="REQUESTTYPE"/>
       <viewAttribute id="ADDITIONALINFO"/>
       <viewAttribute id="CREATEDBYUSER"/>
-      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="ACTIONDESC"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="CV_AUDIT_LOG_FILTERED">
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDAT"/>
+    
+      <mapping xsi:type="Calculation:AttributeMapping" target="ACTIONDESC" source="DESCRIPTION"/>
     </input>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="rightOuter">
@@ -143,6 +145,7 @@
       <viewAttribute id="EFFECTIVESTARTDATE"/>
       <viewAttribute id="INITIATORLANGUAGE"/>
       <viewAttribute id="LASTMODIFIED"/>
+      <viewAttribute id="STATUS"/>
       <viewAttribute hidden="true" id="JOIN$ID$STATUS"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -182,6 +185,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$STATUS" source="STATUS"/>
     </input>
     <joinAttribute name="JOIN$ID$STATUS"/>
@@ -220,6 +224,7 @@
       <viewAttribute id="EFFECTIVESTARTDATE"/>
       <viewAttribute id="INITIATORLANGUAGE"/>
       <viewAttribute id="LASTMODIFIED"/>
+      <viewAttribute id="STATUS"/>
       <viewAttribute id="ID"/>
       <viewAttribute id="EXTERNALCODE"/>
       <viewAttribute id="ACTION_ID"/>
@@ -228,7 +233,7 @@
       <viewAttribute id="REQUESTTYPE"/>
       <viewAttribute id="ADDITIONALINFO"/>
       <viewAttribute id="CREATEDBYUSER_1"/>
-      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="ACTIONDESC"/>
       <viewAttribute hidden="true" id="JOIN$CUST_EXTERNALCODE$EXTERNALCODE"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -265,6 +270,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$EXTERNALCODE" source="CUST_EXTERNALCODE"/>
     </input>
     <input node="Projection_3">
@@ -276,7 +282,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTTYPE" source="REQUESTTYPE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="ADDITIONALINFO" source="ADDITIONALINFO"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER_1" source="CREATEDBYUSER"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ACTIONDESC" source="ACTIONDESC"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$CUST_EXTERNALCODE$EXTERNALCODE" source="EXTERNALCODE"/>
     </input>
     <joinAttribute name="JOIN$CUST_EXTERNALCODE$EXTERNALCODE"/>
@@ -413,43 +419,42 @@
       <descriptions defaultDescription="LASTMODIFIED"/>
       <keyMapping columnObjectName="Join_2" columnName="LASTMODIFIED"/>
     </attribute>
-    <attribute id="ID" order="33" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="STATUS" order="33" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS"/>
+      <keyMapping columnObjectName="Join_2" columnName="STATUS"/>
+    </attribute>
+    <attribute id="ID" order="34" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ID"/>
       <keyMapping columnObjectName="Join_2" columnName="ID"/>
     </attribute>
-    <attribute id="EXTERNALCODE" order="34" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="EXTERNALCODE" order="35" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="EXTERNALCODE"/>
       <keyMapping columnObjectName="Join_2" columnName="EXTERNALCODE"/>
     </attribute>
-    <attribute id="ACTION_ID" order="35" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="ACTION_ID" order="36" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ACTION_ID"/>
       <keyMapping columnObjectName="Join_2" columnName="ACTION_ID"/>
     </attribute>
-    <attribute id="CREATEDON_1" order="36" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CREATEDON_1" order="37" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDON_1"/>
       <keyMapping columnObjectName="Join_2" columnName="CREATEDON_1"/>
     </attribute>
-    <attribute id="CREATEDBY_1" order="37" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CREATEDBY_1" order="38" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBY_1"/>
       <keyMapping columnObjectName="Join_2" columnName="CREATEDBY_1"/>
     </attribute>
-    <attribute id="REQUESTTYPE" order="38" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="REQUESTTYPE" order="39" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="REQUESTTYPE"/>
       <keyMapping columnObjectName="Join_2" columnName="REQUESTTYPE"/>
     </attribute>
-    <attribute id="ADDITIONALINFO" order="39" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="ADDITIONALINFO" order="40" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ADDITIONALINFO"/>
       <keyMapping columnObjectName="Join_2" columnName="ADDITIONALINFO"/>
     </attribute>
-    <attribute id="CREATEDBYUSER_1" order="40" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CREATEDBYUSER_1" order="41" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBYUSER_1"/>
       <keyMapping columnObjectName="Join_2" columnName="CREATEDBYUSER_1"/>
-    </attribute>
-    <attribute id="DESCRIPTION" order="41" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="DESCRIPTION"/>
-      <keyMapping columnObjectName="Join_2" columnName="DESCRIPTION"/>
-    </attribute>
-  </attributes>
+    </attribute></attributes>
   <calculatedAttributes/>
   <baseMeasures/>
   <calculatedMeasures/>
@@ -500,4 +505,4 @@
     </shape>
   </shapes>
 </layout>
-</Calculation:scenario>  
+</Calculation:scenario>
