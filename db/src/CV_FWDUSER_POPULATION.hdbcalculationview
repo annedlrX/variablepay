@@ -39,7 +39,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_USER"/>
-  
     <filter>&quot;USERID&quot;!='$$IP_USERID$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">

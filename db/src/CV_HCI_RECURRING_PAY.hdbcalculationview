@@ -41,7 +41,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_RECURRING_PAY"/>
-  
     <filter>(&quot;STATUS&quot; =$$IP_STATUS$$)</filter>
   </calculationView>
 </calculationViews>
