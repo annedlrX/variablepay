@@ -32,37 +32,28 @@ DECLARE EXIT HANDLER FOR SQLEXCEPTION
 ev_response='';
 SELECT "GET_UUID"() INTO lv_extid FROM DUMMY;
 
-/*SELECT COUNT(*) INTO lv_count FROM "SOLVAY_VARPAY_QA"."com.solvay.varpayqa.db::Table.VP_AVAILABILITY"
---WHERE ("cust_payComponent.id","cust_userId", "effectiveStartDate","cust_endDate") IN 
-                (SELECT "cust_payComponent.id","cust_userId", "effectiveStartDate","cust_endDate"  
-                    FROM :it_recpay) 
-                    AND ("status" = lc_status_complete OR "status" = lc_status_pending);
-IF lv_count != 0 THEN
-    lv_additional_info = 'Record with same Start/End dates, Paycomponent, Amount details already exists for the user!';
-END IF;*/
-
-    /*
-INSERT INTO "VP_AVAILABILITY"("cust_externalCode", "cust_userId", "cust_payComponent.id", "effectiveStartDate",
-"cust_startTime","cust_endDate","cust_endTime","cust_customString","cust_notes","cust_existingCode","status","lastModified","createdBy","createdOn","autoApproved",
-"createdByUser","country.id","initiatorLanguage","cust_payComponent_txt","delimitIndicator","cust_dailyWorkSchedule","cust_dailyWorkScheduleTxt","cust_dwsGrouping",
-"cust_dwsGroupingTxt","cust_wsVariant","cust_wsVariantTxt","cust_customVar1","cust_customVar2","cust_customVar3","cust_customVar4",	"cust_customVar5","cust_customVar6"
+    
+INSERT INTO "COM_STRADA_VP_AVAILABILITY"("ID","CUST_EXTERNALCODE", "CUST_USERID", "CUST_PAYCOMPONENT_ID", "EFFECTIVESTARTDATE",
+"CUST_STARTTIME","CUST_ENDDATE","CUST_ENDTIME","CUST_CUSTOMSTRING","CUST_NOTES","CUST_EXISTINGCODE","STATUS","MODIFIEDAT","CREATEDBY","CREATEDAT","AUTOAPPROVED",
+"CREATEDBYUSER","COUNTRY_ID","INITIATORLANGUAGE","CUST_PAYCOMPONENT_TXT","DELIMITINDICATOR","CUST_DAILYWORKSCHEDULE","CUST_DAILYWORKSCHEDULETXT","CUST_DWSGROUPING",
+"CUST_DWSGROUPINGTXT","CUST_WSVARIANT","CUST_WSVARIANTTXT","CUST_CUSTOMVAR1","CUST_CUSTOMVAR2","CUST_CUSTOMVAR3","CUST_CUSTOMVAR4",	"CUST_CUSTOMVAR5","CUST_CUSTOMVAR6"
 )
 
-        SELECT :lv_extid, "cust_userId", "cust_payComponent.id", "effectiveStartDate",
-"cust_startTime","cust_endDate","cust_endTime","cust_customString","cust_notes","cust_existingCode","status",CURRENT_UTCTIMESTAMP,"createdBy","createdOn","autoApproved",
-"createdByUser","country.id","initiatorLanguage","cust_payComponent_txt","delimitIndicator","cust_dailyWorkSchedule","cust_dailyWorkScheduleTxt","cust_dwsGrouping",
-"cust_dwsGroupingTxt","cust_wsVariant","cust_wsVariantTxt","cust_customVar1","cust_customVar2","cust_customVar3","cust_customVar4",	"cust_customVar5","cust_customVar6"
+        SELECT :lv_extid, :lv_extid, "CUST_USERID", "CUST_PAYCOMPONENT_ID", "EFFECTIVESTARTDATE",
+"CUST_STARTTIME","CUST_ENDDATE","CUST_ENDTIME","CUST_CUSTOMSTRING","CUST_NOTES","CUST_EXISTINGCODE","STATUS",CURRENT_UTCTIMESTAMP,"CREATEDBY","CREATEDAT","AUTOAPPROVED",
+"CREATEDBYUSER","COUNTRY_ID","INITIATORLANGUAGE","CUST_PAYCOMPONENT_TXT","DELIMITINDICATOR","CUST_DAILYWORKSCHEDULE","CUST_DAILYWORKSCHEDULETXT","CUST_DWSGROUPING",
+"CUST_DWSGROUPINGTXT","CUST_WSVARIANT","CUST_WSVARIANTTXT","CUST_CUSTOMVAR1","CUST_CUSTOMVAR2","CUST_CUSTOMVAR3","CUST_CUSTOMVAR4",	"CUST_CUSTOMVAR5","CUST_CUSTOMVAR6"
             FROM :it_recpay; 
             
 
-INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("id","externalCode","action.id","createdOn",
-"createdBy","requestType","additionalInfo","createdByUser")
+INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID","CREATEDAT",
+"CREATEDBY","REQUESTTYPE","ADDITIONALINFO","CREATEDBYUSER")
     SELECT "LOGGER".NEXTVAL,lv_extid,
-    CASE WHEN "autoApproved" = 1 THEN lc_action_submitted ELSE lc_action_approval  END AS "action.id",
-    CURRENT_UTCTIMESTAMP,"createdBy",lc_infoType14,
-     lv_additional_info ,"createdByUser"
+    CASE WHEN "AUTOAPPROVED" = 1 THEN lc_action_submitted ELSE lc_action_approval  END AS "ACTION_ID",
+    CURRENT_UTCTIMESTAMP,"CREATEDBY",lc_infoType14,
+     lv_additional_info ,"CREATEDBYUSER"
         FROM :it_recpay;
  
-CALL "ADD_REQUESTFLOW"(lv_extid,:it_req_flow,ev_response); */
+CALL "ADD_REQUESTFLOW"(lv_extid,:it_req_flow,ev_response); 
 
 END

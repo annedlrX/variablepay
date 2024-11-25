@@ -1,0 +1,23 @@
+PROCEDURE "UPDATE_ONETIMEPAY"(
+    IN iv_externalCode NVARCHAR(100),
+    IN iv_status INTEGER,
+    OUT ev_response NVARCHAR(800)
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
+    END;
+ev_response = '';
+UPDATE "COM_STRADA_VP_ONETIME_PAY"
+SET "STATUS" = iv_status,"MODIFIEDAT"= CURRENT_UTCTIMESTAMP WHERE "CUST_EXTERNALCODE" = iv_externalCode;
+
+
+END

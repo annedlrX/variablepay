@@ -1,0 +1,43 @@
+PROCEDURE "UPDATE_ONETIMEPAY_HCI"(
+    IN it_hci_logs "TT_HCI_LOGS",
+    OUT ev_response NVARCHAR(5000),
+    OUT ev_ins_count INTEGER,
+    OUT ev_upd_count INTEGER
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
+    END;
+ev_response = '';
+ev_ins_count = 0;
+ev_upd_count = 0;
+
+-- Update status of OneTime payment records posted from HCI
+MERGE INTO "COM_STRADA_VP_ONETIME_PAY" AS A
+    USING :it_hci_logs AS B
+    ON A."CUST_EXTERNALCODE" = B."EXTERNALCODE"
+    WHEN MATCHED THEN UPDATE SET 
+        A."STATUS" = B."STATUS",
+        A."MODIFIEDAT" = CURRENT_UTCTIMESTAMP;  
+
+ev_upd_count= ::ROWCOUNT;
+
+IF ev_upd_count > 0 THEN 
+-- Update logs of OneTime payment records posted from HCI
+    INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID",
+        "CREATEDAT","CREATEDBY","REQUESTTYPE","ADDITIONALINFO","CREATEDBYUSER")
+        SELECT "LOGGER".NEXTVAL as "ID",
+            "EXTERNALCODE","ACTION",CURRENT_UTCTIMESTAMP,'HCI',"REQUESTTYPE","COMMENTS" as "ADDITIONALINFO",'HCI'
+            FROM :it_hci_logs; 
+    ev_ins_count= ::ROWCOUNT;
+END IF;
+
+END
