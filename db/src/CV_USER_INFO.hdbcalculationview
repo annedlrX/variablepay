@@ -26,10 +26,6 @@
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
-      <viewAttribute id="CREATEDAT"/>
-      <viewAttribute id="CREATEDBY"/>
-      <viewAttribute id="MODIFIEDAT"/>
-      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="USERID"/>
       <viewAttribute id="USERNAME"/>
       <viewAttribute id="EMPLOYEEID"/>
@@ -50,16 +46,14 @@
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>
-      <viewAttribute id="CREATEDAT"/>
-      <viewAttribute id="CREATEDBY"/>
-      <viewAttribute id="MODIFIEDAT"/>
-      <viewAttribute id="MODIFIEDBY"/>
       <viewAttribute id="USERID"/>
-      <viewAttribute id="COUNTRYOFCOMPANY"/>
+      <viewAttribute id="COUNTRY"/>
       <viewAttribute id="COMPANY"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_EMPJOB"/>
+    <input node="COM_STRADA_VP_EMPJOB">
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRYOFCOMPANY"/>
+    </input>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_N" joinType="leftOuter">
     <viewAttributes>
@@ -104,7 +98,7 @@
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_2" cardinality="CN_N" joinType="rightOuter">
     <viewAttributes>
-      <viewAttribute id="COUNTRYOFCOMPANY"/>
+      <viewAttribute id="COUNTRY"/>
       <viewAttribute id="COMPANY"/>
       <viewAttribute id="USERID"/>
       <viewAttribute id="USERNAME"/>
@@ -124,7 +118,7 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="Projection_3">
-      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRYOFCOMPANY" source="COUNTRYOFCOMPANY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="COMPANY" source="COMPANY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="USERID" source="USERID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$USERID$USERID" source="USERID"/>
@@ -167,7 +161,9 @@
       <viewAttribute id="TIMEKEEPER"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="Join_2"/>
+    <input node="Join_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRYOFCOMPANY" source="COUNTRY"/>
+    </input>
   </calculationView>
 </calculationViews>
 
@@ -247,24 +243,26 @@
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="40" y="85"/>
+      <upperLeftCorner x="343" y="112"/>
+    
+      <rectangleSize width="160"/>
     </shape>
     
   
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="32" y="743"/>
+      <upperLeftCorner x="91" y="661"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-373" y="729"/>
+      <upperLeftCorner x="301" y="661"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="16" y="606"/>
+      <upperLeftCorner x="395" y="501"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-223" y="612"/>
+      <upperLeftCorner x="118" y="501"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
@@ -276,7 +274,7 @@
       <rectangleSize width="156"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-111" y="451"/>
+      <upperLeftCorner x="329" y="341"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
@@ -288,7 +286,7 @@
       <rectangleSize width="189"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="-118" y="350"/>
+      <upperLeftCorner x="329" y="236"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>

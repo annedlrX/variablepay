@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_ACTIVE_WAGETYPES"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_WAGETYPES"/>
 <localVariables>
   <variable id="IP_COMPANY_CODE" parameter="true">
     <descriptions defaultDescription="IP_COMPANY_CODE"/>
@@ -183,8 +183,8 @@
       <descriptions defaultDescription="INFOTYPE"/>
       <keyMapping columnObjectName="Join_1" columnName="INFOTYPE"/>
     </attribute>
-    <attribute id="PAYCOMPONENT_ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="PAYCOMPONENT_ID"/>
+    <attribute id="PAYCOMPONENT" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PAYCOMPONENT"/>
       <keyMapping columnObjectName="Join_1" columnName="PAYCOMPONENT_ID"/>
     </attribute>
     <attribute id="WORKFLOW_ID" order="3" displayAttribute="false" attributeHierarchyActive="false">

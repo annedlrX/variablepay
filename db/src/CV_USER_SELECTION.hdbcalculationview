@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_USER_SELECTION" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_USER_SELECTION"/>
+<localVariables>
+  <variable id="IP_USERID" parameter="true">
+    <descriptions defaultDescription="IP_USERID"/>
+    <variableProperties datatype="NVARCHAR" length="128" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_STATUS" parameter="true">
+    <descriptions defaultDescription="IP_STATUS"/>
+    <variableProperties datatype="NVARCHAR" length="1" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="GET_EMPLOYEE_SELECTION" type="TABLE_FUNCTION">
+    <resourceUri>GET_EMPLOYEE_SELECTION</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="USERID"/>
+      <viewAttribute id="FIRSTNAME"/>
+      <viewAttribute id="MIDDLENAME"/>
+      <viewAttribute id="LASTNAME"/>
+      <viewAttribute id="COUNTRY"/>
+      <viewAttribute id="ROLE"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="COMPANY"/>
+      <viewAttribute id="CURRENCY"/>
+      <viewAttribute id="DEFAULTLOCALE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="GET_EMPLOYEE_SELECTION"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Projection_1">
+  <attributes>
+    <attribute id="USERID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="USERID"/>
+      <keyMapping columnObjectName="Projection_1" columnName="USERID"/>
+    </attribute>
+    <attribute id="FIRSTNAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="FIRSTNAME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="FIRSTNAME"/>
+    </attribute>
+    <attribute id="MIDDLENAME" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MIDDLENAME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="MIDDLENAME"/>
+    </attribute>
+    <attribute id="LASTNAME" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LASTNAME"/>
+      <keyMapping columnObjectName="Projection_1" columnName="LASTNAME"/>
+    </attribute>
+    <attribute id="COUNTRY" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COUNTRY"/>
+      <keyMapping columnObjectName="Projection_1" columnName="COUNTRY"/>
+    </attribute>
+    <attribute id="ROLE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ROLE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="ROLE"/>
+    </attribute>
+    <attribute id="STATUS" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS"/>
+      <keyMapping columnObjectName="Projection_1" columnName="STATUS"/>
+    </attribute>
+    <attribute id="COMPANY" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COMPANY"/>
+      <keyMapping columnObjectName="Projection_1" columnName="COMPANY"/>
+    </attribute>
+    <attribute id="CURRENCY" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CURRENCY"/>
+      <keyMapping columnObjectName="Projection_1" columnName="CURRENCY"/>
+    </attribute>
+    <attribute id="DEFAULTLOCALE" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DEFAULTLOCALE"/>
+      <keyMapping columnObjectName="Projection_1" columnName="DEFAULTLOCALE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="92" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

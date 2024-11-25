@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOG" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AUDIT_LOG" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
 <descriptions defaultDescription="CV_AUDIT_LOG"/>
 <localVariables/>
 <variableMappings/>
@@ -18,7 +18,7 @@
       <viewAttribute id="ID"/>
       <viewAttribute id="EXTERNALCODE"/>
       <viewAttribute id="ACTION_ID"/>
-      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDON"/>
       <viewAttribute id="CREATEDBY"/>
       <viewAttribute id="REQUESTTYPE"/>
       <viewAttribute id="ADDITIONALINFO"/>
@@ -26,7 +26,9 @@
       <viewAttribute id="CREATEDBYUSER"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_AUDIT_LOG"/>
+    <input node="COM_STRADA_VP_AUDIT_LOG">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDAT"/>
+    </input>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>
@@ -42,30 +44,30 @@
       <viewAttribute id="ID"/>
       <viewAttribute id="EXTERNALCODE"/>
       <viewAttribute id="ACTION_ID"/>
-      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDON"/>
       <viewAttribute id="CREATEDBY"/>
       <viewAttribute id="REQUESTTYPE"/>
       <viewAttribute id="ADDITIONALINFO"/>
       <viewAttribute id="CREATEDBYUSER"/>
-      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="ACTIONDESC"/>
       <viewAttribute id="LANGUAGE"/>
       <viewAttribute hidden="true" id="JOIN$ACTION_ID$ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="Projection_2">
       <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="EXTERNALCODE" source="EXTERNALCODE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="ACTION_ID" source="ACTION_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="ADDITIONALINFO" source="ADDITIONALINFO"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTTYPE" source="REQUESTTYPE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDON"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ACTION_ID$ID" source="ACTION_ID"/>
     </input>
     <input node="Projection_3">
       <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ACTIONDESC" source="DESCRIPTION"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ACTION_ID$ID" source="ID"/>
     </input>
     <joinAttribute name="JOIN$ACTION_ID$ID"/>
@@ -86,9 +88,9 @@
       <descriptions defaultDescription="ACTION_ID"/>
       <keyMapping columnObjectName="Join_1" columnName="ACTION_ID"/>
     </attribute>
-    <attribute id="CREATEDAT" order="4" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CREATEDAT"/>
-      <keyMapping columnObjectName="Join_1" columnName="CREATEDAT"/>
+    <attribute id="CREATEDON" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDON"/>
+      <keyMapping columnObjectName="Join_1" columnName="CREATEDON"/>
     </attribute>
     <attribute id="CREATEDBY" order="5" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CREATEDBY"/>
@@ -106,12 +108,12 @@
       <descriptions defaultDescription="CREATEDBYUSER"/>
       <keyMapping columnObjectName="Join_1" columnName="CREATEDBYUSER"/>
     </attribute>
-    <attribute id="DESCRIPTION" order="9" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="DESCRIPTION"/>
-      <keyMapping columnObjectName="Join_1" columnName="DESCRIPTION"/>
+    <attribute id="ACTIONDESC" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ACTIONDESC"/>
+      <keyMapping columnObjectName="Join_1" columnName="ACTIONDESC"/>
     </attribute>
-    <attribute id="LANGUAGE" order="10" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="LANGUAGE"/>
+    <attribute id="ACTIONTEXTLANGUAGE" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ACTIONTEXTLANGUAGE"/>
       <keyMapping columnObjectName="Join_1" columnName="LANGUAGE"/>
     </attribute>
   </attributes>

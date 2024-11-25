@@ -134,6 +134,7 @@ context com.strada {
   };
 
   entity VP_ONETIME_PAY : cuid, managed {
+    key cust_externalCode              : String(100);
     key cust_userId                    : String(128) not null;
         cust_payComponent              : Association[1] to VP_WAGETYPE {
                                            id

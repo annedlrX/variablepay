@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_HCI_ONETIME_PAY" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_HCI_ONETIME_PAY"/>
-<localVariables>
-  <variable id="IP_STATUS" parameter="true">
-    <descriptions defaultDescription="IP_STATUS"/>
-    <variableProperties datatype="INTEGER" mandatory="false" defaultValue="">
-      <valueDomain type="empty"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
-</localVariables>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_PENDPOSTING_ONETIME_PAYTEST" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_PENDPOSTING_ONETIME_PAYTEST"/>
+<localVariables/>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_ONETIME_PAY">
@@ -37,10 +29,11 @@
       <viewAttribute id="CUST_CALCULATEDAMOUNT"/>
       <viewAttribute id="SPECIALRECOGNITION"/>
       <viewAttribute id="DELIMITINDICATOR"/>
+      <viewAttribute id="CREATEDAT"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_ONETIME_PAY"/>
-    <filter>(&quot;STATUS&quot; =$$IP_STATUS$$)</filter>
+    <filter>(&quot;STATUS&quot; =10)</filter>
   </calculationView>
 </calculationViews>
 
@@ -62,10 +55,6 @@
       <descriptions defaultDescription="EFFECTIVESTARTDATE"/>
       <keyMapping columnObjectName="Projection_1" columnName="EFFECTIVESTARTDATE"/>
     </attribute>
-    <attribute id="CUST_PAYCOMPVALUE" order="5" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CUST_PAYCOMPVALUE"/>
-      <keyMapping columnObjectName="Projection_1" columnName="CUST_PAYCOMPVALUE"/>
-    </attribute>
     <attribute id="CUST_CURRENCYCODE" order="6" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CURRENCYCODE"/>
       <keyMapping columnObjectName="Projection_1" columnName="CUST_CURRENCYCODE"/>
@@ -73,14 +62,6 @@
     <attribute id="CUST_CUSTOMSTRING" order="7" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMSTRING"/>
       <keyMapping columnObjectName="Projection_1" columnName="CUST_CUSTOMSTRING"/>
-    </attribute>
-    <attribute id="CUST_SEQUENCENUMBER" order="8" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CUST_SEQUENCENUMBER"/>
-      <keyMapping columnObjectName="Projection_1" columnName="CUST_SEQUENCENUMBER"/>
-    </attribute>
-    <attribute id="CUST_NUMBER" order="9" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CUST_NUMBER"/>
-      <keyMapping columnObjectName="Projection_1" columnName="CUST_NUMBER"/>
     </attribute>
     <attribute id="CUST_UNIT" order="10" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_UNIT"/>
@@ -98,23 +79,48 @@
       <descriptions defaultDescription="CUST_ALTERNATIVECOSTCENTER"/>
       <keyMapping columnObjectName="Projection_1" columnName="CUST_ALTERNATIVECOSTCENTER"/>
     </attribute>
-    <attribute id="CUST_CALCULATEDAMOUNT" order="14" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CUST_CALCULATEDAMOUNT"/>
-      <keyMapping columnObjectName="Projection_1" columnName="CUST_CALCULATEDAMOUNT"/>
-    </attribute>
-    <attribute id="SPECIALRECOGNITION" order="15" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="SPECIALRECOGNITION"/>
-      <keyMapping columnObjectName="Projection_1" columnName="SPECIALRECOGNITION"/>
-    </attribute>
-    <attribute id="DELIMITINDICATOR" order="16" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="DELIMITINDICATOR"/>
-      <keyMapping columnObjectName="Projection_1" columnName="DELIMITINDICATOR"/>
-    </attribute>
   </attributes>
   <calculatedAttributes/>
-  <baseMeasures/>
+  <baseMeasures>
+    <measure id="CUST_PAYCOMPVALUE" order="5" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CUST_PAYCOMPVALUE"/>
+      <measureMapping columnObjectName="Projection_1" columnName="CUST_PAYCOMPVALUE"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="CUST_SEQUENCENUMBER" order="8" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CUST_SEQUENCENUMBER"/>
+      <measureMapping columnObjectName="Projection_1" columnName="CUST_SEQUENCENUMBER"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="CUST_NUMBER" order="9" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CUST_NUMBER"/>
+      <measureMapping columnObjectName="Projection_1" columnName="CUST_NUMBER"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="CUST_CALCULATEDAMOUNT" order="14" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="CUST_CALCULATEDAMOUNT"/>
+      <measureMapping columnObjectName="Projection_1" columnName="CUST_CALCULATEDAMOUNT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="SPECIALRECOGNITION" order="15" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="SPECIALRECOGNITION"/>
+      <measureMapping columnObjectName="Projection_1" columnName="SPECIALRECOGNITION"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="DELIMITINDICATOR" order="16" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="DELIMITINDICATOR"/>
+      <measureMapping columnObjectName="Projection_1" columnName="DELIMITINDICATOR"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+    <measure id="CREATEDAT" order="17" aggregationType="min" measureType="simple">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <measureMapping columnObjectName="Projection_1" columnName="CREATEDAT"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
   <calculatedMeasures/>
   <restrictedMeasures/>
+  <localDimensions/>
 </logicalModel>
 <layout>
   <shapes>
@@ -123,6 +129,8 @@
     
       <rectangleSize width="160"/>
     </shape>
+    
+  
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="92" y="217"/>
       <rectangleSize height="30" width="160"/>

@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AVAILABILITY" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_AVAILABILITY"/>
-<localVariables/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AVAILABILITY" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_ONETIME_PAY"/>
+<localVariables>
+  <variable id="IP_USER" parameter="true">
+    <descriptions defaultDescription="IP_USER"/>
+    <variableProperties datatype="NVARCHAR" length="128" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_LANGUAGE" parameter="true">
+    <descriptions defaultDescription="IP_LANGUAGE"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_AVAILABILITY">
@@ -18,6 +33,8 @@
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY_ID"/>
       <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="CREATEDON"/>
       <viewAttribute id="CUST_CUSTOMSTRING"/>
       <viewAttribute id="CUST_CUSTOMVAR1"/>
       <viewAttribute id="CUST_CUSTOMVAR2"/>
@@ -43,26 +60,33 @@
       <viewAttribute id="DELIMITINDICATOR"/>
       <viewAttribute id="EFFECTIVESTARTDATE"/>
       <viewAttribute id="INITIATORLANGUAGE"/>
-      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="LASTMODIFIED"/>
       <viewAttribute id="STATUS"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_AVAILABILITY"/>
+    <input node="COM_STRADA_VP_AVAILABILITY">
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDAT"/>
+    </input>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="LANGUAGE"/>
-      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="STATUSDESC"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT"/>
+    <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT">
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="DESCRIPTION"/>
+    </input>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY_ID"/>
       <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="CREATEDON"/>
       <viewAttribute id="CUST_CUSTOMSTRING"/>
       <viewAttribute id="CUST_CUSTOMVAR1"/>
       <viewAttribute id="CUST_CUSTOMVAR2"/>
@@ -88,7 +112,7 @@
       <viewAttribute id="DELIMITINDICATOR"/>
       <viewAttribute id="EFFECTIVESTARTDATE"/>
       <viewAttribute id="INITIATORLANGUAGE"/>
-      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="LASTMODIFIED"/>
       <viewAttribute id="STATUS"/>
     </viewAttributes>
     <calculatedViewAttributes/>
@@ -96,10 +120,12 @@
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
     <viewAttributes>
-      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="STATUSDESC"/>
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY_ID"/>
       <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="CREATEDBYUSER"/>
+      <viewAttribute id="CREATEDON"/>
       <viewAttribute id="CUST_CUSTOMSTRING"/>
       <viewAttribute id="CUST_CUSTOMVAR1"/>
       <viewAttribute id="CUST_CUSTOMVAR2"/>
@@ -125,7 +151,7 @@
       <viewAttribute id="DELIMITINDICATOR"/>
       <viewAttribute id="EFFECTIVESTARTDATE"/>
       <viewAttribute id="INITIATORLANGUAGE"/>
-      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="LASTMODIFIED"/>
       <viewAttribute id="STATUS"/>
       <viewAttribute hidden="true" id="JOIN$STATUS$ID"/>
     </viewAttributes>
@@ -134,6 +160,8 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="AUTOAPPROVED" source="AUTOAPPROVED"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDON"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMSTRING" source="CUST_CUSTOMSTRING"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMVAR1" source="CUST_CUSTOMVAR1"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMVAR2" source="CUST_CUSTOMVAR2"/>
@@ -159,12 +187,12 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="STATUS"/>
     </input>
     <input node="Projection_2">
-      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="STATUSDESC"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="ID"/>
     </input>
     <joinAttribute name="JOIN$STATUS$ID"/>
@@ -173,9 +201,9 @@
 
 <logicalModel id="Join_1">
   <attributes>
-    <attribute id="DESCRIPTION" order="1" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="DESCRIPTION"/>
-      <keyMapping columnObjectName="Join_1" columnName="DESCRIPTION"/>
+    <attribute id="STATUSDESC" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUSDESC"/>
+      <keyMapping columnObjectName="Join_1" columnName="STATUSDESC"/>
     </attribute>
     <attribute id="AUTOAPPROVED" order="2" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="AUTOAPPROVED"/>
@@ -189,111 +217,119 @@
       <descriptions defaultDescription="CREATEDBY"/>
       <keyMapping columnObjectName="Join_1" columnName="CREATEDBY"/>
     </attribute>
-    <attribute id="CUST_CUSTOMSTRING" order="5" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CREATEDBYUSER" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBYUSER"/>
+      <keyMapping columnObjectName="Join_1" columnName="CREATEDBYUSER"/>
+    </attribute>
+    <attribute id="CREATEDON" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="Join_1" columnName="CREATEDON"/>
+    </attribute>
+    <attribute id="CUST_CUSTOMSTRING" order="7" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMSTRING"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_CUSTOMSTRING"/>
     </attribute>
-    <attribute id="CUST_CUSTOMVAR1" order="6" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CUSTOMVAR1" order="8" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMVAR1"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_CUSTOMVAR1"/>
     </attribute>
-    <attribute id="CUST_CUSTOMVAR2" order="7" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CUSTOMVAR2" order="9" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMVAR2"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_CUSTOMVAR2"/>
     </attribute>
-    <attribute id="CUST_CUSTOMVAR3" order="8" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CUSTOMVAR3" order="10" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMVAR3"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_CUSTOMVAR3"/>
     </attribute>
-    <attribute id="CUST_CUSTOMVAR4" order="9" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CUSTOMVAR4" order="11" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMVAR4"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_CUSTOMVAR4"/>
     </attribute>
-    <attribute id="CUST_CUSTOMVAR5" order="10" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CUSTOMVAR5" order="12" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMVAR5"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_CUSTOMVAR5"/>
     </attribute>
-    <attribute id="CUST_CUSTOMVAR6" order="11" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_CUSTOMVAR6" order="13" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMVAR6"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_CUSTOMVAR6"/>
     </attribute>
-    <attribute id="CUST_DAILYWORKSCHEDULE" order="12" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_DAILYWORKSCHEDULE" order="14" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_DAILYWORKSCHEDULE"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_DAILYWORKSCHEDULE"/>
     </attribute>
-    <attribute id="CUST_DAILYWORKSCHEDULETXT" order="13" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_DAILYWORKSCHEDULETXT" order="15" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_DAILYWORKSCHEDULETXT"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_DAILYWORKSCHEDULETXT"/>
     </attribute>
-    <attribute id="CUST_DWSGROUPING" order="14" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_DWSGROUPING" order="16" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_DWSGROUPING"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_DWSGROUPING"/>
     </attribute>
-    <attribute id="CUST_DWSGROUPINGTXT" order="15" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_DWSGROUPINGTXT" order="17" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_DWSGROUPINGTXT"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_DWSGROUPINGTXT"/>
     </attribute>
-    <attribute id="CUST_ENDDATE" order="16" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_ENDDATE" order="18" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_ENDDATE"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_ENDDATE"/>
     </attribute>
-    <attribute id="CUST_ENDTIME" order="17" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_ENDTIME" order="19" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_ENDTIME"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_ENDTIME"/>
     </attribute>
-    <attribute id="CUST_EXISTINGCODE" order="18" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_EXISTINGCODE" order="20" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_EXISTINGCODE"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_EXISTINGCODE"/>
     </attribute>
-    <attribute id="CUST_EXTERNALCODE" order="19" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_EXTERNALCODE" order="21" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_EXTERNALCODE"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_EXTERNALCODE"/>
     </attribute>
-    <attribute id="CUST_NOTES" order="20" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_NOTES" order="22" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_NOTES"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_NOTES"/>
     </attribute>
-    <attribute id="CUST_PAYCOMPONENT_ID" order="21" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_PAYCOMPONENT_ID" order="23" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_PAYCOMPONENT_ID"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_PAYCOMPONENT_ID"/>
     </attribute>
-    <attribute id="CUST_PAYCOMPONENT_TXT" order="22" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_PAYCOMPONENT_TXT" order="24" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_PAYCOMPONENT_TXT"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_PAYCOMPONENT_TXT"/>
     </attribute>
-    <attribute id="CUST_STARTTIME" order="23" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_STARTTIME" order="25" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_STARTTIME"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_STARTTIME"/>
     </attribute>
-    <attribute id="CUST_USERID" order="24" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_USERID" order="26" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_USERID"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_USERID"/>
     </attribute>
-    <attribute id="CUST_WSVARIANT" order="25" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_WSVARIANT" order="27" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_WSVARIANT"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_WSVARIANT"/>
     </attribute>
-    <attribute id="CUST_WSVARIANTTXT" order="26" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="CUST_WSVARIANTTXT" order="28" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_WSVARIANTTXT"/>
       <keyMapping columnObjectName="Join_1" columnName="CUST_WSVARIANTTXT"/>
     </attribute>
-    <attribute id="DELIMITINDICATOR" order="27" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="DELIMITINDICATOR" order="29" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="DELIMITINDICATOR"/>
       <keyMapping columnObjectName="Join_1" columnName="DELIMITINDICATOR"/>
     </attribute>
-    <attribute id="EFFECTIVESTARTDATE" order="28" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="EFFECTIVESTARTDATE" order="30" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="EFFECTIVESTARTDATE"/>
       <keyMapping columnObjectName="Join_1" columnName="EFFECTIVESTARTDATE"/>
     </attribute>
-    <attribute id="INITIATORLANGUAGE" order="29" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="INITIATORLANGUAGE" order="31" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="INITIATORLANGUAGE"/>
       <keyMapping columnObjectName="Join_1" columnName="INITIATORLANGUAGE"/>
     </attribute>
-    <attribute id="MODIFIEDAT" order="30" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="MODIFIEDAT"/>
-      <keyMapping columnObjectName="Join_1" columnName="MODIFIEDAT"/>
+    <attribute id="LASTMODIFIED" order="32" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LASTMODIFIED"/>
+      <keyMapping columnObjectName="Join_1" columnName="LASTMODIFIED"/>
     </attribute>
-    <attribute id="STATUS" order="31" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="STATUS" order="33" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="STATUS"/>
       <keyMapping columnObjectName="Join_1" columnName="STATUS"/>
     </attribute>
@@ -315,7 +351,7 @@
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="244" y="366"/>
+      <upperLeftCorner x="244" y="342"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
@@ -323,7 +359,7 @@
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="100" y="208"/>
+      <upperLeftCorner x="94" y="197"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">

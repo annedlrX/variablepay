@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_FWDUSER_POPULATION" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_FWDUSER_POPULATION"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_USER_DETAILS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_USER_DETAILS"/>
 <localVariables>
   <variable id="IP_USERID" parameter="true">
     <descriptions defaultDescription="IP_USERID"/>
@@ -14,6 +14,9 @@
 <dataSources>
   <DataSource id="COM_STRADA_VP_USER">
     <resourceUri>COM_STRADA_VP_USER</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_MAP_CURRENCY_COUNTRY">
+    <resourceUri>COM_STRADA_VP_MAP_CURRENCY_COUNTRY</resourceUri>
   </DataSource>
   <DataSource id="COM_STRADA_VP_EMPJOB">
     <resourceUri>COM_STRADA_VP_EMPJOB</resourceUri>
@@ -39,20 +42,27 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_USER"/>
-    <filter>&quot;USERID&quot;!='$$IP_USERID$$'</filter>
+    <filter>&quot;USERID&quot;='$$IP_USERID$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
+      <viewAttribute id="CURRENCY_ID"/>
+      <viewAttribute id="COUNTRY_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_MAP_CURRENCY_COUNTRY"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3" filterExpressionLanguage="SQL">
+    <viewAttributes>
       <viewAttribute id="USERID"/>
-      <viewAttribute id="COUNTRY"/>
+      <viewAttribute id="COUNTRYOFCOMPANY"/>
       <viewAttribute id="COMPANY"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_EMPJOB">
-      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRYOFCOMPANY"/>
-    </input>
+    <input node="COM_STRADA_VP_EMPJOB"/>
+    <filter>&quot;USERID&quot;='$$IP_USERID$$'</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
+  <calculationView xsi:type="Calculation:JoinView" id="Join_2" joinType="leftOuter">
     <viewAttributes>
       <viewAttribute id="USERID"/>
       <viewAttribute id="USERNAME"/>
@@ -88,12 +98,57 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="MANAGER" source="MANAGER"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$USERID$USERID" source="USERID"/>
     </input>
-    <input node="Projection_2">
-      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+    <input node="Projection_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRYOFCOMPANY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="COMPANY" source="COMPANY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$USERID$USERID" source="USERID"/>
     </input>
     <joinAttribute name="JOIN$USERID$USERID"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="USERID"/>
+      <viewAttribute id="USERNAME"/>
+      <viewAttribute id="EMPLOYEEID"/>
+      <viewAttribute id="FIRSTNAME"/>
+      <viewAttribute id="LASTNAME"/>
+      <viewAttribute id="MIDDLENAME"/>
+      <viewAttribute id="EMAIL"/>
+      <viewAttribute id="CUSTOM15"/>
+      <viewAttribute id="DEFAULTLOCALE"/>
+      <viewAttribute id="STATUS"/>
+      <viewAttribute id="CUSTOMMANAGER"/>
+      <viewAttribute id="HR"/>
+      <viewAttribute id="MANAGER"/>
+      <viewAttribute id="COUNTRY"/>
+      <viewAttribute id="COMPANY"/>
+      <viewAttribute id="CURRENCY"/>
+      <viewAttribute hidden="true" id="JOIN$COUNTRY$COUNTRY_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Join_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="USERID" source="USERID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="USERNAME" source="USERNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EMPLOYEEID" source="EMPLOYEEID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="FIRSTNAME" source="FIRSTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTNAME" source="LASTNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MIDDLENAME" source="MIDDLENAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EMAIL" source="EMAIL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOM15" source="CUSTOM15"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DEFAULTLOCALE" source="DEFAULTLOCALE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUSTOMMANAGER" source="CUSTOMMANAGER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="HR" source="HR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MANAGER" source="MANAGER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY" source="COUNTRY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COMPANY" source="COMPANY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$COUNTRY$COUNTRY_ID" source="COUNTRY"/>
+    </input>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$COUNTRY$COUNTRY_ID" source="COUNTRY_ID"/>
+    </input>
+    <joinAttribute name="JOIN$COUNTRY$COUNTRY_ID"/>
   </calculationView>
 </calculationViews>
 
@@ -159,6 +214,10 @@
       <descriptions defaultDescription="COMPANY"/>
       <keyMapping columnObjectName="Join_1" columnName="COMPANY"/>
     </attribute>
+    <attribute id="CURRENCY" order="16" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CURRENCY_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="CURRENCY"/>
+    </attribute>
   </attributes>
   <calculatedAttributes/>
   <baseMeasures/>
@@ -168,30 +227,48 @@
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="40" y="85"/>
+      <upperLeftCorner x="328" y="112"/>
+    
+      <rectangleSize width="160"/>
     </shape>
     
   
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="8" y="346"/>
+      <upperLeftCorner x="92" y="536"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="211" y="346"/>
+      <upperLeftCorner x="395" y="376"/>
       <rectangleSize height="30" width="160"/>
     </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302" y="536"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="118" y="376"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="189"/>
+    </shape>
+    <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="210"/>
+    </shape>
+  
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="100" y="206"/>
+      <upperLeftCorner x="328" y="217"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+    <shape modelObjectName="Join_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
       <rectangleSize width="189"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="210"/>
-    </shape>
-  </shapes>
+      <rectangleSize width="165"/>
+    </shape></shapes>
 </layout>
 </Calculation:scenario>
