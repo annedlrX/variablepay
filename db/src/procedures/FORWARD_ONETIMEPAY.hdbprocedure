@@ -1,0 +1,68 @@
+PROCEDURE "FORWARD_ONETIMEPAY"( 
+    IN it_req_flow "COM_STRADA_VP_REQUEST_FLOW",
+    IN iv_additionalInfo NVARCHAR(5000) DEFAULT '',
+    OUT ev_response NVARCHAR(800)
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+
+-- Data declarations  
+DECLARE lc_status_complete INTEGER := 4;
+DECLARE lc_status_pendposting INTEGER := 3;
+DECLARE lc_log_app_forward INTEGER := 11;
+DECLARE lc_log_posting INTEGER := 2;
+DECLARE lv_changedBy NVARCHAR(100);
+DECLARE lv_count INTEGER := 0;
+
+DECLARE lc_infoType15 NVARCHAR(5) := 'IT15';
+
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
+    END;
+
+ev_response = '';
+
+CALL "UPDATE_REQUESTFLOW"(:it_req_flow,ev_response);
+
+-- Update log for Request Approved and forwarded action:
+INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID",
+    "CREATEDAT","CREATEDBY","REQUESTTYPE","ADDITIONALINFO","CREATEDBYUSER")
+            SELECT "LOGGER".NEXTVAL,"EXTERNALCODE",
+            lc_log_app_forward,CURRENT_UTCTIMESTAMP,"MODIFIEDBY","REQUESTTYPE",iv_additionalInfo,"CREATEDBYUSER"
+                FROM :it_req_flow;            
+            
+-- Select records which require no further processing   
+lt_reqflow_complete = SELECT "EXTERNALCODE","MODIFIEDBY","REQUESTTYPE" FROM :it_req_flow 
+        WHERE "STATUS_ID" = lc_status_pendposting; 
+
+
+SELECT COUNT(*) INTO lv_count FROM :lt_reqflow_complete;
+IF lv_count != 0 THEN
+-- In case of no further approvals, update status of payment to 'Pending for Posting'
+     MERGE INTO "COM_STRADA_VP_ONETIME_PAY" AS A
+            USING :lt_reqflow_complete AS B
+            ON A."ID" = B."EXTERNALCODE"
+            WHEN MATCHED THEN UPDATE SET 
+                A."STATUS" = lc_status_pendposting,
+                A."MODIFIEDAT" = CURRENT_UTCTIMESTAMP;        
+
+        
+            
+-- Update log with action OneTime Pay submitted for posting    
+    INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID",
+            "CREATEDAT","CREATEDBY","REQUESTTYPE","ADDITIONALINFO","CREATEDBYUSER")
+            SELECT "LOGGER".NEXTVAL,"EXTERNALCODE",
+                    lc_log_posting,CURRENT_UTCTIMESTAMP,"MODIFIEDBY","REQUESTTYPE",iv_additionalInfo,"CREATEDBYUSER"
+                    FROM :it_req_flow;    
+
+
+END IF;
+
+END

@@ -1,0 +1,25 @@
+PROCEDURE "DELETERBPGROUPS"(
+    IN it_groups "COM_STRADA_VP_RBP_GROUPS",
+    OUT ev_response NVARCHAR(800)
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
+    END;
+
+ev_response = '';
+
+DELETE FROM "COM_STRADA_VP_RBP_GROUPS" 
+    WHERE   ("GROUPID","USERID") IN
+            (SELECT "GROUPID","USERID" FROM :it_groups); 
+
+END

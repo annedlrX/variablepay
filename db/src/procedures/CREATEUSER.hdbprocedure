@@ -1,0 +1,24 @@
+PROCEDURE "CREATEUSER"(
+    IN it_user "TT_VP_USER",
+    OUT et_error "TT_ERROR"
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+   DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        et_error = SELECT ::SQL_ERROR_CODE AS http_status_code,::SQL_ERROR_MESSAGE  AS error_message, '' AS detail  FROM dummy;
+    END;
+
+UPSERT "COM_STRADA_VP_USER"(
+  "USERID","USERNAME","EMPLOYEEID","FIRSTNAME","LASTNAME","MIDDLENAME","EMAIL","CUSTOM15",
+  "DEFAULTLOCALE","STATUS","CUSTOMMANAGER","HR","MANAGER","MODIFIEDAT" )
+        SELECT  "USERID","USERNAME","EMPLOYEEID","FIRSTNAME","LASTNAME","MIDDLENAME","EMAIL",
+                "CUSTOM15","DEFAULTLOCALE","STATUS","CUSTOMMANAGER","HR","MANAGER","MODIFIEDAT"
+            FROM :it_user; 
+END
