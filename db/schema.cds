@@ -343,6 +343,7 @@ context com.strada {
     key timeKeeper : String(128);
   };
 
+
 }
 
 @cds.persistence.exists
@@ -363,3 +364,5 @@ entity CV_WAGETYPES {
       LANGUAGE                  : String(5)   @title: 'LANGUAGE: LANGUAGE';
       DESCRIPTION               : String(255) @title: 'DESCRIPTION: DESCRIPTION';
 }
+
+
