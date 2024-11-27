@@ -1,0 +1,22 @@
+PROCEDURE "IS_HRADM"(
+    IN iv_user NVARCHAR(128),
+    OUT ev_result INTEGER
+ )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   READS SQL DATA AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+
+   DECLARE lv_user NVARCHAR(128) := '';
+   DECLARE lc_hradmin NVARCHAR(32) := 'HRADMIN';
+   
+   ev_result = 0;
+   
+   SELECT COUNT(*) INTO ev_result FROM "COM_STRADA_VP_RBP_GROUPS" 
+        WHERE "USERID" = iv_user AND "ROLE"= lc_hradmin;
+
+END

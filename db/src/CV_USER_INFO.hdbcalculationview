@@ -243,26 +243,26 @@
 <layout>
   <shapes>
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
-      <upperLeftCorner x="343.2644203178371" y="112"/>
+      <upperLeftCorner x="343" y="112"/>
     
       <rectangleSize width="160"/>
     </shape>
     
   
     <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="91.99999999999991" y="661.9999964237213"/>
+      <upperLeftCorner x="91" y="661"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="301.9999999999999" y="661.9999964237213"/>
+      <upperLeftCorner x="301" y="661"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="395.83959680791406" y="501.9999976158142"/>
+      <upperLeftCorner x="395" y="501"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="118.66666666666657" y="501.9999976158142"/>
+      <upperLeftCorner x="118" y="501"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
@@ -274,7 +274,7 @@
       <rectangleSize width="156"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="329.7346324379398" y="341.9999988079071"/>
+      <upperLeftCorner x="329" y="341"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_2" modelObjectType="JoinNodeInput">
@@ -286,7 +286,7 @@
       <rectangleSize width="189"/>
     </shape>
     <shape expanded="true" modelObjectName="Projection_4" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="329.7346324379398" y="236.9999988079071"/>
+      <upperLeftCorner x="329" y="236"/>
       <rectangleSize height="30" width="160"/>
     </shape>
   </shapes>

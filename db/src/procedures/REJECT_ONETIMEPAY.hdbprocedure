@@ -1,0 +1,42 @@
+PROCEDURE "REJECT_ONETIMEPAY"( 
+    IN it_req_flow "COM_STRADA_VP_REQUEST_FLOW",
+    IN iv_additionalInfo NVARCHAR(1000) DEFAULT '',
+    OUT ev_response NVARCHAR(800)
+)
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   AS
+BEGIN
+   /*************************************
+       Write your procedure logic
+   *************************************/
+-- Data declarations  
+DECLARE lc_status_rejected INTEGER := 5;
+DECLARE lc_log_rejected INTEGER := 7;
+
+DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
+    END;
+
+ev_response = '';
+
+CALL "UPDATE_REQUESTFLOW"(:it_req_flow,ev_response);
+
+-- Update log for Request Rejected action:
+INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID",
+        "CREATEDAT","CREATEDBY","REQUESTTYPE","ADDITIONALINFO","CREATEDBYUSER")
+        SELECT "LOGGER".NEXTVAL,"EXTERNALCODE",
+        lc_log_rejected,CURRENT_UTCTIMESTAMP,"MODIFIEDBY","REQUESTTYPE",iv_additionalInfo,"CREATEDBYUSER"
+                FROM :it_req_flow;
+
+-- Update status of payment to 'Rejected'
+MERGE INTO "COM_STRADA_VP_ONETIME_PAY" AS A
+        USING :it_req_flow AS B
+        ON A."ID" = B."EXTERNALCODE"
+        WHEN MATCHED THEN UPDATE SET 
+            A."STATUS" = lc_status_rejected,
+            A."MODIFIEDAT" = CURRENT_UTCTIMESTAMP;
+
+END

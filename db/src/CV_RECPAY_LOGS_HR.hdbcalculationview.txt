@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_RECPAY_LOGS_HR" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<descriptions defaultDescription="CV_RECPAY_LOGS_HR"/>
+<localVariables>
+  <variable id="IP_LANGUAGE" parameter="true">
+    <descriptions defaultDescription="IP_LANGUAGE"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="false" defaultExpressionLanguage="SQL" defaultValue="en">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_START_DATE" parameter="true">
+    <descriptions defaultDescription="IP_START_DATE"/>
+    <variableProperties datatype="TIMESTAMP" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_END_DATE" parameter="true">
+    <descriptions defaultDescription="IP_END_DATE"/>
+    <variableProperties datatype="TIMESTAMP" mandatory="false" defaultExpressionLanguage="SQL" defaultValue="99991231">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_USER" parameter="true">
+    <descriptions defaultDescription="IP_USER"/>
+    <variableProperties datatype="NVARCHAR" length="128" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
+<variableMappings/>
+<dataSources>
+  <DataSource id="CV_AUDIT_LOG_FILTERED">
+    <resourceUri>CV_AUDIT_LOG_FILTERED</resourceUri>
+  </DataSource>
+  <DataSource id="COM_STRADA_VP_REQUEST_STATUS_TEXT">
+    <resourceUri>COM_STRADA_VP_REQUEST_STATUS_TEXT</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+    <viewAttributes>
+      <viewAttribute id="LOGID"/>
+      <viewAttribute id="EXTERNALCODE"/>
+      <viewAttribute id="ACTION_ID"/>
+      <viewAttribute id="LOGCREATEDAT"/>
+      <viewAttribute id="LOGCREATEDBY"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="ADDITIONALINFO"/>
+      <viewAttribute id="LOGCREATEDBYUSER"/>
+      <viewAttribute id="ACTIONDESC"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CV_AUDIT_LOG_FILTERED">
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGCREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGCREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGCREATEDBYUSER" source="CREATEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ACTIONDESC" source="DESCRIPTION"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="SQL">
+    <viewAttributes>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="STATUSDESC"/>
+      <viewAttribute id="LANGUAGE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT">
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="DESCRIPTION"/>
+    </input>
+    <filter>&quot;LANGUAGE&quot;='$$IP_LANGUAGE$$'</filter>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
+    <viewAttributes>
+      <viewAttribute id="STATUSDESC"/>
+      <viewAttribute id="LOGID"/>
+      <viewAttribute id="EXTERNALCODE"/>
+      <viewAttribute id="ACTION_ID"/>
+      <viewAttribute id="LOGCREATEDAT"/>
+      <viewAttribute id="LOGCREATEDBY"/>
+      <viewAttribute id="REQUESTTYPE"/>
+      <viewAttribute id="ADDITIONALINFO"/>
+      <viewAttribute id="LOGCREATEDBYUSER"/>
+      <viewAttribute id="ACTIONDESC"/>
+      <viewAttribute hidden="true" id="JOIN$ID$EXTERNALCODE"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_2">
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="STATUSDESC"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$EXTERNALCODE" source="ID"/>
+    </input>
+    <input node="Projection_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGID" source="LOGID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="EXTERNALCODE" source="EXTERNALCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ACTION_ID" source="ACTION_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGCREATEDAT" source="LOGCREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGCREATEDBY" source="LOGCREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="REQUESTTYPE" source="REQUESTTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ADDITIONALINFO" source="ADDITIONALINFO"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LOGCREATEDBYUSER" source="LOGCREATEDBYUSER"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ACTIONDESC" source="ACTIONDESC"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$EXTERNALCODE" source="EXTERNALCODE"/>
+    </input>
+    <joinAttribute name="JOIN$ID$EXTERNALCODE"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="STATUSDESC" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DESCRIPTION"/>
+      <keyMapping columnObjectName="Join_1" columnName="STATUSDESC"/>
+    </attribute>
+    <attribute id="LOGID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="LOGID"/>
+    </attribute>
+    <attribute id="EXTERNALCODE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="EXTERNALCODE"/>
+      <keyMapping columnObjectName="Join_1" columnName="EXTERNALCODE"/>
+    </attribute>
+    <attribute id="ACTION_ID" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ACTION_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="ACTION_ID"/>
+    </attribute>
+    <attribute id="LOGCREATEDAT" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="Join_1" columnName="LOGCREATEDAT"/>
+    </attribute>
+    <attribute id="LOGCREATEDBY" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="Join_1" columnName="LOGCREATEDBY"/>
+    </attribute>
+    <attribute id="REQUESTTYPE" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="REQUESTTYPE"/>
+      <keyMapping columnObjectName="Join_1" columnName="REQUESTTYPE"/>
+    </attribute>
+    <attribute id="ADDITIONALINFO" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ADDITIONALINFO"/>
+      <keyMapping columnObjectName="Join_1" columnName="ADDITIONALINFO"/>
+    </attribute>
+    <attribute id="LOGCREATEDBYUSER" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBYUSER"/>
+      <keyMapping columnObjectName="Join_1" columnName="LOGCREATEDBYUSER"/>
+    </attribute>
+    <attribute id="ACTIONDESC" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="DESCRIPTION"/>
+      <keyMapping columnObjectName="Join_1" columnName="ACTIONDESC"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="221.11302679000914" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="302.00000000000006" y="376.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92.00000000000001" y="376.9999988079071"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="221.11302679000914" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="161.173828125"/>
+    </shape>
+    <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="206.21044921875"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
