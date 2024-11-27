@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
 <descriptions defaultDescription="CV_WAGETYPES"/>
-<localVariables/>
+<localVariables>
+  <variable id="IP_COMPANY_CODE" parameter="true">
+    <descriptions defaultDescription="IP_Company code"/>
+    <variableProperties datatype="NVARCHAR" length="16" mandatory="true">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_INFOTYPE" parameter="true">
+    <descriptions defaultDescription="IP_INFOTYPE"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="true">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_COUNTRY" parameter="true">
+    <descriptions defaultDescription="IP_COUNTRY"/>
+    <variableProperties datatype="NVARCHAR" length="3" mandatory="false">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_INITIATOR" parameter="true">
+    <descriptions defaultDescription="IP_INITIATOR"/>
+    <variableProperties datatype="NVARCHAR" length="32" mandatory="true">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_LANGUAGE" parameter="true">
+    <descriptions defaultDescription="IP_LANGUAGE"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="true">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
 <variableMappings/>
 <dataSources>
-  <DataSource id="COM_STRADA_VP_WAGETYPE">
-    <resourceUri>COM_STRADA_VP_WAGETYPE</resourceUri>
+  <DataSource id="COM_STRADA_VP_WAGETYPE_MAPPING">
+    <resourceUri>COM_STRADA_VP_WAGETYPE_MAPPING</resourceUri>
   </DataSource>
   <DataSource id="COM_STRADA_VP_WAGETYPE_TEXT">
     <resourceUri>COM_STRADA_VP_WAGETYPE_TEXT</resourceUri>
@@ -13,106 +49,100 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_1" joinType="inner">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes>
-      <viewAttribute id="ID"/>
-      <viewAttribute id="IS_ACTIVE"/>
-      <viewAttribute id="STARTDATE"/>
-      <viewAttribute id="ENDDATE"/>
-      <viewAttribute id="IS_AMOUNTTYPE"/>
-      <viewAttribute id="UOM"/>
-      <viewAttribute id="IS_SPECIALRECOGNITIONTYPE"/>
-      <viewAttribute id="WAGETYPE"/>
-      <viewAttribute id="ISINDEVAL"/>
-      <viewAttribute id="CURRENCY"/>
-      <viewAttribute id="IS_QUOTACOMPENSATION"/>
-      <viewAttribute id="SUB_INFOTYPE"/>
-      <viewAttribute id="LANGUAGE"/>
-      <viewAttribute id="DESCRIPTION"/>
-      <viewAttribute hidden="true" id="JOIN$ID$PAYCOMPONENT_ID"/>
+      <viewAttribute id="INFOTYPE"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="PAYCOMPONENT_ID"/>
+      <viewAttribute id="INITIATORROLE"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="COMPANYCODE"/>
+      <viewAttribute id="OPERATOR"/>
+      <viewAttribute id="CUST_FREQUENCY"/>
+      <viewAttribute id="CUST_FREQUENCY_TXT"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_WAGETYPE">
-      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="IS_ACTIVE" source="IS_ACTIVE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="STARTDATE" source="STARTDATE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="ENDDATE" source="ENDDATE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="IS_AMOUNTTYPE" source="IS_AMOUNTTYPE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="UOM" source="UOM"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="IS_SPECIALRECOGNITIONTYPE" source="IS_SPECIALRECOGNITIONTYPE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="WAGETYPE" source="WAGETYPE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="ISINDEVAL" source="ISINDEVAL"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CURRENCY" source="CURRENCY"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="IS_QUOTACOMPENSATION" source="IS_QUOTACOMPENSATION"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="SUB_INFOTYPE" source="SUB_INFOTYPE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$PAYCOMPONENT_ID" source="ID"/>
+    <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+    <viewAttributes>
+      <viewAttribute id="LANGUAGE"/>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="PAYCOMPONENT_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="COM_STRADA_VP_WAGETYPE_TEXT"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
+    <viewAttributes>
+      <viewAttribute id="INFOTYPE"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="PAYCOMPONENT_ID"/>
+      <viewAttribute id="INITIATORROLE"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="COMPANYCODE"/>
+      <viewAttribute id="OPERATOR"/>
+      <viewAttribute id="CUST_FREQUENCY"/>
+      <viewAttribute id="CUST_FREQUENCY_TXT"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_1"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1">
+    <viewAttributes>
+      <viewAttribute id="LANGUAGE"/>
+      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="PAYCOMPONENT_ID_1"/>
+      <viewAttribute id="INFOTYPE"/>
+      <viewAttribute id="COUNTRY_ID"/>
+      <viewAttribute id="PAYCOMPONENT_ID"/>
+      <viewAttribute id="INITIATORROLE"/>
+      <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="COMPANYCODE"/>
+      <viewAttribute id="OPERATOR"/>
+      <viewAttribute id="CUST_FREQUENCY"/>
+      <viewAttribute id="CUST_FREQUENCY_TXT"/>
+      <viewAttribute id="DELIMITINDICATOR"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Projection_3">
+      <mapping xsi:type="Calculation:AttributeMapping" target="INFOTYPE" source="INFOTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORROLE" source="INITIATORROLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="COMPANYCODE" source="COMPANYCODE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="OPERATOR" source="OPERATOR"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_FREQUENCY" source="CUST_FREQUENCY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_FREQUENCY_TXT" source="CUST_FREQUENCY_TXT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
     </input>
-    <input node="COM_STRADA_VP_WAGETYPE_TEXT">
+    <input node="Projection_2">
       <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
-    </input>
-    <joinAttribute name="JOIN$ID$PAYCOMPONENT_ID"/>
-  </calculationView>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAYCOMPONENT_ID_1" source="PAYCOMPONENT_ID"/>
+    </input></calculationView>
 </calculationViews>
 
 <logicalModel id="Join_1">
   <attributes>
-    <attribute id="ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="ID"/>
-      <keyMapping columnObjectName="Join_1" columnName="ID"/>
-    </attribute>
-    <attribute id="IS_ACTIVE" order="2" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="IS_ACTIVE"/>
-      <keyMapping columnObjectName="Join_1" columnName="IS_ACTIVE"/>
-    </attribute>
-    <attribute id="STARTDATE" order="3" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="STARTDATE"/>
-      <keyMapping columnObjectName="Join_1" columnName="STARTDATE"/>
-    </attribute>
-    <attribute id="ENDDATE" order="4" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="ENDDATE"/>
-      <keyMapping columnObjectName="Join_1" columnName="ENDDATE"/>
-    </attribute>
-    <attribute id="IS_AMOUNTTYPE" order="5" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="IS_AMOUNTTYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="IS_AMOUNTTYPE"/>
-    </attribute>
-    <attribute id="UOM" order="6" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="UOM"/>
-      <keyMapping columnObjectName="Join_1" columnName="UOM"/>
-    </attribute>
-    <attribute id="IS_SPECIALRECOGNITIONTYPE" order="7" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="IS_SPECIALRECOGNITIONTYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="IS_SPECIALRECOGNITIONTYPE"/>
-    </attribute>
-    <attribute id="WAGETYPE" order="8" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="WAGETYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="WAGETYPE"/>
-    </attribute>
-    <attribute id="ISINDEVAL" order="9" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="ISINDEVAL"/>
-      <keyMapping columnObjectName="Join_1" columnName="ISINDEVAL"/>
-    </attribute>
-    <attribute id="CURRENCY" order="10" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CURRENCY"/>
-      <keyMapping columnObjectName="Join_1" columnName="CURRENCY"/>
-    </attribute>
-    <attribute id="IS_QUOTACOMPENSATION" order="11" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="IS_QUOTACOMPENSATION"/>
-      <keyMapping columnObjectName="Join_1" columnName="IS_QUOTACOMPENSATION"/>
-    </attribute>
-    <attribute id="SUB_INFOTYPE" order="12" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="SUB_INFOTYPE"/>
-      <keyMapping columnObjectName="Join_1" columnName="SUB_INFOTYPE"/>
-    </attribute>
-    <attribute id="LANGUAGE" order="13" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="LANGUAGE"/>
-      <keyMapping columnObjectName="Join_1" columnName="LANGUAGE"/>
-    </attribute>
-    <attribute id="DESCRIPTION" order="14" displayAttribute="false" attributeHierarchyActive="false">
+    <attribute id="DESCRIPTION" order="1" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="DESCRIPTION"/>
       <keyMapping columnObjectName="Join_1" columnName="DESCRIPTION"/>
+    </attribute>
+    <attribute id="PAYCOMPONENT" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PAYCOMPONENT_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="PAYCOMPONENT_ID"/>
+    </attribute>
+    <attribute id="INFOTYPE" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INFOTYPE"/>
+      <keyMapping columnObjectName="Join_1" columnName="INFOTYPE"/>
+    </attribute>
+    <attribute id="WORKFLOW_ID" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="WORKFLOW_ID"/>
+      <keyMapping columnObjectName="Join_1" columnName="WORKFLOW_ID"/>
     </attribute>
   </attributes>
   <calculatedAttributes/>
@@ -125,19 +155,29 @@
     <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
       <upperLeftCorner x="40" y="85"/>
     </shape>
-    
-  
-    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="100" y="207"/>
+    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-55" y="405"/>
       <rectangleSize height="30" width="160"/>
     </shape>
-    <shape modelObjectName="COM_STRADA_VP_WAGETYPE" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="127" y="92"/>
-      <rectangleSize width="255"/>
+    <shape expanded="true" modelObjectName="Projection_2" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="239" y="342"/>
+      <rectangleSize height="30" width="160"/>
     </shape>
-    <shape modelObjectName="COM_STRADA_VP_WAGETYPE_TEXT" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="-68" y="301"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="89" y="191"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Projection_3" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="283"/>
+      <rectangleSize width="250"/>
     </shape>
   </shapes>
 </layout>

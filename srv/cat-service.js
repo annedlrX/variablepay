@@ -35,7 +35,7 @@ module.exports = cds.service.impl(async function () {
         });
 
         // Return the data that was created (CAP will automatically assign IDs, etc.)
-        return inputData; 
+        return inputData;
     });
 
     // Handle CREATE operation for EmpJob
@@ -60,8 +60,79 @@ module.exports = cds.service.impl(async function () {
         });
 
         // Return the data that was created (CAP will automatically assign IDs, etc.)
-        return inputData; 
+        return inputData;
     });
 
+    //XSJS
+
+    //Add:auditLogs
+
+    // Local function to format the timestamp
+    function formatTime(ipDate) {
+        const ldate = ipDate;
+        const dateString = ldate.substring(6);
+        const parsedDate = parseInt(dateString, 10);
+        const d = new Date(parsedDate);
+        return d.toISOString();
+    }
+
+    // Local function to process log entries and call the procedure
+    async function addLogs(db, obj) {
+        const logLength = obj.length;
+        let errorMsg = '';
+        let task = [];
+
+        for (let j = 0; j < logLength; j++) {
+            task.push({
+                "id": obj[j].id,
+                "externalCode": obj[j].externalCode,
+                "action.id": obj[j].action,
+                "createdOn": formatTime(obj[j].createdOn),
+                "createdBy": obj[j].createdBy,
+                "requestType": obj[j].requestType,
+                "additionalInfo": obj[j].additionalInfo
+            });
+        }
+
+        // Load the procedure and call it
+        await db.tx(async (tx) => {
+            // Call the stored procedure with the table data as input
+            errorMsg = await tx.run('CALL ADD_TO_LOG(:it_audit_log)', { task });
+            return errorMsg.ev_response;
+        });        
+        
+    }
+
+    // Event handler for POSTing logs
+    this.on('postLogs', async (req) => {
+        const output = { error: [] };
+        let error_message = '';
+        const JSONObj = req.data; // Body of the request is automatically parsed by CAP
+
+        try {
+            const db = await cds.connect.to('db'); // Connect to the HANA database
+           
+            const len = JSONObj.d.results.length;
+            if (len > 0) {
+                const payObject = JSONObj.d.results;
+                error_message = await addLogs(db, payObject);
+
+                if (error_message && error_message.length !== 0) {
+                    output.error.push(error_message);
+                    req.error(400, JSON.stringify(output));
+                } else {
+                    // Commit transaction if no error
+                    await conn.commit();
+                    req.reply(output);
+                }
+            } else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+
+        } catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
 
 });

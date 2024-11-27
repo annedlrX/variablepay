@@ -546,6 +546,10 @@
       <upperLeftCorner x="246" y="844"/>
       <rectangleSize height="30" width="160"/>
     </shape>
+    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="236" y="668"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="2" y="662"/>
       <rectangleSize height="30" width="160"/>
@@ -556,11 +560,7 @@
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="402" y="30"/>
-      <rectangleSize width="161.173828125"/>
-    </shape>
-    <shape expanded="true" modelObjectName="Projection_3" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="236" y="668"/>
-      <rectangleSize height="30" width="160"/>
+      <rectangleSize width="161"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="122" y="530"/>
