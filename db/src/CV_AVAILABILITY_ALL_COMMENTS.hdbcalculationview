@@ -34,7 +34,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="REQREQUESTTYPE"/>
       <viewAttribute id="REQWORKFLOWSEQUENCE"/>
@@ -63,8 +63,10 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="REQWORKFLOW_ID" source="WORKFLOW_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="REQNOTIFICATIONAGENT" source="NOTIFICATIONAGENT"/>
     </input>
+  
+    <filter>&quot;REQEXTERNALCODE&quot;='$$IP_EXTERNAL_CODE$$' AND &quot;REQREQUESTTYPE&quot;='$$IP_REQUEST_TYPE$$'</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY"/>
@@ -107,6 +109,8 @@
     
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="MODIFIEDAT"/>
     </input>
+  
+    <filter>&quot;CUST_EXTERNALCODE&quot;='$$IP_EXTERNAL_CODE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>
@@ -119,7 +123,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="DESCRIPTION"/>
     </input>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_4">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_4" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="EXTERNALCODE"/>
       <viewAttribute id="ACTION_ID"/>
@@ -128,6 +132,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_AUDIT_LOG"/>
+  
+    <filter>&quot;EXTERNALCODE&quot;='$$IP_EXTERNAL_CODE$$'and &quot;REQUESTTYPE&quot;='$$IP_REQUEST_TYPE$$'and &quot;ACTION_ID&quot;=7</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
     <viewAttributes>

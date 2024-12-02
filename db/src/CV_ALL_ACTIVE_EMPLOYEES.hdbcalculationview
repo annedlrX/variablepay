@@ -18,7 +18,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="USERID"/>
       <viewAttribute id="USERNAME"/>
@@ -32,6 +32,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_USER"/>
+  
+    <filter>&quot;STATUS&quot;='t' AND &quot;USERID&quot; != '$$IP_USERID$$'</filter>
   </calculationView>
 </calculationViews>
 

@@ -28,7 +28,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY_ID"/>
@@ -68,8 +68,10 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="MODIFIEDAT"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDAT"/>
     </input>
+  
+    <filter>&quot;CREATEDBYUSER&quot;='$$IP_USER$$'</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="LANGUAGE"/>
@@ -79,6 +81,8 @@
     <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT">
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="DESCRIPTION"/>
     </input>
+  
+    <filter>&quot;LANGUAGE&quot;='$$IP_LANGUAGE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>

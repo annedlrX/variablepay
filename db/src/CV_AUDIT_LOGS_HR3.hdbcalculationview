@@ -77,7 +77,7 @@
     </calculatedViewAttributes>
     <input node="GET_ONETIME_PAY"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="DESCRIPTION"/>
@@ -85,6 +85,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT"/>
+  
+    <filter>&quot;LANGUAGE&quot;='$$IP_LANGUAGE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>

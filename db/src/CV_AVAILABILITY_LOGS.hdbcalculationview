@@ -45,7 +45,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="DESCRIPTION"/>
@@ -53,8 +53,10 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT"/>
+  
+    <filter>&quot;LANGUAGE&quot;='$$IP_LANGUAGE$$'</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="CUST_PAYCOMPONENT"/>
       <viewAttribute id="DELIMITINDICATOR"/>
@@ -91,6 +93,9 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="GET_AVAILABILITY"/>
+  
+    <filter>(&quot;STATUS&quot;=2 or &quot;STATUS&quot;=4 or &quot;STATUS&quot;=5) and ((&quot;CREATEDON&quot; &gt;= '$$IP_START_DATE$$') and (&quot;CREATEDON&quot; &lt;= '$$IP_END_DATE$$' ))
+</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>

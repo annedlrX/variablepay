@@ -52,7 +52,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="COLUMN_ENGINE">
     <viewAttributes>
       <viewAttribute id="INFOTYPE"/>
       <viewAttribute id="COUNTRY_ID"/>
@@ -67,8 +67,12 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
+  
+    <filter>&quot;INFOTYPE&quot;='$$IP_INFOTYPE$$' and match( &quot;country_id&quot;, if('$$IP_COUNTRY$$' = '','*','$$IP_COUNTRY$$')) and 
+match( &quot;INITIATORROLE&quot;, if('$$IP_INITIATOR$$' = '','*','$$IP_INITIATOR$$'))and 
+((&quot;COMPANYCODE&quot;='')or (&quot;COMPANYCODE&quot;='$$IP_COMPANY_CODE$$' and &quot;OPERATOR&quot;='eq') or (&quot;COMPANYCODE&quot; != '$$IP_COMPANY_CODE$$' and &quot;OPERATOR&quot;='neq'))</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="COLUMN_ENGINE">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="IS_ACTIVE"/>
@@ -85,6 +89,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE"/>
+  
+    <filter>&quot;IS_ACTIVE&quot;=1 and &quot;STARTDATE&quot; &lt;= format(now(),'YYYYMMDD') and &quot;ENDDATE&quot; &gt;= format(now(),'YYYYMMDD')</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts">
     <viewAttributes>
@@ -136,7 +142,7 @@
     </input>
     <joinAttribute name="JOIN$PAYCOMPONENT_ID$ID"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="WT">
+  <calculationView xsi:type="Calculation:ProjectionView" id="WT" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="INFOTYPE"/>
       <viewAttribute id="PAYCOMPONENT_ID"/>

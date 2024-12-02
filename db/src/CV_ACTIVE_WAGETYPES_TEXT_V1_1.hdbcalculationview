@@ -1,7 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_ACTIVE_WAGETYPES_TEXT_V1_1" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
 <descriptions defaultDescription="CV_WAGETYPES"/>
-<localVariables/>
+<localVariables>
+  <variable id="IP_COMPANY_CODE" parameter="true">
+    <descriptions defaultDescription="IP_COMPANY_CODE"/>
+    <variableProperties datatype="NVARCHAR" length="16" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_INFOTYPE" parameter="true">
+    <descriptions defaultDescription="IP_INFOTYPE"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_COUNTRY" parameter="true">
+    <descriptions defaultDescription="IP_COUNTRY"/>
+    <variableProperties datatype="NVARCHAR" length="3" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_INITIATOR" parameter="true">
+    <descriptions defaultDescription="IP_INITIATOR"/>
+    <variableProperties datatype="NVARCHAR" length="32" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_LANGUAGE" parameter="true">
+    <descriptions defaultDescription="IP_LANGUAGE"/>
+    <variableProperties datatype="NVARCHAR" length="10" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_SUB_INFOTYPE" parameter="true">
+    <descriptions defaultDescription="IP_SUB_INFOTYPE"/>
+    <variableProperties datatype="NVARCHAR" length="10" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_WAGETYPE_MAPPING">
@@ -16,7 +59,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="COLUMN_ENGINE">
     <viewAttributes>
       <viewAttribute id="INFOTYPE"/>
       <viewAttribute id="COUNTRY_ID"/>
@@ -28,8 +71,12 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
+  
+    <filter>&quot;INFOTYPE&quot;='$$IP_INFOTYPE$$' and match( &quot;COUNTRY_ID&quot;, if('$$IP_COUNTRY$$' = '','*','$$IP_COUNTRY$$')) and 
+match( &quot;INITIATORROLE&quot;, if('$$IP_INITIATOR$$' = '','*','$$IP_INITIATOR$$'))and 
+((&quot;COMPANYCODE&quot;='')or (&quot;COMPANYCODE&quot;='$$IP_COMPANY_CODE$$' and &quot;OPERATOR&quot;='eq') or (&quot;COMPANYCODE&quot; != '$$IP_COMPANY_CODE$$' and &quot;OPERATOR&quot;='neq'))</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="COLUMN_ENGINE">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="IS_ACTIVE"/>
@@ -46,6 +93,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE"/>
+  
+    <filter>&quot;IS_ACTIVE&quot;=1 and &quot;STARTDATE&quot; &lt;= format(now(),'YYYYMMDD') and &quot;ENDDATE&quot; &gt;= format(now(),'YYYYMMDD') and (&quot;SUB_INFOTYPE&quot; = '$$IP_SUB_INFOTYPE$$')</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts">
     <viewAttributes>
