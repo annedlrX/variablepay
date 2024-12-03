@@ -51,29 +51,38 @@ service CatalogService {
     entity VP_WAGETYPE                as projection on vp.VP_WAGETYPE;
 
     entity VP_AUDIT_LOG               as projection on vp.VP_AUDIT_LOG;
+    entity VP_TIMEKEEPER              as projection on vp.VP_TIMEKEEPER;
 
-    entity VP_TIMEKEEPER               as projection on vp.VP_TIMEKEEPER;
     @open
     type object {};
-    
-    //XSJS
-    function postLogs(task : object) returns String;
-    function upsertTimekeepers(task : object) returns String;
-    function updateOneTimePayHCI(body: String) returns String;
-    function updateAvailabilityHCI(body: String) returns String;
-    function saveOneTimePay(data: object) returns object;
-    function saveAvailability(data: object) returns object;
-    function rejectPayments(data: object) returns object;
-    function checkAdmin(data: String) returns String;
-    function uploadUsers(data: object) returns object;
-    function uploadEmployees(data: object) returns object;
-    function getPayComponents(data: object) returns object;
-    function getPayComponentData(data: object) returns object;
-    //Actions xsjs
-    
 
-    //XSODATA Services
-
+    //================================================
+    //      Actions xsjs
+    //================================================
+    function postLogs(task : object)                     returns String;
+    function postApprovePayments(task : object)          returns String; // ApprovePayments
+    function postCreateGroupPostman(task : object)       returns String; // Create_Group_Postman
+    function posCreateRBPEmployeesPostman(task : object) returns String; // Create_RBP_Employees_Postman
+    function postCreateRBPEmployees(task : object)       returns String; // createRBPEmployees
+    function postCreateRBPGroups(task : object)          returns String; // CreateRBPGroups
+    function postDeleteRBPGroups(task : object)          returns String; // DeleteRBPGroups
+    function postForwardPayments(task : object)          returns String; // ForwardPayments
+    function processPayComponents(data : object)         returns String;
+    function getPendingApprovalCount(data : object)      returns String;
+    function upsertTimekeepers(task : object)            returns String;
+    function updateOneTimePayHCI(body : String)          returns String;
+    function updateAvailabilityHCI(body : String)        returns String;
+    function saveOneTimePay(data : object)               returns object;
+    function saveAvailability(data : object)             returns object;
+    function rejectPayments(data : object)               returns object;
+    function checkAdmin(data : String)                   returns String;
+    function uploadUsers(data : object)                  returns object;
+    function uploadEmployees(data : object)              returns object;
+    function getPayComponents(data : object)             returns object;
+    function getPayComponentData(data : object)          returns object;
+    //================================================
+    //      XSODATA Services
+    //================================================
     entity VP_COUNTRIES               as projection on vp.VP_COUNTRIES;
     entity RBPGroup                   as projection on vp.VP_RBP_GROUPS;
     entity RBPEmployees               as projection on vp.VP_RBP_EMPLOYEES;
@@ -85,7 +94,9 @@ service CatalogService {
 
     entity EmailParams                as projection on vp.VP_MAP_EMAIL_PARAMETERS; //with JS service
 
-    // CV Views
+    //================================================
+    //      CV Views
+    //================================================
     entity Pending_OneTimePayments    as projection on CV_PENDPOSTING_ONETIME_PAY;
     entity Pending_Availability       as projection on CV_PENDPOSTING_AVAILABILITY_PAY;
     entity OneTimePay_HCI             as projection on CV_HCI_ONETIME_PAY;

@@ -1,12 +1,12 @@
 const cds = require('@sap/cds');
-const { formatTime, formatDate, splitCSV } = require('./helper/formatter'); 
+const { formatTime, formatDate, splitCSV } = require('./helper/formatter');
 
 module.exports = cds.service.impl(async function () {
     const { User } = this.entities;
     const { EmpJob } = this.entities;
     const { VP_TIMEKEEPER } = this.entities;
     const { VP_AUDIT_LOG } = this.entities;
-    
+
 
     // Handle CREATE operation for User
     this.on('CREATE', User, async (req) => {
@@ -67,7 +67,9 @@ module.exports = cds.service.impl(async function () {
         return inputData;
     });
 
-    //XSJS
+    //===========================================
+    //              XSJS
+    //===========================================
 
     //Add_AuditLogs.xsjs
     // Local function to process log entries and call the procedure
@@ -130,7 +132,547 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    //Update_Users.xsjs
+    /**
+     *      Approve_Payments
+     */
+    async function approvePayments(db, obj) {
+        //obj.ID = 0;
+        const result = '';
+        if (obj.reqexternalCode === '') {
+            return 'Invalid Payload';
+        }
+        if (obj.reqcreatedOn.length === 0) {
+            obj.reqcreatedOn = new Date();
+        } else {
+            obj.reqcreatedOn = formatTime(obj.reqcreatedOn);
+        }
+        obj.reqlastModified = new Date();
+        let task = [];
+        task.push({
+            "id": 0,
+            "externalCode": obj.cust_externalCode,
+            "requestType": obj.reqrequestType,
+            "workflowSequence": parseInt(obj.reqworkflowSequence, 10) || 0,
+            "forwardSequence": parseInt(obj.reqforwardSequence, 10) || 0,
+            "createdOn": obj.reqcreatedOn,
+            "status.id": obj.reqstatus,
+            "agent": obj.reqagent,
+            "nextAgent": obj.reqnextAgent,
+            "changedBy": obj.reqchangedBy,
+            "lastModified": obj.reqlastModified,
+            "changedByUser": obj.reqchangedByUser,
+            "notificationAgent": obj.reqnotificationAgent,
+            "workflow.id": obj.reqworkflow_id
+        });
+        let additionalInfo = '';
+        if (obj.additionalInfo) {
+            additionalInfo = obj.additionalInfo;
+        }
+
+        if (obj.reqrequestType === 'IT15') {
+            await db.tx(async (tx) => {
+                // Call the stored procedure with the table data as input
+                result = await tx.run('CALL APPROVE_ONETIME(:it_req_flow, :iv_additionalInfo)', { task, additionalInfo });
+                return result.ev_response;
+            });
+        }
+        else if (obj.reqrequestType === '2004') {
+            await db.tx(async (tx) => {
+                // Call the stored procedure with the table data as input
+                result = await tx.run('CALL APPROVE_AVAILABILITY(:it_req_flow, :iv_additionalInfo)', { task, additionalInfo });
+                return result.ev_response;
+            });
+        }
+    }
+    this.on('postApprovePayments', async (req) => {
+        const output = { error: [] };
+        let error_message = '';
+        const JSONObj = req.data; // Body of the request is automatically parsed by CAP
+        try {
+            const db = await cds.connect.to('db'); // Connect to the HANA database           
+            const len = JSONObj.d.results.length;
+            if (len > 0) {
+                const payObject = JSONObj.d.results;
+                error_message = '';
+                for (let i; i < len; i++) {
+                    payObject = JSONObj.d.results[i];
+                    error_message = await approvePayments(db, payObject);
+
+                    if ((error_message.length !== 0) || (error_message !== '')) {
+                        error_message = error_message || ', External Code:' || payObject.reqexternalCode;
+                        output.error.push(error_message);
+                        break;
+                    }
+                }
+
+                if (output.error.length === 0) {
+                    // Commit transaction if no error
+                    await conn.commit();
+                    req.reply(output);
+
+                } else {
+                    req.error(400, JSON.stringify(output));
+                }
+
+            } else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+
+        } catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
+    /**     CreateRBPGroups
+     * XSJS to create multiple RBP Employees in HANA
+     */
+    async function createRBPEmployees(db, obj) {
+        const groupLength = obj.length;
+        let errorMsg = '';
+        let task = [];
+
+        for (let j = 0; j < groupLength; j++) {
+            task.push({
+                "id.groupID": obj[j]["id.groupID"],
+                "userID": obj[j].userID
+            });
+        }
+        await db.tx(async (tx) => {
+            errorMsg = await tx.run('CALL CREATERBPEMPLOYEES(:it_employees)', { task });
+            return errorMsg.ev_response;
+        });
+    }
+    this.on('postCreateRBPEmployees', async (req) => {
+
+        const output = { error: [] };
+        let errorMessage = '';
+        const JSONObj = req.data;
+
+        try {
+            const conn = await cds.connect.to('db'); // Connect to the HANA database
+            let i = 0, groups = [];
+            const len = JSONObj.results.length;
+            if (len > 0) {
+                groups = JSONObj.results;
+                errorMessage = createRBPEmployees(conn, groups);
+
+                if (errorMessage && errorMessage.length !== 0) {
+                    output.error.push(errorMessage);
+                    req.error(400, JSON.stringify(output));
+                } else {
+                    await conn.commit();
+                    req.reply(output);
+                }
+            }
+            else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+        }
+
+        catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
+    /**
+     *      CreateRBPGroups
+     */
+    async function createRBPGroups(db, obj) {
+        const groupLength = obj.length;
+        let errorMsg = '';
+        let task = [];
+        for (let j = 0; j < groupLength; j++) {
+            task.push({
+                "groupID": obj[j].groupID,
+                "groupName": obj[j].groupName,
+                "userID": obj[j].userID,
+                "today": obj[j].today,
+                "next": obj[j].next,
+                "role": obj[j].role
+            });
+        }
+        await db.tx(async (tx) => {
+            errorMsg = await tx.run('CALL CREATERBPGROUPS(:it_groups)', { task });
+            return errorMsg.ev_response;
+        });
+    }
+    this.on('postCreateRBPGroups', async (req) => {
+
+        const output = { error: [] };
+        let errorMessage = '';
+        const JSONObj = req.data;
+
+        try {
+            const db = await cds.connect.to('db'); // Connect to the HANA database
+
+            let i = 0, flag = 0, groups = [];
+            const len = JSONObj.results.length;
+            if (len > 0) {
+                groups = JSONObj.results;
+                errorMessage = await createRBPGroups(db, groups);
+
+                if ((errorMessage.length !== 0) || (errorMessage !== '')) {
+                    output.error.push(errorMessage);
+                    req.error(400, JSON.stringify(output));
+                }
+                else {
+                    await db.commit();
+                    req.reply(output);
+                }
+            }
+            else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+        }
+        catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
+    /**     DeleteRBPEmployees   
+     * XSJS to delete multiple Employees in HANA
+     */
+
+    async function deleteRBPEmployees(db, obj) {
+        const groupLength = obj.length;
+        let errorMsg = '';
+        let task = [];
+
+        for (let j = 0; j < groupLength; j++) {
+            task.push({
+                "id.groupID": obj[j]["id.groupID"],
+                "userID": obj[j].userID
+            });
+        }
+        await db.tx(async (tx) => {
+            errorMsg = await tx.run('CALL DELETERBPEMPLOYEES(:it_employees)', { task });
+            return errorMsg.ev_response;
+        });
+    }
+    this.on('postDeleteRBPEmployees', async (req) => {
+        let output = { error: [] };
+        let error_message = '';
+        const JSONObj = req.data;
+
+        try {
+            conn = await cds.connect.to('db'); // Connect to the HANA database
+            let groups = [];
+            const len = JSONObj.results.length;
+            if (len > 0) {
+                groups = JSONObj.results;
+                error_message = await deleteRBPEmployees(conn, groups);
+
+                if (error_message && error_message.length !== 0) {
+                    output.error.push(error_message);
+                    req.error(400, JSON.stringify(output));
+                }
+                else {
+                    await conn.commit();
+                    req.reply(output);
+                }
+            }
+            else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+        }
+        catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
+    /**
+     * deleteRBPGroups
+     * @param {*} db 
+     * @param {*} obj 
+     */
+    //XSJS to delete multiple RBP Groups in HANA
+    async function deleteRBPGroups(db, obj) {
+        const groupLength = obj.length;
+        let errorMsg = '';
+        let task = [];
+        for (let j = 0; j < groupLength; j++) {
+            task.push({
+                "groupID": obj[j].groupID,
+                "groupName": obj[j].groupName,
+                "userID": obj[j].userID,
+                "today": obj[j].today,
+                "next": obj[j].next,
+                "role": obj[j].role
+            });
+        }
+        await db.tx(async (tx) => {
+            errorMsg = await tx.run('CALL DELETERBPGROUPS(:it_groups)', { task });
+            return errorMsg.ev_response;
+        });
+    }
+
+    this.on('postDeleteRBPGroups', async (req) => {
+
+        const output = { error: [] };
+        let error_message = '';
+        const JSONObj = req.data;
+
+        try {
+            const conn = await cds.connect.to('db');
+            let groups = [];
+            const len = JSONObj.results.length;
+            if (len > 0) {
+                groups = JSONObj.results;
+                error_message = await deleteRBPGroups(conn, groups);
+
+                if (error_message && error_message.length !== 0) {
+                    output.error.push(error_message);
+                    req.error(400, JSON.stringify(output));
+                } else {
+                    // Commit transaction if no error
+                    await conn.commit();
+                    req.reply(output);
+                }
+            } else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+        }
+        catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
+
+    /**         DeleteRBPGroupsbyID
+     * XSJS to delete multiple RBP Groups in HANA
+     */
+    async function deleteRBPGroupsbyID(connection, obj) {
+        const groupLength = obj.length;
+        let errorMsg = '';
+        let task = [];
+        for (let j = 0; j < groupLength; j++) {
+            task.push({
+                "groupID": obj[j].groupID
+            });
+        }
+        await db.tx(async (tx) => {
+            // Call the stored procedure with the table data as input
+            errorMsg = await tx.run('CALL DELETEGROUPSBYID(:it_groups)', { task });
+            return errorMsg.ev_response;
+        });
+    }
+
+
+
+    this.on('postDeleteRBPGroupsbyID', async (req) => {
+
+        let output = { error: [] };
+        let errorMessage = '';
+        const JSONObj = req.data
+
+        try {
+            const conn = $.hdb.getConnection();
+            const len = JSONObj.results.length;
+            if (len > 0) {
+                const groups = JSONObj.results;
+                errorMessage = await deleteRBPGroupsbyID(conn, groups);
+
+                if (errorMessage && errorMessage.length !== 0) {
+                    output.error.push(errorMessage);
+                    req.error(400, JSON.stringify(output));
+                } else {
+                    await conn.commit();
+                    req.reply(output);
+                }
+            } else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+
+        } catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
+    /**
+     * 
+     */
+    //  function formatTime(ipDate) 
+    async function forwardPayments(db, obj) {
+        let result = '';
+
+        if (obj.reqexternalCode === '') {
+            return 'Invalid Payload';
+        }
+        if (obj.reqcreatedOn.length === 0) {
+            obj.reqcreatedOn = new Date();
+        } else {
+            obj.reqcreatedOn = formatTime(obj.reqcreatedOn);
+        }
+        obj.reqlastModified = new Date();
+        let task = [];
+        task.push({
+            "id": 0,
+            "externalCode": obj.cust_externalCode,
+            "requestType": obj.reqrequestType,
+            "workflowSequence": parseInt(obj.reqworkflowSequence, 10) || 0,
+            "forwardSequence": parseInt(obj.reqforwardSequence, 10) || 0,
+            "createdOn": obj.reqcreatedOn,
+            "status.id": obj.reqstatus,
+            "agent": obj.reqagent,
+            "nextAgent": obj.reqnextAgent,
+            "changedBy": obj.reqchangedBy,
+            "lastModified": obj.reqlastModified,
+            "changedByUser": obj.reqchangedByUser,
+            "notificationAgent": obj.reqnotificationAgent,
+            "workflow.id": obj.reqworkflow_id
+        });
+        let additionalInfo = '';
+        if (obj.additionalInfo) {
+            additionalInfo = obj.additionalInfo;
+        }
+        if (obj.reqrequestType === 'IT15') {
+            await db.tx(async (tx) => {
+                errorMsg = await tx.run('CALL FORWARD_ONETIMEPAY(:it_req_flow, :iv_additionalInfo)', { task, additionalInfo });
+                return errorMsg.ev_response;
+            });
+        }
+    }
+
+    /**
+     *      Forward_Payments.xsjs
+     */
+    this.on('postForwardPayments', async (req) => {
+
+        let output = { error: [] };
+        let errorMessage = '';
+        var JSONObj = req.data
+
+        try {
+            const conn = await cds.connect.to('db');
+            let i = 0, flag = 0, payObject = '';
+            var len = JSONObj.d.results.length;
+            if (len > 0) {
+                errorMessage = '';
+                for (i; i < len; i++) {
+                    payObject = JSONObj.d.results[i];
+                    errorMessage = await forwardPayments(conn, payObject);
+
+                    if (errorMessage && errorMessage.length !== 0) {
+                        errorMessage = errorMessage || ', External Code:' || payObject.reqexternalCode;
+                        output.error.push(errorMessage);
+                        req.error(400, JSON.stringify(output));
+                        break;
+                    }
+                }
+
+                if (output.error.length === 0) {
+                    await conn.commit();
+                    req.reply(output);
+                }
+                else {
+                    req.error(400, JSON.stringify(output));
+                }
+            }
+            else {
+                output.error.push('Invalid Payload');
+                req.error(400, JSON.stringify(output));
+            }
+
+        }
+
+        catch (e) {
+            req.error(400, '${e.name} : ${e.message}');
+        }
+    });
+
+    /**
+     *      Get_InfoTypes_WT_HCI.xsjs
+     */
+    this.on('POST', 'processPayComponents', async (req) => {
+        const output = { it14: [], it15: [], None: [], error: [] };
+        const contents = req.data;  // CSV content
+        const conn = await cds.connect.to('db');
+        try {
+            // Process CSV and call the stored procedure or custom logic
+            const records = splitCSV(contents);
+
+            const result = await fetchPayComponentData(conn, records);
+
+            // Handling result and populating the output
+            if (result.error) {
+                output.error.push(result.error);
+                return req.error(400, result.error);
+            }
+
+            // Process different types of results
+            result.et_infoType_14.forEach(item => output.it14.push(item.payComponent));
+            result.et_infoType_15.forEach(item => output.it15.push(item.payComponent));
+            result.et_infoType_None.forEach(item => output.None.push(item.payComponent));
+
+            // Return the results
+            return { Result: output };
+        } catch (err) {
+            output.error.push(`Error: ${err.message}`);
+            return req.error(400, err.message);
+        }
+    });
+
+    // Function to simulate calling a stored procedure (or custom logic)
+    async function fetchPayComponentData(db, records) {
+        //call HANA procedure
+        const results = await db.tx.run('CALL GET_WT_INFOTYPE(:it_infoType)', { records });
+
+        let et_infoType_14 = [], et_infoType_15 = [], et_infoType_None = [];
+
+        // Simulated response (replace with actual database call or procedure)
+        for (const record of results) {
+            if (record.payComponent.startsWith('14')) {
+                et_infoType_14.push({ payComponent: record.payComponent });
+            } else if (record.payComponent.startsWith('15')) {
+                et_infoType_15.push({ payComponent: record.payComponent });
+            } else {
+                et_infoType_None.push({ payComponent: record.payComponent });
+            }
+        }
+
+        return {
+            et_infoType_14,
+            et_infoType_15,
+            et_infoType_None
+        };
+    }
+
+    /**
+     *      Update_Users.xsjs
+     */
+    this.on('getPendingApprovalCount', async (req) => {
+        const output = { count: 0 };  // Default output
+
+        try {
+            const userName = req.data.userName;  // Getting the userName from the request
+
+            if (userName && userName.length > 0) {
+                // Establishing connection to the database (CAP handles this)
+                const db = await cds.connect.to('db');  // Replace 'hana' with the correct data source name if needed
+
+                // Call the stored procedure to get pending approval count (custom logic)
+                const procedureResult = await db.transaction(async (tx) => {
+                    const result = await tx.run('CALL GET_PENDINGAPPROVAL_COUNT(:iv_user)', { userName });
+                    return result[0].EV_COUNT;  // Assuming the procedure returns a result with the field EV_COUNT
+                });
+
+                output.count = procedureResult;
+
+                return { count: output.count };
+            } else {
+                // Invalid user name input
+                return req.error(400, 'Invalid userName');
+            }
+        } catch (err) {
+            // Error handling
+            return req.error(400, `Error: ${err.message}`);
+        }
+    });
+
+
+    /**
+     *      Update_Users.xsjs
+     */
     this.on('upsertTimekeepers', async (req) => {
         const usersArray = req.data.users; // Get the users array from the request body
         const tx = await cds.transaction(); // Create a new transaction
@@ -184,7 +726,9 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    //Update_OneTimePay_HCILogs.xsjs
+    /**
+     *      Update_OneTimePay_HCILogs.xsjs
+     */
     this.on('updateOneTimePayHCI', async (req) => {
         let body = req.data.body;
         let messages = [];
@@ -225,8 +769,8 @@ module.exports = cds.service.impl(async function () {
 
                     // Call the stored procedure or your business logic here
                     try {
-                        let res = await cds.tx(req).run('CALL UPDATE_ONETIMEPAY_HCI(:it_hci_logs)', {record});
-                        
+                        let res = await cds.tx(req).run('CALL UPDATE_ONETIMEPAY_HCI(:it_hci_logs)', { record });
+
                         if (res.ev_response.length !== 0) {
                             errorRec.push('${line[0]} ${res.ev_response}');
                         } else {
@@ -250,8 +794,9 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-
-    // Update_Availability_HCILogs
+    /**
+     *      Update_Availability_HCILogs.xsjs
+     */
     this.on('updateAvailabilityHCI', async (req) => {
         let body = req.data.body;
         let messages = [];
@@ -306,7 +851,7 @@ module.exports = cds.service.impl(async function () {
 
                     try {
                         // Call the stored procedure to update availability  
-                        const procedure = await cds.tx(req).run('CALL UPDATE_AVAILABILITY_HCI(:it_hci_logs)', {record});
+                        const procedure = await cds.tx(req).run('CALL UPDATE_AVAILABILITY_HCI(:it_hci_logs)', { record });
 
                         if (procedure.ev_response.length !== 0) {
                             errorRec.push(`${externalCode} ${procedure.ev_response}`);
@@ -331,7 +876,9 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    //Submit_OneTimePay.xsjs
+    /**
+     *      Submit_OneTimePay.xsjs.xsjs
+     */
     this.on('saveOneTimePay', async (req) => {
         const data = req.data;
         const response = {
@@ -437,7 +984,9 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    //Submit_Availability.xsjs
+    /**
+     *      Submit_Availability.xsjs
+     */
     this.on('saveAvailability', async (req) => {
         const data = req.data; // Get input data from the request
 
@@ -457,9 +1006,9 @@ module.exports = cds.service.impl(async function () {
                 payObject.createdOn = payObject.createdOn.length === 0 ? new Date() : formatTime(payObject.createdOn);
 
                 if (payObject.reqcreatedOn.length === 0) {
-                payObject.reqcreatedOn = new Date();
+                    payObject.reqcreatedOn = new Date();
                 } else {
-                payObject.reqcreatedOn = formatTime(payObject.reqcreatedOn);
+                    payObject.reqcreatedOn = formatTime(payObject.reqcreatedOn);
                 }
 
                 payObject.reqlastModified = new Date();
@@ -479,7 +1028,7 @@ module.exports = cds.service.impl(async function () {
                     changedByUser: payObject.reqchangedByUser,
                     notificationAgent: payObject.reqnotificationAgent,
                     workflow_id: payObject.reqworkflow_id
-                  };
+                };
 
                 try {
                     // Call the procedure (assuming you have a custom procedure)
@@ -488,7 +1037,7 @@ module.exports = cds.service.impl(async function () {
                 } catch (error) {
                     response.success = false;
                     response.error = error.message || 'Unknown error occurred';
-                }  
+                }
                 resp.push(response);
 
             }
@@ -497,21 +1046,20 @@ module.exports = cds.service.impl(async function () {
         return resp; // CAP will return this object as a JSON response
     });
 
-
-    // Reject_Payments.xsjs
-
-    // Reject payments function
+    /**
+     *      Reject_Payments.xsjs
+     */
     async function rejectPayments(req, obj) {
         if (obj.reqexternalCode === '') {
-        return 'Invalid Payload';
+            return 'Invalid Payload';
         }
         if (obj.reqcreatedOn.length === 0) {
-        obj.reqcreatedOn = new Date();
+            obj.reqcreatedOn = new Date();
         } else {
-        obj.reqcreatedOn = formatTime(obj.reqcreatedOn);
+            obj.reqcreatedOn = formatTime(obj.reqcreatedOn);
         }
         obj.reqlastModified = new Date();
-        
+
         const task = {
             id: 0,
             externalCode: obj.cust_externalCode,
@@ -528,16 +1076,16 @@ module.exports = cds.service.impl(async function () {
             notificationAgent: obj.reqnotificationAgent,
             workflow_id: obj.reqworkflow_id
         };
-    
+
         const additionalInfo = obj.additionalInfo || '';
-    
+
         let procedureResult;
         if (obj.reqrequestType === 'IT15') {
-            procedureResult = await cds.tx(req).run( 'CALL "REJECT_ONETIMEPAY"(?, ?)', [obj, task]);
+            procedureResult = await cds.tx(req).run('CALL "REJECT_ONETIMEPAY"(?, ?)', [obj, task]);
         } else if (obj.reqrequestType === '2004') {
-            procedureResult = await cds.tx(req).run( 'CALL "REJECT_AVAILABILITY"(?, ?)', [obj, task]);
+            procedureResult = await cds.tx(req).run('CALL "REJECT_AVAILABILITY"(?, ?)', [obj, task]);
         }
-    
+
         return procedureResult.ev_response;
     }
 
@@ -545,30 +1093,34 @@ module.exports = cds.service.impl(async function () {
         const { data } = req; // incoming data from the request body
         let errorMessage = '';
         let errors = [];
-    
-        if (data.length > 0) {
-          for (const payObject of data) {
-            // Process the payment rejection
-            errorMessage = await rejectPayments(req.context, payObject);
-    
-            if (errorMessage) {
-              errorMessage = errorMessage || `, External Code: ${payObject.reqexternalCode}`;
-              errors.push(errorMessage);
-              break;
-            }
-          }
-        } else {
-          errors.push('Invalid Payload');
-        }
-    
-        if (errors.length > 0) {
-          return req.reject(400, errors.join(', '));
-        } else {
-          return { status: 'success' };
-        }
-      });
 
-      this.on('checkAdmin', async (req) => {
+        if (data.length > 0) {
+            for (const payObject of data) {
+                // Process the payment rejection
+                errorMessage = await rejectPayments(req.context, payObject);
+
+                if (errorMessage) {
+                    errorMessage = errorMessage || `, External Code: ${payObject.reqexternalCode}`;
+                    errors.push(errorMessage);
+                    break;
+                }
+            }
+        } else {
+            errors.push('Invalid Payload');
+        }
+
+        if (errors.length > 0) {
+            return req.reject(400, errors.join(', '));
+        } else {
+            return { status: 'success' };
+        }
+    });
+
+    
+    /**
+     *      Is_HRADMIN.xsjs
+     */
+    this.on('checkAdmin', async (req) => {
         const { userID } = req.data;
         let result = {};
 
@@ -581,7 +1133,7 @@ module.exports = cds.service.impl(async function () {
 
             // Load the connection from CDS context
             const db = await cds.connect.to('db'); // Make sure db is configured in your CDS service configuration
-            const oProcedure = await cds.tx(req).run( 'CALL "IS_HRADM"(?, ?)', [userID]);
+            const oProcedure = await cds.tx(req).run('CALL "IS_HRADM"(?, ?)', [userID]);
 
             // Check the result from the procedure
             if (oProcedure.ev_result === 0) {
@@ -600,7 +1152,7 @@ module.exports = cds.service.impl(async function () {
     });
 
     // Helper function to split CSV data
-    String.prototype.splitCSV2 = function(sep) {
+    String.prototype.splitCSV2 = function (sep) {
         let foo = this.split(sep || ",");
         for (let x = foo.length - 1, tl; x >= 0; x--) {
             if (foo[x].replace(/"\s+$/, '"').charAt(foo[x].length - 1) === '"') {
@@ -618,7 +1170,10 @@ module.exports = cds.service.impl(async function () {
         return foo;
     };
 
-    //Ins_User_Dtls.xsjs
+
+    /**
+     *      Ins_User_Dtls.xsjs
+     */
     this.on('uploadUsers', async (req) => {
         const fileContent = req.data.fileContent;
         const messages = [];
@@ -643,7 +1198,7 @@ module.exports = cds.service.impl(async function () {
                     messages.push(`Invalid columns for line: ${i + 1}`);
                     return req.error(400, messages.join(", "));
                 }
-                
+
                 // Extract columns and map to the record format
                 const col = line.splice(0, colCount);
                 records.push({
@@ -666,8 +1221,8 @@ module.exports = cds.service.impl(async function () {
 
             // Call stored procedure to insert records
             const db = await cds.connect.to('db'); // Ensure database connection
-            const result = await cds.tx(req).run( 'CALL "CREATEUSER"(?)', [records]);
-  
+            const result = await cds.tx(req).run('CALL "CREATEUSER"(?)', [records]);
+
             // Check for errors from the procedure response
             if (result.et_error && result.et_error.length > 0) {
                 messages.push(result.et_error);
@@ -683,8 +1238,9 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-
-    //Ins_EmpJob_Dtls.xsjs
+    /**
+     *     Ins_EmpJob_Dtls.xsjs
+     */
     this.on('uploadEmployees', async (req) => {
         const fileContent = req.data.fileContent;
         const messages = [];
@@ -709,7 +1265,7 @@ module.exports = cds.service.impl(async function () {
                     messages.push(`Invalid columns for line: ${i + 1}`);
                     return req.error(400, messages.join(", "));
                 }
-                
+
                 // Extract columns and map to the record format
                 const col = line.splice(0, colCount);
                 records.push({
@@ -722,7 +1278,7 @@ module.exports = cds.service.impl(async function () {
 
             // Call stored procedure to insert records
             const db = await cds.connect.to('db'); // Ensure database connection CREATEEMPJOB
-            const result = await cds.tx(req).run( 'CALL "CREATEEMPJOB"(?)', [records]);
+            const result = await cds.tx(req).run('CALL "CREATEEMPJOB"(?)', [records]);
 
             // Check for errors from the procedure response
             if (result.et_error && result.et_error.length > 0) {
@@ -739,7 +1295,9 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    //GetWagetypes.xsjs
+    /**
+     *     GetWagetypes.xsjs
+     */
     this.on('getPayComponents', async (req) => {
         const { company, infotype, country, initiator, language } = req.data;
 
@@ -899,7 +1457,9 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    //Get_WageTypesV1_1.xsjs
+    /**
+     *     Get_WageTypesV1_1.xsjs
+     */
     const executeQuery = async (company, infotype, country, initiator, subInfoType, language) => {
         const db = await cds.connect.to('db');  // Connecting to the database (HANA)
         const query = `

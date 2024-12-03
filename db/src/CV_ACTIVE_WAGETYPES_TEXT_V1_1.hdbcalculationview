@@ -71,7 +71,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
-  
     <filter>&quot;INFOTYPE&quot;='$$IP_INFOTYPE$$' and match( &quot;COUNTRY_ID&quot;, if('$$IP_COUNTRY$$' = '','*','$$IP_COUNTRY$$')) and 
 match( &quot;INITIATORROLE&quot;, if('$$IP_INITIATOR$$' = '','*','$$IP_INITIATOR$$'))and 
 ((&quot;COMPANYCODE&quot;='')or (&quot;COMPANYCODE&quot;='$$IP_COMPANY_CODE$$' and &quot;OPERATOR&quot;='eq') or (&quot;COMPANYCODE&quot; != '$$IP_COMPANY_CODE$$' and &quot;OPERATOR&quot;='neq'))</filter>
@@ -93,7 +92,6 @@ match( &quot;INITIATORROLE&quot;, if('$$IP_INITIATOR$$' = '','*','$$IP_INITIATOR
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE"/>
-  
     <filter>&quot;IS_ACTIVE&quot;=1 and &quot;STARTDATE&quot; &lt;= format(now(),'YYYYMMDD') and &quot;ENDDATE&quot; &gt;= format(now(),'YYYYMMDD') and (&quot;SUB_INFOTYPE&quot; = '$$IP_SUB_INFOTYPE$$')</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts">

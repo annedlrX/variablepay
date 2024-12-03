@@ -1,10 +1,6 @@
 PROCEDURE "GET_PENDINGAPPROVAL_COUNT"(
-    IN iv_externalCode NVARCHAR(100),
-    IN iv_action INTEGER,
-    IN iv_requestType NVARCHAR(5),
-    IN iv_createdBy NVARCHAR(100),
-    IN iv_add_info NVARCHAR(5000) DEFAULT '',
-    OUT ev_response NVARCHAR(800)
+    IN iv_user NVARCHAR(128),
+    OUT ev_count INTEGER 
  )
    LANGUAGE SQLSCRIPT
    SQL SECURITY INVOKER
@@ -14,15 +10,14 @@ BEGIN
    /*************************************
        Write your procedure logic
    *************************************/
-   DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
-        ev_response := ev_response || '  External Code: ' || :iv_externalCode;
-    END;
- 
-ev_response = '';
- 
-INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID","CREATEDAT","CREATEDBY","REQUESTTYPE","ADDITIONALINFO" )
-        VALUES ("LOGGER".NEXTVAL,iv_externalCode,iv_action,CURRENT_UTCTIMESTAMP,iv_createdBy,iv_requestType,iv_add_info);
+DECLARE lc_status_pending INTEGER := 1;
+DECLARE lv_user NVARCHAR(128) := '';
+
+ev_count = 0;
+
+lv_user = '%' || iv_user || '%';
+
+SELECT COUNT(*) INTO ev_count FROM "COM_STRADA_VP_REQUEST_FLOW" where "AGENT" LIKE lv_user
+     AND "STATUS_ID"= 1;
 
 END
