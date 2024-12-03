@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_WF_DETAILS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_WF_DETAILS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
 <descriptions defaultDescription="CV_WF_DETAILS"/>
-<localVariables/>
+<localVariables>
+  <variable id="IP_WORKFLOW_ID" parameter="true">
+    <descriptions defaultDescription="IP_WORKFLOW_ID"/>
+    <variableProperties datatype="NVARCHAR" length="16" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_WORKFLOW_CONFIG">
@@ -10,7 +18,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="WORKFLOW_ID"/>
       <viewAttribute id="TRIGGERWORKFLOW"/>
@@ -25,6 +33,7 @@
     <input node="COM_STRADA_VP_WORKFLOW_CONFIG">
       <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="ID"/>
     </input>
+    <filter>&quot;WORKFLOW_ID&quot;='$$IP_WORKFLOW_ID$$'</filter>
   </calculationView>
 </calculationViews>
 

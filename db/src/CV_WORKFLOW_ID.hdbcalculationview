@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_WORKFLOW_ID" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_WORKFLOW_ID"/>
-<localVariables/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_WORKFLOW_ID" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_WAGETYPES"/>
+<localVariables>
+  <variable id="IP_INFOTYPE" parameter="true">
+    <descriptions defaultDescription="IP_INFOTYPE"/>
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_INITIATOR" parameter="true">
+    <descriptions defaultDescription="IP_INITIATOR"/>
+    <variableProperties datatype="NVARCHAR" length="32" mandatory="true" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+  <variable id="IP_WAGETYPE" parameter="true">
+    <descriptions defaultDescription="IP_WAGETYPE"/>
+    <variableProperties datatype="NVARCHAR" length="255" mandatory="false" defaultValue="">
+      <valueDomain type="empty"/>
+      <selection multiLine="false" type="SingleValue"/>
+    </variableProperties>
+  </variable>
+</localVariables>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_WAGETYPE_MAPPING">
@@ -13,7 +35,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="INFOTYPE"/>
       <viewAttribute id="PAYCOMPONENT_ID"/>
@@ -22,6 +44,7 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
+    <filter>&quot;INFOTYPE&quot;='$$IP_INFOTYPE$$' and &quot;INITIATORROLE&quot;='$$IP_INITIATOR$$' and &quot;PAYCOMPONENT_ID&quot;='$$IP_WAGETYPE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
@@ -135,11 +158,11 @@
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="194.99560546875"/>
+      <rectangleSize width="194"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="245.91357421875"/>
+      <rectangleSize width="245"/>
     </shape>
   </shapes>
 </layout>
