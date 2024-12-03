@@ -28,7 +28,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="COLUMN_ENGINE">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="IS_ACTIVE"/>
@@ -44,8 +44,12 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE"/>
+  
+    <filter>&quot;IS_ACTIVE&quot;=1 and &quot;STARTDATE&quot; &lt;= format( NOW() ,'YYYYMMDD') and &quot;ENDDATE&quot; &gt;= format(NOW(),'YYYYMMDD') and &quot;ID&quot;='$$IP_PAY_COMPONENT$$'and &quot;IS_SPECIALRECOGNITIONTYPE&quot;=0
+
+</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts">
+  <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="DESCRIPTION"/>
     
@@ -53,6 +57,8 @@
       <viewAttribute id="PAYCOMPONENT_ID"/></viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_TEXT"/>
+  
+    <filter>&quot;LANGUAGE&quot;='$$IP_LANGUAGE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT">
     <viewAttributes>
