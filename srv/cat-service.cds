@@ -41,6 +41,7 @@ using CV_AUDIT_LOG_FILTERED from '../db/schema';
 using CV_EMAIL_TEXT from '../db/schema';
 using CV_HRADMIN_USERS from '../db/schema';
 using CV_COUNTRIES from '../db/schema';
+using CV_AUDIT_LOGS_V2 from '../db/schema';
 
 service CatalogService {
     @readonly
@@ -50,10 +51,24 @@ service CatalogService {
     entity VP_WAGETYPE                as projection on vp.VP_WAGETYPE;
 
     entity VP_AUDIT_LOG               as projection on vp.VP_AUDIT_LOG;
+
+    entity VP_TIMEKEEPER               as projection on vp.VP_TIMEKEEPER;
     @open
     type object {};
     
+    //XSJS
     function postLogs(task : object) returns String;
+    function upsertTimekeepers(task : object) returns String;
+    function updateOneTimePayHCI(body: String) returns String;
+    function updateAvailabilityHCI(body: String) returns String;
+    function saveOneTimePay(data: object) returns object;
+    function saveAvailability(data: object) returns object;
+    function rejectPayments(data: object) returns object;
+    function checkAdmin(data: String) returns String;
+    function uploadUsers(data: object) returns object;
+    function uploadEmployees(data: object) returns object;
+    function getPayComponents(data: object) returns object;
+    function getPayComponentData(data: object) returns object;
     //Actions xsjs
     
 
@@ -114,7 +129,7 @@ service CatalogService {
     entity EmailText                  as projection on CV_EMAIL_TEXT;
     entity HRAdminUsers               as projection on CV_HRADMIN_USERS;
     entity Countries                  as projection on CV_COUNTRIES;
-    //TODO
+    entity AllAuditLogs_V2            as projection on CV_AUDIT_LOGS_V2;
     entity UOM_TEXT                   as projection on vp.VP_UOM_TEXT; //with JS service
     entity UOM                        as projection on vp.VP_UOM; //missing navigation to UOM_TXT
 /*    association "VP_UOM_TEXT"

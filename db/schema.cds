@@ -1,7 +1,7 @@
 //namespace com.strada;
 using {
   managed,
-  cuid,
+cuid  ,
   sap.common.CodeList
 } from '@sap/cds/common';
 
@@ -26,6 +26,7 @@ context com.strada {
         is_QuotaCompensation      : hana.TINYINT;
         SUB_INFOTYPE              : String(10) default '';
   }
+
 
   entity VP_WAGETYPE_TEXT {
     key payComponent : Association[1] to VP_WAGETYPE {
@@ -1435,3 +1436,60 @@ entity CV_COUNTRIES {
       NAME : String(64) @title: 'NAME: NAME';
 }
 
+@cds.persistence.exists
+@cds.persistence.calcview
+entity CV_AUDIT_LOGS_V2(IP_LANGUAGE : String(5)) {
+  key CUST_EXTERNALCODE     : String(100)  @title: 'CUST_EXTERNALCODE: CUST_EXTERNALCODE';
+      LOGID                 : String(36)   @title: 'LOGID: ID';
+      ACTION_ID             : Integer      @title: 'ACTION_ID: ACTION_ID';
+      LOGCREATEDBY          : String(255)  @title: 'LOGCREATEDBY: LOGCREATEDBY';
+      REQUESTTYPE           : String(5)    @title: 'REQUESTTYPE: REQUESTTYPE';
+      ADDITIONALINFO        : String(5000) @title: 'ADDITIONALINFO: ADDITIONALINFO';
+      LOGCREATEDBYUSER      : String(128)  @title: 'LOGCREATEDBYUSER: LOGCREATEDBYUSER';
+      ACTIONDESC            : String(128)  @title: 'ACTIONDESC: ACTIONDESC';
+      STATUSDESC            : String(64)   @title: 'STATUSDESC: STATUSDESC';
+      CUST_USERID           : String(128)  @title: 'CUST_USERID: CUST_USERID';
+      CUST_PAYCOMPONENT     : String(255)  @title: 'CUST_PAYCOMPONENT: CUST_PAYCOMPONENT';
+      EFFECTIVESTARTDATE    : Date         @title: 'EFFECTIVESTARTDATE: EFFECTIVESTARTDATE';
+      CUST_PAYCOMPVALUE     : Decimal(34)  @title: 'CUST_PAYCOMPVALUE: CUST_PAYCOMPVALUE';
+      CUST_CURRENCYCODE     : String(64)   @title: 'CUST_CURRENCYCODE: CUST_CURRENCYCODE';
+      CUST_CUSTOMSTRING     : String(255)  @title: 'CUST_CUSTOMSTRING: CUST_CUSTOMSTRING';
+      CUST_NUMBER           : Integer      @title: 'CUST_NUMBER: CUST_NUMBER';
+      CUST_UNIT             : String(255)  @title: 'CUST_UNIT: CUST_UNIT';
+      CUST_NOTES            : String(255)  @title: 'CUST_NOTES: CUST_NOTES';
+      STATUS                : Integer      @title: 'STATUS: STATUS';
+      LASTMODIFIED          : Timestamp    @title: 'LASTMODIFIED: LASTMODIFIED';
+      CREATEDBY             : String(128)  @title: 'CREATEDBY: CREATEDBY';
+      CREATEDON             : Timestamp    @title: 'CREATEDON: CREATEDON';
+      AUTOAPPROVED          : UInt8        @title: 'AUTOAPPROVED: AUTOAPPROVED';
+      CUST_CALCULATEDAMOUNT : Decimal(34)  @title: 'CUST_CALCULATEDAMOUNT: CUST_CALCULATEDAMOUNT';
+      CREATEDBYUSER         : String(128)  @title: 'CREATEDBYUSER: CREATEDBYUSER';
+      CUST_USER             : String(128)  @title: 'CUST_USER: CUST_USER';
+      COUNTRY               : String(3)    @title: 'COUNTRY: COUNTRY';
+      CUST_UNIT_TXT         : String(32)   @title: 'CUST_UNIT_TXT: CUST_UNIT_TXT';
+      CUST_PAYCOMPONENT_TXT : String(128)  @title: 'CUST_PAYCOMPONENT_TXT: CUST_PAYCOMPONENT_TXT';
+      CUST_ENDDATE          : Date         @title: 'CUST_ENDDATE: CUST_ENDDATE';
+      LOGID_1               : String(36)   @title: 'LOGID_1: LOGID_1';
+}
+
+
+@cds.persistence.exists
+@cds.persistence.calcview
+entity CV_ACTIVE_WAGETYPES_TEXT_BASEDONLOCALE {
+  key INFOTYPE                  : String(5)   @title: 'INFOTYPE: INFOTYPE';
+      PAYCOMPONENT_ID           : String(255) @title: 'PAYCOMPONENT_ID: PAYCOMPONENT_ID';
+      WORKFLOW_ID               : String(16)  @title: 'WORKFLOW_ID: WORKFLOW_ID';
+      DESCRIPTION               : String(255) @title: 'DESCRIPTION: DESCRIPTION';
+      IS_AMOUNTTYPE             : String(5)   @title: 'IS_AMOUNTTYPE: IS_AMOUNTTYPE';
+      UOM                       : String(5)   @title: 'UOM: UOM';
+      IS_SPECIALRECOGNITIONTYPE : UInt8       @title: 'IS_SPECIALRECOGNITIONTYPE: IS_SPECIALRECOGNITIONTYPE';
+      WAGETYPE                  : String(255) @title: 'WAGETYPE: WAGETYPE';
+      ISINDEVAL                 : UInt8       @title: 'ISINDEVAL: ISINDEVAL';
+      CURRENCY                  : String(16)  @title: 'CURRENCY: CURRENCY';
+      IS_QUOTACOMPENSATION      : UInt8       @title: 'IS_QUOTACOMPENSATION: IS_QUOTACOMPENSATION';
+      LANGUAGE                  : String(5)   @title: 'LANGUAGE: LANGUAGE';
+      SUB_INFOTYPE              : String(10)  @title: 'SUB_INFOTYPE: SUB_INFOTYPE';
+      CUST_FREQUENCY            : String(255) @title: 'CUST_FREQUENCY: CUST_FREQUENCY';
+      CUST_FREQUENCY_TXT        : String(64)  @title: 'CUST_FREQUENCY_TXT: CUST_FREQUENCY_TXT';
+      DELIMITINDICATOR          : UInt8       @title: 'DELIMITINDICATOR: DELIMITINDICATOR';
+}
