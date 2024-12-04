@@ -1,7 +1,7 @@
 //namespace com.strada;
 using {
   managed,
-cuid  ,
+  cuid,
   sap.common.CodeList
 } from '@sap/cds/common';
 
@@ -668,7 +668,6 @@ entity CV_PEND_APPROVAL_SPL_RECOG(IP_AGENT : String(100)) {
       CUST_NUMBER           : Decimal(34) @title: 'CUST_NUMBER: CUST_NUMBER';
   key CUST_UNIT             : String(255) @title: 'CUST_UNIT: CUST_UNIT';
   key CUST_NOTES            : String(255) @title: 'CUST_NOTES: CUST_NOTES';
-  key cust_endDate          : Date        @title: 'cust_endDate: cust_endDate';
   key CUST_USER             : String(128) @title: 'CUST_USER: CUST_USER';
   key CUST_PAYCOMPONENT_TXT : String(128) @title: 'CUST_PAYCOMPONENT_TXT: CUST_PAYCOMPONENT_TXT';
       CUST_CALCULATEDAMOUNT : Decimal(34) @title: 'CUST_CALCULATEDAMOUNT: CUST_CALCULATEDAMOUNT';
@@ -1087,7 +1086,6 @@ entity CV_PAYMENTS_COMBINED {
   key CUST_USER             : String(128) @title: 'CUST_USER: CUST_USER';
   key CUST_PAYCOMPONENT_TXT : String(128) @title: 'CUST_PAYCOMPONENT_TXT: CUST_PAYCOMPONENT_TXT';
       CUST_CALCULATEDAMOUNT : Decimal(34) @title: 'CUST_CALCULATEDAMOUNT: CUST_CALCULATEDAMOUNT';
-  key cust_endDate          : Date        @title: 'cust_endDate: cust_endDate';
   key CUST_UNIT_TXT         : String(32)  @title: 'CUST_UNIT_TXT: CUST_UNIT_TXT';
       MODIFIEDAT            : Timestamp   @title: 'MODIFIEDAT: MODIFIEDAT';
   key CREATEDBYUSER         : String(128) @title: 'CREATEDBYUSER: CREATEDBYUSER';
@@ -1096,7 +1094,6 @@ entity CV_PAYMENTS_COMBINED {
       STATUS                : Integer     @title: 'STATUS: STATUS';
   key STATUSDESC            : String(64)  @title: 'STATUSDESC: STATUSDESC';
       AUTOAPPROVED          : UInt8       @title: 'AUTOAPPROVED: AUTOAPPROVED';
-  key statusTextLanguage    : String(5)   @title: 'statusTextLanguage: statusTextLanguage';
   key COUNTRY               : String(3)   @title: 'COUNTRY: COUNTRY_ID';
 }
 
@@ -1130,7 +1127,6 @@ entity CV_PAYMENTS_COMBINED_FILTERED(IP_LANGUAGE : String(5)) {
   key CUST_USER             : String(128)  @title: 'CUST_USER: CUST_USER';
   key CUST_PAYCOMPONENT_TXT : String(128)  @title: 'CUST_PAYCOMPONENT_TXT: CUST_PAYCOMPONENT_TXT';
       CUST_CALCULATEDAMOUNT : Decimal(34)  @title: 'CUST_CALCULATEDAMOUNT: CUST_CALCULATEDAMOUNT';
-  key cust_endDate          : Date         @title: 'cust_endDate: cust_endDate';
   key CUST_UNIT_TXT         : String(32)   @title: 'CUST_UNIT_TXT: CUST_UNIT_TXT';
       MODIFIEDAT            : Timestamp    @title: 'MODIFIEDAT: MODIFIEDAT';
   key CREATEDBYUSER         : String(128)  @title: 'CREATEDBYUSER: CREATEDBYUSER';
@@ -1231,7 +1227,6 @@ entity CV_ONETIMEPAY_LOGS_HR(IP_LANGUAGE : String(5)) {
       CUST_USERID                    : String(128)  @title: 'CUST_USERID: CUST_USERID';
       CUST_PAYCOMPONENT              : String(255)  @title: 'CUST_PAYCOMPONENT: CUST_PAYCOMPONENT';
       EFFECTIVESTARTDATE             : Date         @title: 'EFFECTIVESTARTDATE: EFFECTIVESTARTDATE';
-      cust_endDate                   : Date         @title: 'cust_endDate: cust_endDate';
       CUST_PAYCOMPVALUE              : Decimal(34)  @title: 'CUST_PAYCOMPVALUE: CUST_PAYCOMPVALUE';
       CUST_CURRENCYCODE              : String(64)   @title: 'CUST_CURRENCYCODE: CUST_CURRENCYCODE';
       CUST_CUSTOMSTRING              : String(255)  @title: 'CUST_CUSTOMSTRING: CUST_CUSTOMSTRING';
@@ -1266,7 +1261,7 @@ entity CV_ONETIMEPAY_LOGS_HR(IP_LANGUAGE : String(5)) {
 
 @cds.persistence.exists
 @cds.persistence.calcview
-entity CV_AVAILABILITY_LOGS_HR {
+entity CV_AVAILABILITY_LOGS_HR(IP_LANGUAGE : String(6)) {
   key LOGID                     : String(36)   @title: 'LOGID: ID';
       ACTION_ID                 : Integer      @title: 'ACTION_ID: ACTION_ID';
       LOGCREATEDON              : Timestamp    @title: 'LOGCREATEDON: CREATEDAT';
@@ -1274,12 +1269,13 @@ entity CV_AVAILABILITY_LOGS_HR {
       REQUESTTYPE               : String(5)    @title: 'REQUESTTYPE: REQUESTTYPE';
       ADDITIONALINFO            : String(5000) @title: 'ADDITIONALINFO: ADDITIONALINFO';
       LOGCREATEDBYUSER          : String(128)  @title: 'LOGCREATEDBYUSER: CREATEDBYUSER';
-      ACTIONDESCRIPTION         : String(128)  @title: 'ACTIONDESCRIPTION: DESCRIPTION';
-      STATUSDESCRIPTION         : String(64)   @title: 'STATUSDESCRIPTION: DESCRIPTION';
+      ACTIONDESC                : String(128)  @title: 'ACTIONDESC: ACTIONDESC';
+      STATUSDESC                : String(64)   @title: 'STATUSDESC: STATUSDESC';
       AUTOAPPROVED              : UInt8        @title: 'AUTOAPPROVED: AUTOAPPROVED';
       COUNTRY                   : String(3)    @title: 'COUNTRY: COUNTRY';
       CREATEDBY                 : String(128)  @title: 'CREATEDBY: CREATEDBY';
       CREATEDBYUSER             : String(128)  @title: 'CREATEDBYUSER: CREATEDBYUSER';
+      CREATEDON                 : Timestamp    @title: 'CREATEDON: CREATEDON';
       CUST_CUSTOMSTRING         : String(255)  @title: 'CUST_CUSTOMSTRING: CUST_CUSTOMSTRING';
       CUST_CUSTOMVAR1           : String(255)  @title: 'CUST_CUSTOMVAR1: CUST_CUSTOMVAR1';
       CUST_CUSTOMVAR2           : String(255)  @title: 'CUST_CUSTOMVAR2: CUST_CUSTOMVAR2';
@@ -1305,51 +1301,49 @@ entity CV_AVAILABILITY_LOGS_HR {
       DELIMITINDICATOR          : UInt8        @title: 'DELIMITINDICATOR: DELIMITINDICATOR';
       EFFECTIVESTARTDATE        : Date         @title: 'EFFECTIVESTARTDATE: EFFECTIVESTARTDATE';
       INITIATORLANGUAGE         : String(5)    @title: 'INITIATORLANGUAGE: INITIATORLANGUAGE';
-      CREATEDON                 : Timestamp    @title: 'CREATEDON: CREATEDON';
       LASTMODIFIED              : Timestamp    @title: 'LASTMODIFIED: LASTMODIFIED';
       STATUS                    : Integer      @title: 'STATUS: STATUS';
 }
 
-@cds.persistence.exists
-@cds.persistence.calcview
-entity CV_ONETIMEPAY_LOGS(IP_LANGUAGE : String(5), IP_START_DATE : Timestamp, IP_END_DATE : Timestamp) {
-  key ID                             : String(36)   @title: 'ID: ID';
-  key CUST_USERID                    : String(128)  @title: 'CUST_USERID: CUST_USERID';
-  key CUST_PAYCOMPONENT_ID           : String(255)  @title: 'CUST_PAYCOMPONENT_ID: CUST_PAYCOMPONENT_ID';
-  key CUST_PAYCOMPONENT_TXT          : String(128)  @title: 'CUST_PAYCOMPONENT_TXT: CUST_PAYCOMPONENT_TXT';
-  key EFFECTIVESTARTDATE             : Date         @title: 'EFFECTIVESTARTDATE: EFFECTIVESTARTDATE';
-      CUST_PAYCOMPVALUE              : Decimal(34)  @title: 'CUST_PAYCOMPVALUE: CUST_PAYCOMPVALUE';
-  key CUST_CURRENCYCODE              : String(64)   @title: 'CUST_CURRENCYCODE: CUST_CURRENCYCODE';
-  key CUST_CUSTOMSTRING              : String(255)  @title: 'CUST_CUSTOMSTRING: CUST_CUSTOMSTRING';
-      CUST_SEQUENCENUMBER            : Integer      @title: 'CUST_SEQUENCENUMBER: CUST_SEQUENCENUMBER';
-      CUST_NUMBER                    : Decimal(34)  @title: 'CUST_NUMBER: CUST_NUMBER';
-  key CUST_UNIT                      : String(255)  @title: 'CUST_UNIT: CUST_UNIT';
-  key CUST_UNIT_TXT                  : String(32)   @title: 'CUST_UNIT_TXT: CUST_UNIT_TXT';
-  key CUST_NOTES                     : String(255)  @title: 'CUST_NOTES: CUST_NOTES';
-  key CUST_USER                      : String(128)  @title: 'CUST_USER: CUST_USER';
-      CUST_CALCULATEDAMOUNT          : Decimal(34)  @title: 'CUST_CALCULATEDAMOUNT: CUST_CALCULATEDAMOUNT';
-      MODIFIEDAT                     : Timestamp    @title: 'MODIFIEDAT: MODIFIEDAT';
-  key CREATEDBYUSER                  : String(128)  @title: 'CREATEDBYUSER: CREATEDBYUSER';
-  key CREATEDBY                      : String(255)  @title: 'CREATEDBY: CREATEDBY';
-      CREATEDAT                      : Timestamp    @title: 'CREATEDAT: CREATEDAT';
-      STATUS                         : Integer      @title: 'STATUS: STATUS';
-  key STATUSDESC                     : String(64)   @title: 'STATUSDESC: STATUSDESC';
-      AUTOAPPROVED                   : UInt8        @title: 'AUTOAPPROVED: AUTOAPPROVED';
-  key cust_endDate                   : Date         @title: 'cust_endDate: cust_endDate';
-  key CUST_ALTERNATIVECOSTCENTER     : String(255)  @title: 'CUST_ALTERNATIVECOSTCENTER: CUST_ALTERNATIVECOSTCENTER';
-  key CUST_ALTERNATIVECOSTCENTER_TXT : String(64)   @title: 'CUST_ALTERNATIVECOSTCENTER_TXT: CUST_ALTERNATIVECOSTCENTER_TXT';
-  key CUST_EXISTINGCODE              : String(255)  @title: 'CUST_EXISTINGCODE: CUST_EXISTINGCODE';
-  key LOGID                          : String(36)   @title: 'LOGID: ID_1';
-      ACTION_ID                      : Integer      @title: 'ACTION_ID: ACTION_ID';
-      LOGCREATEDAT                   : Timestamp    @title: 'LOGCREATEDAT: CREATEDAT_1';
-  key LOGCREATEDBY                   : String(255)  @title: 'LOGCREATEDBY: CREATEDBY_1';
-  key REQUESTTYPE                    : String(5)    @title: 'REQUESTTYPE: REQUESTTYPE';
-  key ADDITIONALINFO                 : String(5000) @title: 'ADDITIONALINFO: ADDITIONALINFO';
-  key LOGCREATEDBYUSER               : String(128)  @title: 'LOGCREATEDBYUSER: CREATEDBYUSER_1';
-  key ACTIONDESC                     : String(128)  @title: 'ACTIONDESC: ACTIONDESC';
-  key COUNTRY_ID                     : String(3)    @title: 'COUNTRY_ID: COUNTRY_ID';
-      SPECIALRECOGNITION             : UInt8        @title: 'SPECIALRECOGNITION: SPECIALRECOGNITION';
-      DELIMITINDICATOR               : UInt8        @title: 'DELIMITINDICATOR: DELIMITINDICATOR';
+@cds.persistence.exists 
+@cds.persistence.calcview 
+Entity CV_ONETIMEPAY_LOGS (IP_LANGUAGE : String(5), IP_START_DATE : Timestamp, IP_END_DATE : Timestamp){
+key     ID: String(36)  @title: 'ID: ID' ; 
+key     CUST_USERID: String(128)  @title: 'CUST_USERID: CUST_USERID' ; 
+key     CUST_PAYCOMPONENT_ID: String(255)  @title: 'CUST_PAYCOMPONENT_ID: CUST_PAYCOMPONENT_ID' ; 
+key     CUST_PAYCOMPONENT_TXT: String(128)  @title: 'CUST_PAYCOMPONENT_TXT: CUST_PAYCOMPONENT_TXT' ; 
+key     EFFECTIVESTARTDATE: Date  @title: 'EFFECTIVESTARTDATE: EFFECTIVESTARTDATE' ; 
+        CUST_PAYCOMPVALUE: Decimal(34)  @title: 'CUST_PAYCOMPVALUE: CUST_PAYCOMPVALUE' ; 
+key     CUST_CURRENCYCODE: String(64)  @title: 'CUST_CURRENCYCODE: CUST_CURRENCYCODE' ; 
+key     CUST_CUSTOMSTRING: String(255)  @title: 'CUST_CUSTOMSTRING: CUST_CUSTOMSTRING' ; 
+        CUST_SEQUENCENUMBER: Integer  @title: 'CUST_SEQUENCENUMBER: CUST_SEQUENCENUMBER' ; 
+        CUST_NUMBER: Decimal(34)  @title: 'CUST_NUMBER: CUST_NUMBER' ; 
+key     CUST_UNIT: String(255)  @title: 'CUST_UNIT: CUST_UNIT' ; 
+key     CUST_UNIT_TXT: String(32)  @title: 'CUST_UNIT_TXT: CUST_UNIT_TXT' ; 
+key     CUST_NOTES: String(255)  @title: 'CUST_NOTES: CUST_NOTES' ; 
+key     CUST_USER: String(128)  @title: 'CUST_USER: CUST_USER' ; 
+        CUST_CALCULATEDAMOUNT: Decimal(34)  @title: 'CUST_CALCULATEDAMOUNT: CUST_CALCULATEDAMOUNT' ; 
+        MODIFIEDAT: Timestamp  @title: 'MODIFIEDAT: MODIFIEDAT' ; 
+key     CREATEDBYUSER: String(128)  @title: 'CREATEDBYUSER: CREATEDBYUSER' ; 
+key     CREATEDBY: String(255)  @title: 'CREATEDBY: CREATEDBY' ; 
+        CREATEDAT: Timestamp  @title: 'CREATEDAT: CREATEDAT' ; 
+        STATUS: Integer  @title: 'STATUS: STATUS' ; 
+key     STATUSDESC: String(64)  @title: 'STATUSDESC: STATUSDESC' ; 
+        AUTOAPPROVED: UInt8  @title: 'AUTOAPPROVED: AUTOAPPROVED' ; 
+key     CUST_ALTERNATIVECOSTCENTER: String(255)  @title: 'CUST_ALTERNATIVECOSTCENTER: CUST_ALTERNATIVECOSTCENTER' ; 
+key     CUST_ALTERNATIVECOSTCENTER_TXT: String(64)  @title: 'CUST_ALTERNATIVECOSTCENTER_TXT: CUST_ALTERNATIVECOSTCENTER_TXT' ; 
+key     CUST_EXISTINGCODE: String(255)  @title: 'CUST_EXISTINGCODE: CUST_EXISTINGCODE' ; 
+key     LOGID: String(36)  @title: 'LOGID: ID_1' ; 
+        ACTION_ID: Integer  @title: 'ACTION_ID: ACTION_ID' ; 
+        LOGCREATEDAT: Timestamp  @title: 'LOGCREATEDAT: CREATEDAT_1' ; 
+key     LOGCREATEDBY: String(255)  @title: 'LOGCREATEDBY: CREATEDBY_1' ; 
+key     REQUESTTYPE: String(5)  @title: 'REQUESTTYPE: REQUESTTYPE' ; 
+key     ADDITIONALINFO: String(5000)  @title: 'ADDITIONALINFO: ADDITIONALINFO' ; 
+key     LOGCREATEDBYUSER: String(128)  @title: 'LOGCREATEDBYUSER: CREATEDBYUSER_1' ; 
+key     ACTIONDESC: String(128)  @title: 'ACTIONDESC: ACTIONDESC' ; 
+key     COUNTRY_ID: String(3)  @title: 'COUNTRY_ID: COUNTRY_ID' ; 
+        SPECIALRECOGNITION: UInt8  @title: 'SPECIALRECOGNITION: SPECIALRECOGNITION' ; 
+        DELIMITINDICATOR: UInt8  @title: 'DELIMITINDICATOR: DELIMITINDICATOR' ; 
 }
 
 @cds.persistence.exists

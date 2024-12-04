@@ -9,7 +9,6 @@
     "@cap-js/hana": "^1",
     "@sap/cds": "^8",
     "@sap/cds-common-content": "^2.1.0",
-    "@sap/hana-client": "^2.22.32",
     "@sap/hdi-deploy": "^5.3.2",
     "@sap/xssec": "^4",
     "express": "^4",
@@ -30,7 +29,10 @@
       "destinations": true,
       "html5-repo": true,
       "application-logging": true,
-      "db": "hana"
+      "db": "hana",
+      "[production]": {
+        "db": "hana"
+      }
     },
     "sql": {
       "native_hana_associations": false

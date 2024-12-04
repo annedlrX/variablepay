@@ -68,12 +68,12 @@ service CatalogService {
     function postDeleteRBPGroups(task : object)          returns String; // DeleteRBPGroups
     function postForwardPayments(task : object)          returns String; // ForwardPayments
     function processPayComponents(data : object)         returns String;
-    function getPendingApprovalCount(data : object)      returns String;
+    function getPendingApprovalCount(userName : String)  returns String;
     function upsertTimekeepers(task : object)            returns String;
     function updateOneTimePayHCI(body : String)          returns String;
     function updateAvailabilityHCI(body : String)        returns String;
     function saveOneTimePay(data : object)               returns object;
-    function saveAvailability(data : object)             returns object;
+    function saveAvailability(results : object)             returns object;
     function rejectPayments(data : object)               returns object;
     function checkAdmin(data : String)                   returns String;
     function uploadUsers(data : object)                  returns object;

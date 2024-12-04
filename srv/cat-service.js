@@ -987,8 +987,8 @@ module.exports = cds.service.impl(async function () {
     /**
      *      Submit_Availability.xsjs
      */
-    this.on('saveAvailability', async (req) => {
-        const data = req.data; // Get input data from the request
+    this.on('POST','saveAvailability', async (req) => {
+        const data = req.data.results; // Get input data from the request
 
         const response = {
             success: true,
@@ -996,7 +996,8 @@ module.exports = cds.service.impl(async function () {
             error: ''
         };
         let resp = [];
-
+        console.log("length: " + data.length);
+        const db = await cds.connect.to('db');
         if (data.length > 0) {
             for (let payObject of data) {
                 // Format dates and times
@@ -1032,7 +1033,7 @@ module.exports = cds.service.impl(async function () {
 
                 try {
                     // Call the procedure (assuming you have a custom procedure)
-                    const result = await cds.tx(req).run('CALL "SAVE_APP_AVAILABILITY"(?, ?)', [record, task]);
+                    const result = await db.tx(req).run('CALL "SAVE_APP_AVAILABILITY"(?, ?)', [record, task]);
                     response.message = result.message;
                 } catch (error) {
                     response.success = false;

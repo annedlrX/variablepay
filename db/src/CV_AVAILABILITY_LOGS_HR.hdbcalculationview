@@ -54,7 +54,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT"/>
-  
     <filter>&quot;LANGUAGE&quot;='$$IP_LANGUAGE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
@@ -288,7 +287,7 @@
   </calculationView>
 </calculationViews>
 
-<logicalModel id="Join_2" filterExpressionLanguage="SQL">
+<logicalModel id="Join_2">
   <attributes>
     <attribute id="LOGID" order="1" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ID"/>

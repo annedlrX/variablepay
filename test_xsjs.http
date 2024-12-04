@@ -1,0 +1,76 @@
+
+### Define Variables
+@port=46565
+
+
+### call VP_WAGETYPE
+GET http://localhost:45159/odata/v4/catalog/VP_WAGETYPE
+Content-Type: application/json
+
+### post Availability
+POST http://localhost:4004/odata/v4/catalog/saveAvailability
+Content-Type: application/json
+
+{
+    "results": [
+      {
+        "cust_customVar4": "",
+        "reqchangedByUser": "Arnaud Bonnet",
+        "country": "FRA",
+        "cust_customVar5": "",
+        "cust_customVar2": "",
+        "cust_payComponent": "07",
+        "cust_customVar3": "",
+        "createdByUser": "Arnaud Bonnet",
+        "reqworkflow_id": "WF5",
+        "cust_customVar6": "",
+        "cust_startTime": "08:00:00",
+        "cust_endDate": "/Date(1617667200000)/",
+        "cust_dailyWorkSchedule": "",
+        "reqforwardSequence": "",
+        "createdOn": "",
+        "cust_customVar1": "Adrien Duret",
+        "autoApproved": "1",
+        "cust_userId": "50103572",
+        "reqagent": "",
+        "reqlastModified": "",
+        "cust_notes": "",
+        "reqnextAgent": "",
+        "effectiveStartDate": "/Date(1617667200000)/",
+        "reqexternalCode": "",
+        "cust_dailyWorkScheduleTxt": "",
+        "cust_wsVariantTxt": "",
+        "cust_dwsGroupingTxt": "",
+        "reqcreatedOn": "",
+        "cust_eventReason": "SOL_VarPay",
+        "cust_externalCode": "",
+        "initiatorLanguage": "fr_FR",
+        "cust_endTime": "13:00:00",
+        "reqrequestType": "2004",
+        "cust_customString": "",
+        "reqworkflowSequence": "1",
+        "cust_dwsGrouping": "",
+        "reqnotificationAgent": "",
+        "cust_existingCode": "",
+        "reqstatus": "3",
+        "reqchangedBy": "50076279",
+        "createdBy": "50076279",
+        "lastModified": "",
+        "delimitIndicator": 0,
+        "additionalProperties": {
+          "amountEditable": true,
+          "currencyEditable": true,
+          "wagetype": "07",
+          "role": "2",
+          "numberEditable": true,
+          "isValid": true,
+          "uomEditable": true,
+          
+          "userId": "Adrien Debiolle(50200183)"
+        },
+        "cust_payComponent_txt": "Astreinte cadre récupérée",
+        "status": "3",
+        "cust_wsVariant": ""
+      }
+    ]
+}
