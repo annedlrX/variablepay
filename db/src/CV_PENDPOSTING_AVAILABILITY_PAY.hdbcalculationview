@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_PENDPOSTING_AVAILABILITY_PAY" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_PENDPOSTING_AVAILABILITY_PAY" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
 <descriptions defaultDescription="CV_PENDPOSTING_AVAILABILITY_PAY"/>
 <localVariables/>
 <variableMappings/>
@@ -47,6 +47,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_AVAILABILITY"/>
+  
+    <filter>(&quot;STATUS&quot; =3)</filter>
   </calculationView>
 </calculationViews>
 

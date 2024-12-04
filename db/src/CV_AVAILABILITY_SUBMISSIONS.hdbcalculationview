@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AVAILABILITY_SUBMISSIONS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
-<descriptions defaultDescription="CV_AVAILABILITY_SUBMISSIONS"/>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AVAILABILITY_SUBMISSIONS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
+<descriptions defaultDescription="CV_ONETIMEPAY_SUBMISSIONS"/>
 <localVariables>
   <variable id="IP_CREATEDBY" parameter="true">
     <descriptions defaultDescription="IP_CREATEDBY"/>
@@ -24,19 +24,21 @@
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes>
       <viewAttribute id="LANGUAGE"/>
-      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="STATUSDESC"/>
       <viewAttribute id="ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT"/>
+    <input node="COM_STRADA_VP_REQUEST_STATUS_TEXT">
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="DESCRIPTION"/>
+    </input>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="AUTOAPPROVED"/>
       <viewAttribute id="COUNTRY_ID"/>
       <viewAttribute id="CREATEDBY"/>
       <viewAttribute id="CREATEDBYUSER"/>
-      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDON"/>
       <viewAttribute id="CUST_CUSTOMSTRING"/>
       <viewAttribute id="CUST_CUSTOMVAR1"/>
       <viewAttribute id="CUST_CUSTOMVAR2"/>
@@ -62,11 +64,15 @@
       <viewAttribute id="DELIMITINDICATOR"/>
       <viewAttribute id="EFFECTIVESTARTDATE"/>
       <viewAttribute id="INITIATORLANGUAGE"/>
-      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="LASTMODIFIED"/>
       <viewAttribute id="STATUS"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_AVAILABILITY"/>
+    <input node="COM_STRADA_VP_AVAILABILITY">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="MODIFIEDAT"/>
+    </input>
+    <filter>&quot;CREATEDBY&quot;='$$IP_CREATEDBY$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_1" joinType="leftOuter">
     <viewAttributes>
@@ -74,7 +80,7 @@
       <viewAttribute id="COUNTRY_ID"/>
       <viewAttribute id="CREATEDBY"/>
       <viewAttribute id="CREATEDBYUSER"/>
-      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDON"/>
       <viewAttribute id="CUST_CUSTOMSTRING"/>
       <viewAttribute id="CUST_CUSTOMVAR1"/>
       <viewAttribute id="CUST_CUSTOMVAR2"/>
@@ -100,10 +106,10 @@
       <viewAttribute id="DELIMITINDICATOR"/>
       <viewAttribute id="EFFECTIVESTARTDATE"/>
       <viewAttribute id="INITIATORLANGUAGE"/>
-      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="LASTMODIFIED"/>
       <viewAttribute id="STATUS"/>
       <viewAttribute id="LANGUAGE"/>
-      <viewAttribute id="DESCRIPTION"/>
+      <viewAttribute id="STATUSDESC"/>
       <viewAttribute id="ID"/>
       <viewAttribute hidden="true" id="JOIN$INITIATORLANGUAGE$LANGUAGE"/>
       <viewAttribute hidden="true" id="JOIN$STATUS$ID"/>
@@ -114,7 +120,7 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="COUNTRY_ID" source="COUNTRY_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBYUSER" source="CREATEDBYUSER"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDON" source="CREATEDON"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMSTRING" source="CUST_CUSTOMSTRING"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMVAR1" source="CUST_CUSTOMVAR1"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="CUST_CUSTOMVAR2" source="CUST_CUSTOMVAR2"/>
@@ -140,14 +146,14 @@
       <mapping xsi:type="Calculation:AttributeMapping" target="DELIMITINDICATOR" source="DELIMITINDICATOR"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="EFFECTIVESTARTDATE" source="EFFECTIVESTARTDATE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORLANGUAGE" source="INITIATORLANGUAGE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="LASTMODIFIED"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="STATUS" source="STATUS"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$INITIATORLANGUAGE$LANGUAGE" source="INITIATORLANGUAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="STATUS"/>
     </input>
     <input node="Projection_1">
       <mapping xsi:type="Calculation:AttributeMapping" target="LANGUAGE" source="LANGUAGE"/>
-      <mapping xsi:type="Calculation:AttributeMapping" target="DESCRIPTION" source="DESCRIPTION"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="STATUSDESC" source="STATUSDESC"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$INITIATORLANGUAGE$LANGUAGE" source="LANGUAGE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$STATUS$ID" source="ID"/>
@@ -175,9 +181,9 @@
       <descriptions defaultDescription="CREATEDBYUSER"/>
       <keyMapping columnObjectName="Join_1" columnName="CREATEDBYUSER"/>
     </attribute>
-    <attribute id="CREATEDAT" order="5" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="CREATEDAT"/>
-      <keyMapping columnObjectName="Join_1" columnName="CREATEDAT"/>
+    <attribute id="CREATEDON" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDON"/>
+      <keyMapping columnObjectName="Join_1" columnName="CREATEDON"/>
     </attribute>
     <attribute id="CUST_CUSTOMSTRING" order="6" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="CUST_CUSTOMSTRING"/>
@@ -279,9 +285,9 @@
       <descriptions defaultDescription="INITIATORLANGUAGE"/>
       <keyMapping columnObjectName="Join_1" columnName="INITIATORLANGUAGE"/>
     </attribute>
-    <attribute id="MODIFIEDAT" order="31" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="MODIFIEDAT"/>
-      <keyMapping columnObjectName="Join_1" columnName="MODIFIEDAT"/>
+    <attribute id="LASTMODIFIED" order="31" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="LASTMODIFIED"/>
+      <keyMapping columnObjectName="Join_1" columnName="LASTMODIFIED"/>
     </attribute>
     <attribute id="STATUS" order="32" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="STATUS"/>
@@ -291,9 +297,9 @@
       <descriptions defaultDescription="LANGUAGE"/>
       <keyMapping columnObjectName="Join_1" columnName="LANGUAGE"/>
     </attribute>
-    <attribute id="DESCRIPTION" order="34" displayAttribute="false" attributeHierarchyActive="false">
-      <descriptions defaultDescription="DESCRIPTION"/>
-      <keyMapping columnObjectName="Join_1" columnName="DESCRIPTION"/>
+    <attribute id="STATUSDESC" order="34" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUSDESC"/>
+      <keyMapping columnObjectName="Join_1" columnName="STATUSDESC"/>
     </attribute>
     <attribute id="ID" order="35" displayAttribute="false" attributeHierarchyActive="false">
       <descriptions defaultDescription="ID"/>
@@ -325,12 +331,12 @@
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="320" y="30"/>
+      <upperLeftCorner x="1109" y="30"/>
       <rectangleSize width="267"/>
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
-      <upperLeftCorner x="809" y="430"/>
-      <rectangleSize width="161"/>
+      <upperLeftCorner x="1555" y="69"/>
+      <rectangleSize width="158"/>
     </shape>
   </shapes>
 </layout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_MASS_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_MASS_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
 <descriptions defaultDescription="CV_MASS_WAGETYPES"/>
 <localVariables>
   <variable id="IP_INFOTYPE" parameter="true">
@@ -24,7 +24,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
     <viewAttributes>
       <viewAttribute id="INFOTYPE"/>
       <viewAttribute id="COUNTRY_ID"/>
@@ -36,8 +36,10 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
+  
+    <filter>&quot;INFOTYPE&quot;='$$IP_INFOTYPE$$'</filter>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="COLUMN_ENGINE">
     <viewAttributes>
       <viewAttribute id="ID"/>
       <viewAttribute id="IS_ACTIVE"/>
@@ -53,6 +55,8 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE"/>
+  
+    <filter>&quot;IS_ACTIVE&quot;=1 and &quot;STARTDATE&quot; &lt;= format(now(),'YYYYMMDD') and &quot;ENDDATE&quot; &gt;= format(now(),'YYYYMMDD')</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts">
     <viewAttributes>
@@ -252,24 +256,24 @@
       <upperLeftCorner x="265" y="550"/>
       <rectangleSize height="30" width="160"/>
     </shape>
+    <shape expanded="true" modelObjectName="WT_Texts" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="273" y="308"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
     <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="-47" y="412"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape modelObjectName="Projection_1" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="20" y="30"/>
-      <rectangleSize width="194.99560546875"/>
+      <rectangleSize width="194"/>
     </shape>
     <shape modelObjectName="Projection_2" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
       <upperLeftCorner x="320" y="30"/>
-      <rectangleSize width="255.318359375"/>
+      <rectangleSize width="255"/>
     </shape>
     <shape expanded="true" modelObjectName="WT" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="-47" y="301"/>
-      <rectangleSize height="30" width="160"/>
-    </shape>
-    <shape expanded="true" modelObjectName="WT_Texts" modelObjectNameSpace="CalculationView">
-      <upperLeftCorner x="273" y="308"/>
       <rectangleSize height="30" width="160"/>
     </shape>
     <shape expanded="true" modelObjectName="Join_2" modelObjectNameSpace="CalculationView">
