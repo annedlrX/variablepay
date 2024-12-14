@@ -8,6 +8,7 @@ function formatTime(s_date) {
 
 // Function to format a date string into YYYYMMDD format
 function formatDate(s_date) {
+    console.log("Here2");
     const l_str = s_date.substring(6);
     const l_parsedate = parseInt(l_str, 10);
     const d = new Date(l_parsedate);

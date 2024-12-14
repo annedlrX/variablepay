@@ -1,33 +1,70 @@
-PROCEDURE "ADD_REQUESTFLOW"(
+PROCEDURE "ADD_REQUESTFLOW" (
     IN iv_externalCode NVARCHAR(100) DEFAULT '',
-    IN it_req_flow "COM_STRADA_VP_REQUEST_FLOW",
+    IN iv_req_flow NVARCHAR(100), 
     OUT ev_response NVARCHAR(800)
- )
-   LANGUAGE SQLSCRIPT
-   SQL SECURITY INVOKER
-   --DEFAULT SCHEMA <default_schema_name>
-   AS
+)
+LANGUAGE SQLSCRIPT
+SQL SECURITY INVOKER
+AS
 BEGIN
-   /*************************************
-       Write your procedure logic
-   *************************************/
--- Data declarations  
-DECLARE lv_sequence INTEGER;
-DECLARE lv_requestType NVARCHAR(5);
- 
-DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    /*************************************
+        Write your procedure logic
+    *************************************/
+    -- Data declarations  
+    DECLARE lv_sequence INTEGER;
+    DECLARE lv_requestType NVARCHAR(5);
+    DECLARE lv_sql_query NVARCHAR(5000);
+    DECLARE lv_sql_query_insert NVARCHAR(5000);
+    DECLARE it_req_flow TABLE (
+        ID NVARCHAR(100),
+        CREATEDAT TIMESTAMP,
+        CREATEDBY NVARCHAR(255),
+        MODIFIEDAT TIMESTAMP,
+        MODIFIEDBY NVARCHAR(255),
+        EXTERNALCODE NVARCHAR(100),
+        REQUESTTYPE NVARCHAR(5),
+        WORKFLOW_ID NVARCHAR(50),
+        WORKFLOWSEQUENCE INTEGER,
+        FORWARDSEQUENCE INTEGER,
+        STATUS_ID NVARCHAR(50),
+        AGENT NVARCHAR(500),
+        NEXTAGENT NVARCHAR(500),
+        NOTIFICATIONAGENT NVARCHAR(64),
+        CREATEDBYUSER NVARCHAR(128)
+    );
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         SELECT ::SQL_ERROR_MESSAGE INTO ev_response FROM DUMMY;
-        SELECT TOP 1 "WORKFLOWSEQUENCE","REQUESTTYPE" INTO lv_sequence,lv_requestType FROM :it_req_flow;
-        ev_response := ev_response || ' : ' || :iv_externalCode || ' ,' || :lv_sequence ||' , '|| :lv_requestType;
+        SELECT TOP 1 "WORKFLOWSEQUENCE", "REQUESTTYPE" INTO lv_sequence, lv_requestType FROM :it_req_flow;
+        ev_response := ev_response || ' : ' || :iv_externalCode || ' ,' || :lv_sequence || ' , ' || :lv_requestType;
     END;
 
-ev_response = '';
+    -- Initialize response
+    ev_response = '';
 
-INSERT INTO "COM_STRADA_VP_REQUEST_FLOW"("ID","EXTERNALCODE","REQUESTTYPE","WORKFLOWSEQUENCE",
-            "FORWARDSEQUENCE","CREATEDAT","STATUS_ID","AGENT","NEXTAGENT","MODIFIEDBY","MODIFIEDAT","CREATEDBYUSER","NOTIFICATIONAGENT","WORKFLOW_ID")
-        SELECT "REQFLOW".NEXTVAL,:iv_externalCode, "REQUESTTYPE","WORKFLOWSEQUENCE",
-            "FORWARDSEQUENCE","CREATEDAT","STATUS_ID","AGENT","NEXTAGENT","MODIFIEDBY",CURRENT_UTCTIMESTAMP,"CREATEDBYUSER","NOTIFICATIONAGENT","WORKFLOW_ID"
-            FROM :it_req_flow; 
+    -- Dynamic SQL to fetch data from the temporary table
+    lv_sql_query = 'SELECT * FROM ' || :iv_req_flow || ' WHERE "STATUS_ID" = ''Active''';
 
-END
+    -- Execute dynamic SQL and populate table variable
+    EXECUTE IMMEDIATE :lv_sql_query INTO it_req_flow;
+
+    -- Dynamic SQL for inserting data into the target table
+    lv_sql_query_insert = '
+        INSERT INTO "COM_STRADA_VP_REQUEST_FLOW" (
+            "ID", "EXTERNALCODE", "REQUESTTYPE", "WORKFLOWSEQUENCE", "FORWARDSEQUENCE",
+            "CREATEDAT", "STATUS_ID", "AGENT", "NEXTAGENT", "MODIFIEDBY", "MODIFIEDAT", 
+            "CREATEDBYUSER", "NOTIFICATIONAGENT", "WORKFLOW_ID"
+        )
+        SELECT 
+            "REQFLOW".NEXTVAL, ''' || :iv_externalCode || ''', "REQUESTTYPE", "WORKFLOWSEQUENCE",
+            "FORWARDSEQUENCE", "CREATEDAT", "STATUS_ID", "AGENT", "NEXTAGENT", "MODIFIEDBY",
+            CURRENT_UTCTIMESTAMP, "CREATEDBYUSER", "NOTIFICATIONAGENT", "WORKFLOW_ID"
+        FROM ' || :iv_req_flow;
+
+    -- Execute dynamic SQL for the insert operation
+    EXECUTE IMMEDIATE :lv_sql_query_insert;
+
+    -- Set success response
+    ev_response = 'Data processed successfully.';
+END;

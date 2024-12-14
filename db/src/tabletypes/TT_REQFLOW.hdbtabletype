@@ -1,0 +1,17 @@
+TYPE "TT_REQFLOW" AS TABLE ( 
+    id NVARCHAR(36),
+    createdAt TIMESTAMP,
+    createdBy NVARCHAR(255),
+    modifiedAt TIMESTAMP,
+    modifiedBy NVARCHAR(255),
+    externalCode NVARCHAR(100),
+    requestType  NVARCHAR(5),
+    workflow_id  NVARCHAR(16),      
+    workflowSequence Integer,
+    forwardSequence  INTEGER,
+    status_id   INTEGER,
+    agent NVARCHAR(500),
+    nextAgent NVARCHAR(500),
+    notificationAgent NVARCHAR(64),
+    createdByUser NVARCHAR(128)
+)

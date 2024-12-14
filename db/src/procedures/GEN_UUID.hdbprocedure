@@ -1,0 +1,12 @@
+PROCEDURE "GEN_UUID"(OUT EV_UUID NVARCHAR(100)) 
+  LANGUAGE SQLSCRIPT 
+  SQL SECURITY INVOKER 
+  --DEFAULT SCHEMA <default_schema_name>
+  AS 
+BEGIN 
+  /*************************************
+  Write your procedure logic
+  *************************************/
+  SELECT SYSUUID INTO EV_UUID
+  FROM dummy;
+END

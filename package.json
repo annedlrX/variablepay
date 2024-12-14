@@ -21,21 +21,5 @@
   },
   "scripts": {
     "start": "cds-serve"
-  },
-  "cds": {
-    "requires": {
-      "auth": "mocked",
-      "connectivity": true,
-      "destinations": true,
-      "html5-repo": true,
-      "application-logging": true,
-      "db": "hana",
-      "[production]": {
-        "db": "hana"
-      }
-    },
-    "sql": {
-      "native_hana_associations": false
-    }
   }
 }

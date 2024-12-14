@@ -6,6 +6,7 @@ module.exports = cds.service.impl(async function () {
     const { EmpJob } = this.entities;
     const { VP_TIMEKEEPER } = this.entities;
     const { VP_AUDIT_LOG } = this.entities;
+    const { VP_AVAILABILITY, VP_REQUEST_FLOW } = this.entities;
 
 
     // Handle CREATE operation for User
@@ -519,7 +520,7 @@ module.exports = cds.service.impl(async function () {
             "lastModified": obj.reqlastModified,
             "changedByUser": obj.reqchangedByUser,
             "notificationAgent": obj.reqnotificationAgent,
-            "workflow.id": obj.reqworkflow_id
+            "workflow_id": obj.reqworkflow_id
         });
         let additionalInfo = '';
         if (obj.additionalInfo) {
@@ -879,7 +880,7 @@ module.exports = cds.service.impl(async function () {
     /**
      *      Submit_OneTimePay.xsjs.xsjs
      */
-    this.on('saveOneTimePay', async (req) => {
+    this.on("POST", 'saveOneTimePay', async (req) => {
         const data = req.data;
         const response = {
             error: []
@@ -984,68 +985,410 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    /**
-     *      Submit_Availability.xsjs
-     */
-    this.on('POST','saveAvailability', async (req) => {
-        const data = req.data.results; // Get input data from the request
+    /*TEST*/
+    this.on('saveTest', async (req) => {
+        const testval = req.data.val1;
+        console.log(testval);
+        let val2 = testval + " YUP";
+        return val2;
+    });
 
-        const response = {
-            success: true,
-            message: '',
-            error: ''
-        };
-        let resp = [];
-        console.log("length: " + data.length);
-        const db = await cds.connect.to('db');
-        if (data.length > 0) {
-            for (let payObject of data) {
-                // Format dates and times
-                payObject.effectiveStartDate = formatDate(payObject.effectiveStartDate);
-                payObject.cust_endDate = formatDate(payObject.cust_endDate);
-                payObject.lastModified = new Date();
-                payObject.createdOn = payObject.createdOn.length === 0 ? new Date() : formatTime(payObject.createdOn);
+    // Implement the saveAppAvailability action
+    this.on('saveAvailability', async (req) => {
 
-                if (payObject.reqcreatedOn.length === 0) {
-                    payObject.reqcreatedOn = new Date();
-                } else {
-                    payObject.reqcreatedOn = formatTime(payObject.reqcreatedOn);
-                }
+        // Get the incoming payload
+        const { results } = req.data;
 
-                payObject.reqlastModified = new Date();
+        // Split the data into two parts: VP_AVAILABILITY and VP_REQUEST_FLOW
+        const it_recpay = results.map(record => ({
+            cust_externalCode: record.cust_externalCode || '',
+            cust_userId: record.cust_userId || '',
+            cust_payComponent: record.cust_payComponent || '',
+            effectiveStartDate: '2025-01-01',//new Date(record.effectiveStartDate).toISOString().slice(0, 10),  // Format to YYYY-MM-DDTHH:MM:SS
+            cust_startTime: record.cust_startTime || '',
+            cust_endDate: '2025-01-01',//new Date(record.cust_endDate).toISOString().slice(0, 10),  // Format to YYYY-MM-DDTHH:MM:SS
+            cust_endTime: record.cust_endTime || '',
+            cust_customString: record.cust_customString || '',
+            cust_notes: record.cust_notes || '',
+            cust_existingCode: record.cust_existingCode || '',
+            status: parseInt(record.status, 10),
+            autoApproved: parseInt(record.autoApproved, 10),
+            createdByUser: record.createdByUser || '',
+            createdBy: record.createdBy || '',
+            country_id: record.country || '',
+            initiatorLanguage: record.initiatorLanguage || '',
+            cust_payComponent_txt: record.cust_payComponent_txt || '',
+            delimitIndicator: parseInt(record.delimitIndicator, 10),
+            cust_dailyWorkSchedule: record.cust_dailyWorkSchedule || '',
+            cust_dailyWorkScheduleTxt: record.cust_dailyWorkScheduleTxt || '',
+            cust_dwsGrouping: record.cust_dwsGrouping || '',
+            cust_dwsGroupingTxt: record.cust_dwsGroupingTxt || '',
+            cust_wsVariant: record.cust_wsVariant || '',
+            cust_wsVariantTxt: record.cust_wsVariantTxt || '',
+            cust_customVar1: record.cust_customVar1 || '',
+            cust_customVar2: record.cust_customVar2 || '',
+            cust_customVar3: record.cust_customVar3 || '',
+            cust_customVar4: record.cust_customVar4 || '',
+            cust_customVar5: record.cust_customVar5 || '',
+            cust_customVar6: record.cust_customVar6 || ''
+        }));
 
-                const task = {
-                    id: 0,
-                    externalCode: payObject.reqexternalCode,
-                    requestType: payObject.reqrequestType,
-                    workflowSequence: parseInt(payObject.reqworkflowSequence, 10) || 0,
-                    forwardSequence: parseInt(payObject.reqforwardSequence, 10) || 0,
-                    createdOn: payObject.reqcreatedOn,
-                    status: payObject.reqstatus,
-                    agent: payObject.reqagent,
-                    nextAgent: payObject.reqnextAgent,
-                    changedBy: payObject.reqchangedBy,
-                    lastModified: payObject.reqlastModified,
-                    changedByUser: payObject.reqchangedByUser,
-                    notificationAgent: payObject.reqnotificationAgent,
-                    workflow_id: payObject.reqworkflow_id
-                };
+        const it_req_flow = results.map(record => ({
+            id: record.reqexternalCode || '',
+            externalCode: record.reqexternalCode || '',
+            requestType: record.reqrequestType || '',
+            workflow_id: record.reqworkflow_id || '',
+            workflowSequence: parseInt(record.reqworkflowSequence, 10) || null,
+            forwardSequence: parseInt(record.reqforwardSequence, 10) || null,
+            status_id: record.reqstatus || '',
+            agent: record.reqagent || '',
+            nextAgent: record.reqnextAgent || '',
+            notificationAgent: record.reqnotificationAgent || '',
+            createdByUser: record.createdByUser || ''
 
-                try {
-                    // Call the procedure (assuming you have a custom procedure)
-                    const result = await db.tx(req).run('CALL "SAVE_APP_AVAILABILITY"(?, ?)', [record, task]);
-                    response.message = result.message;
-                } catch (error) {
-                    response.success = false;
-                    response.error = error.message || 'Unknown error occurred';
-                }
-                resp.push(response);
+        }));
+
+
+
+
+
+        // Call the stored procedure or perform the database operations
+        const tx = await cds.tx(req);
+        let ev_response = '';
+
+        try {
+            //Generate UUID
+            const result = await tx.run(
+                `CALL "GEN_UUID" (?)`,  // Procedure call with output parameter placeholder
+                []  // No input parameters are needed in this case, only output
+            );
+            // Call the 'processBooks' action defined in the CDS model
+
+            const lv_extid = result.EV_UUID;
+
+            for (const row of it_recpay) {
+                await tx.run(`
+                    INSERT INTO "COM_STRADA_VP_AVAILABILITY"(
+                        "ID", "CUST_EXTERNALCODE", "CUST_USERID", "CUST_PAYCOMPONENT_ID", "EFFECTIVESTARTDATE",
+                        "CUST_STARTTIME", "CUST_ENDDATE", "CUST_ENDTIME", "CUST_CUSTOMSTRING", "CUST_NOTES", 
+                        "CUST_EXISTINGCODE", "STATUS", "MODIFIEDAT", "CREATEDBY", "CREATEDAT", "AUTOAPPROVED",
+                        "CREATEDBYUSER", "COUNTRY_ID", "INITIATORLANGUAGE", "CUST_PAYCOMPONENT_TXT", 
+                        "DELIMITINDICATOR", "CUST_DAILYWORKSCHEDULE", "CUST_DAILYWORKSCHEDULETXT", 
+                        "CUST_DWSGROUPING", "CUST_DWSGROUPINGTXT", "CUST_WSVARIANT", "CUST_WSVARIANTTXT", 
+                        "CUST_CUSTOMVAR1", "CUST_CUSTOMVAR2", "CUST_CUSTOMVAR3", "CUST_CUSTOMVAR4", "CUST_CUSTOMVAR5",
+                        "CUST_CUSTOMVAR6"
+                    )
+                    VALUES (
+                        ?,  -- Using sequence for ID
+                        ?,  -- Bind variable for lv_extid
+                        ?,  -- Bind variable for CUST_USERID
+                        ?,  -- Bind variable for CUST_PAYCOMPONENT_ID
+                        ?,  -- Bind variable for EFFECTIVESTARTDATE
+                        ?,  -- Bind variable for CUST_STARTTIME
+                        ?,  -- Bind variable for CUST_ENDDATE
+                        ?,  -- Bind variable for CUST_ENDTIME
+                        ?,  -- Bind variable for CUST_CUSTOMSTRING
+                        ?,  -- Bind variable for CUST_NOTES
+                        ?,  -- Bind variable for CUST_EXISTINGCODE
+                        ?,  -- Bind variable for STATUS
+                        CURRENT_UTCTIMESTAMP,  -- Using CURRENT_UTCTIMESTAMP for MODIFIEDAT
+                        ?,  -- Bind variable for CREATEDBY
+                        CURRENT_UTCTIMESTAMP,  -- Bind variable for CREATEDAT
+                        ?,  -- Bind variable for AUTOAPPROVED
+                        ?,  -- Bind variable for CREATEDBYUSER
+                        ?,  -- Bind variable for COUNTRY_ID
+                        ?,  -- Bind variable for INITIATORLANGUAGE
+                        ?,  -- Bind variable for CUST_PAYCOMPONENT_TXT
+                        ?,  -- Bind variable for DELIMITINDICATOR
+                        ?,  -- Bind variable for CUST_DAILYWORKSCHEDULE
+                        ?,  -- Bind variable for CUST_DAILYWORKSCHEDULETXT
+                        ?,  -- Bind variable for CUST_DWSGROUPING
+                        ?,  -- Bind variable for CUST_DWSGROUPINGTXT
+                        ?,  -- Bind variable for CUST_WSVARIANT
+                        ?,  -- Bind variable for CUST_WSVARIANTTXT
+                        ?,  -- Bind variable for CUST_CUSTOMVAR1
+                        ?,  -- Bind variable for CUST_CUSTOMVAR2
+                        ?,  -- Bind variable for CUST_CUSTOMVAR3
+                        ?,  -- Bind variable for CUST_CUSTOMVAR4
+                        ?,  -- Bind variable for CUST_CUSTOMVAR5
+                        ?   -- Bind variable for CUST_CUSTOMVAR6
+                    )
+                `, [
+                    lv_extid,  // Pass the ID value
+                    lv_extid,  // Pass the external ID value
+                    row.cust_userId,  // Pass the record's CUST_USERID
+                    row.cust_payComponent,  // Pass the record's CUST_PAYCOMPONENT_ID
+                    row.effectiveStartDate,  // Pass the record's EFFECTIVESTARTDATE
+                    row.cust_startTime,  // Pass the record's CUST_STARTTIME
+                    row.cust_endDate,  // Pass the record's CUST_ENDDATE
+                    row.cust_endTime,  // Pass the record's CUST_ENDTIME
+                    row.cust_customString,  // Pass the record's CUST_CUSTOMSTRING
+                    row.cust_notes,  // Pass the record's CUST_NOTES
+                    row.cust_existingCode,  // Pass the record's CUST_EXISTINGCODE
+                    row.status,  // Pass the record's STATUS
+                    row.createdBy,  // Pass the record's CREATEDBY
+                    row.autoApproved,  // Pass the record's AUTOAPPROVED
+                    row.createdByUser,  // Pass the record's CREATEDBYUSER
+                    row.country_id,  // Pass the record's COUNTRY_ID
+                    row.initiatorLanguage,  // Pass the record's INITIATORLANGUAGE
+                    row.cust_payComponent_txt,  // Pass the record's CUST_PAYCOMPONENT_TXT
+                    row.delimitIndicator,  // Pass the record's DELIMITINDICATOR
+                    row.cust_dailyWorkSchedule,  // Pass the record's CUST_DAILYWORKSCHEDULE
+                    row.cust_dailyWorkScheduleTxt,  // Pass the record's CUST_DAILYWORKSCHEDULETXT
+                    row.cust_dwsGrouping,  // Pass the record's CUST_DWSGROUPING
+                    row.cust_dwsGroupingTxt,  // Pass the record's CUST_DWSGROUPINGTXT
+                    row.cust_wsVariant,  // Pass the record's CUST_WSVARIANT
+                    row.cust_wsVariantTxt,  // Pass the record's CUST_WSVARIANTTXT
+                    row.cust_customVar1,  // Pass the record's CUST_CUSTOMVAR1
+                    row.cust_customVar2,  // Pass the record's CUST_CUSTOMVAR2
+                    row.cust_customVar3,  // Pass the record's CUST_CUSTOMVAR3
+                    row.cust_customVar4,  // Pass the record's CUST_CUSTOMVAR4
+                    row.cust_customVar5,  // Pass the record's CUST_CUSTOMVAR5
+                    row.cust_customVar6   // Pass the record's CUST_CUSTOMVAR6
+                ]);
+            }
+
+            // Iterate over request flow data and insert directly into the database
+            for (const row of it_req_flow) {
+
+                // Perform the insertion logic (mimicking the procedure logic)
+                await tx.run(`
+                        INSERT INTO "COM_STRADA_VP_REQUEST_FLOW"(
+                            "ID", "EXTERNALCODE", "REQUESTTYPE", "WORKFLOWSEQUENCE",
+                            "FORWARDSEQUENCE", "CREATEDAT", "STATUS_ID", "AGENT",
+                            "NEXTAGENT", "MODIFIEDBY", "MODIFIEDAT", "CREATEDBYUSER",
+                            "NOTIFICATIONAGENT", "WORKFLOW_ID"
+                        )
+                        VALUES ("REQFLOW".NEXTVAL, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)
+                    `, [
+                    lv_extid,
+                    row.requestType,
+                    row.workflowSequence,
+                    row.forwardSequence,
+                    row.status_id,
+                    row.agent,
+                    row.nextAgent,
+                    '',
+                    row.createdByUser,
+                    row.notificationAgent,
+                    row.workflow_id
+                ]);
 
             }
+
+            await tx.commit();
+            return { message: "Availability saved successfully." };
+
+        } catch (error) {
+            await tx.rollback();
+            console.error('Error:', error);
+            return { error: `Error saving availability: ${error.message}` };
         }
 
-        return resp; // CAP will return this object as a JSON response
+        /*
+        try {
+            // Call the stored procedure with the parsed inputs
+            await tx.run(
+                `CALL "SAVE_APP_AVAILABILITY"(?, ?, ?)`,
+                [it_recpay, it_req_flow, ev_response]
+            );
+            await tx.run(
+                `CALL "ADD_REQUESTFLOW"(?, ?, ?)`,
+                ['54CCEDF02982AB351900391A685FEF82', ltt_req_flow, ev_response]
+            );
+
+            // Return success response
+            return { message: "Availability saved successfully." };
+
+        } catch (error) {
+            // Handle errors and return appropriate message
+            return { error: `Error saving availability: ${error.message}` };
+        }*/
     });
+
+
+    /*
+    this.on('saveAvailability', async (req) => {
+        let payload = req.data.results;
+        let formattedRecPay = [];
+
+        console.log("hello: " + JSON.stringify(payload));
+
+        if (payload.length > 0) {
+
+            let formattedReqFlow = [];
+            for (let i = 0; i < payload.length; i++) {
+                const obj = payload[i];
+
+                formattedRecPay.push({
+                    "cust_externalCode": obj.cust_externalCode,
+                    "cust_userId": obj.cust_userId,
+                    "cust_payComponent_id": obj.cust_payComponent,
+                    "effectiveStartDate": obj.effectiveStartDate,
+                    "cust_startTime": obj.cust_startTime,
+                    "cust_endDate": obj.cust_endDate,
+                    "cust_endTime": obj.cust_endTime,
+                    "cust_customString": obj.cust_customString,
+                    "cust_notes": obj.cust_notes,
+                    "cust_existingCode": obj.cust_existingCode,
+                    "status": obj.status,
+                    "lastModified": obj.lastModified,
+                    "createdByUser": obj.createdByUser,
+                    "country_id": obj.country,
+                    "initiatorLanguage": obj.initiatorLanguage,
+                    "cust_payComponent_txt": obj.cust_payComponent_txt,
+                    "delimitIndicator": obj.delimitIndicator.length !== 0 ? parseInt(obj.delimitIndicator, 10) : 0,
+                    "autoApproved": obj.autoApproved,
+                    "createdAt": obj.createdOn,
+                    "createdBy": obj.createdBy,
+                    "cust_dailyWorkSchedule": obj.cust_dailyWorkSchedule,
+                    "cust_dailyWorkScheduleTxt": obj.cust_dailyWorkScheduleTxt,
+                    "cust_dwsGrouping": obj.cust_dwsGrouping,
+                    "cust_dwsGroupingTxt": obj.cust_dwsGroupingTxt,
+                    "cust_wsVariant": obj.cust_wsVariant,
+                    "cust_wsVariantTxt": obj.cust_wsVariantTxt,
+                    "cust_customVar1": obj.cust_customVar1,
+                    "cust_customVar2": obj.cust_customVar2,
+                    "cust_customVar3": obj.cust_customVar3,
+                    "cust_customVar4": obj.cust_customVar4,
+                    "cust_customVar5": obj.cust_customVar5,
+                    "cust_customVar6": obj.cust_customVar6
+                });
+
+            }
+
+            console.log("formattedRecPay: " + JSON.stringify(formattedRecPay));
+            console.log("formattedRecPay length: " + formattedRecPay.length);
+
+            for (let i = 0; i < payload.length; i++) {
+                const item = payload[i];
+                formattedReqFlow.push({
+                    "id": 0,
+                    "externalCode": item.cust_externalCode,
+                    "workflowSequence": parseInt(item.workflowSequence, 10) || 0,
+                    "forwardSequence": parseInt(item.forwardSequence, 10) || 0,
+                    "requestType": item.reqrequestType,
+                    "workflowSequence": parseInt(item.reqworkflowSequence, 10) || 0,
+                    "forwardSequence": parseInt(item.reqforwardSequence, 10) || 0,
+                    "createdOn": item.createdOn ? formatTime(item.createdOn) : new Date().toISOString(),
+                    "status_id": item.reqstatus,
+                    "agent": item.reqagent,
+                    "nextAgent": item.reqnextAgent,
+                    "changedBy": item.reqchangedBy,
+                    "lastModified": item.reqlastModified,
+                    "changedByUser": item.reqchangedByUser,
+                    "notificationAgent": item.reqnotificationAgent,
+                    "workflow_id": item.reqworkflow_id
+                });
+            }
+
+
+            console.log("formattedReqFlow: " + JSON.stringify(formattedReqFlow));
+            console.log("formattedReqFlow length: " + formattedReqFlow.length);
+
+            // Connect to HANA database
+            const db = await cds.connect.to('db');
+
+            // Call the stored procedure with the formatted tables
+            try {
+
+                //const lv_uuid = await cds.tx(req).run('CALL "GEN_UUID"()');
+                const result = await cds.tx(req).run(
+                    `CALL "GEN_UUID" (?)`,  // Procedure call with output parameter placeholder
+                    []  // No input parameters are needed in this case, only output
+                  );
+                // Call the 'processBooks' action defined in the CDS model
+                
+                return result.EV_UUID;
+
+            } catch (err) {
+                console.error('Error calling HANA procedure:', err);
+                return { success: false, error: err.message };  // Return failure response
+            }
+
+
+        }
+
+
+    });
+
+    */
+    /**
+     *      Submit_Availability.xsjs
+    
+    this.on('saveAvailability', async (req) => {
+        
+        //const { VP_AVAILABILITY, VP_REQUEST_FLOW } = req.data.results;// Get input data from the request
+
+        let payload = req.data.results;
+
+        console.log("hello: "+ JSON.stringify(VP_AVAILABILITY));
+        console.log("hi: "+JSON.stringify(VP_REQUEST_FLOW));
+       
+
+        try {
+            // Format the date fields for the input records
+           
+           
+            if (payload.length > 0) {
+
+
+
+                let formattedReqFlow = [];
+                let formattedRecPay = [];
+                for (let i = 0; i < payload.length; i++) {
+                    const item = payload[i];
+                    console.log("date? " + item.effectiveStartDate);
+
+                    formattedRecPay.push({
+                        ...item,
+                        "effectiveStartDate": item.effectiveStartDat,//formatDate(item.effectiveStartDate),
+                        "cust_endDate": item.cust_endDate, //formatDate(item.cust_endDate),
+                        "lastModified": new Date(),
+                        "createdOn": item.createdOn ? formatTime(item.createdOn) : new Date().toISOString(),
+                    });
+                
+                }
+
+                for (let i = 0; i < payload.length; i++) {
+                    const item = payload[i];
+                    formattedReqFlow.push({
+                        ...item,
+                        "id": 0,
+                        "externalCode": item.cust_externalCode,
+                        "workflowSequence": parseInt(item.workflowSequence, 10) || 0,
+                        "forwardSequence": parseInt(item.forwardSequence, 10) || 0
+                    });
+                }     
+                
+                console.log("formattedReqFlow: " + JSON.stringify(formattedReqFlow));
+                console.log("formattedReqFlow length: " + formattedReqFlow.length);
+    
+                // Connect to HANA database
+                const db = await cds.connect.to('db');
+    
+                // Call the stored procedure with the formatted tables
+                const result = await db.run(
+                    `CALL SAVE_APP_AVAILABILITY(:it_recpay, :it_req_flow, :ev_response)`,
+                    {
+                        it_recpay: formattedRecPay,
+                        it_req_flow: formattedReqFlow,
+                        ev_response: null
+                    }
+                );
+    
+                // Return the response (ev_response from the procedure)
+                return result[0].EV_RESPONSE;
+
+            } 
+
+
+        } catch (err) {
+            // Handle any errors and return an appropriate response
+            return `Error: ${err.message}`;
+        }
+    }); */
+
 
     /**
      *      Reject_Payments.xsjs
@@ -1117,7 +1460,7 @@ module.exports = cds.service.impl(async function () {
         }
     });
 
-    
+
     /**
      *      Is_HRADMIN.xsjs
      */

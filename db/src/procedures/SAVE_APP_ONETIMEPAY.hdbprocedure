@@ -62,7 +62,7 @@ INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID","CREATEDAT
             CURRENT_UTCTIMESTAMP,"CREATEDBY",lc_infoType15,lv_additional_info,"CREATEDBYUSER"
         FROM :it_onetime_pay;
 
-CALL "ADD_REQUESTFLOW"(lv_extid,:it_req_flow,ev_response);
+--CALL "ADD_REQUESTFLOW"(lv_extid,:it_req_flow,ev_response);
 
 
 END

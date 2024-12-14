@@ -54,6 +54,6 @@ INSERT INTO "COM_STRADA_VP_AUDIT_LOG"("ID","EXTERNALCODE","ACTION_ID","CREATEDAT
      lv_additional_info ,"CREATEDBYUSER"
         FROM :it_recpay;
  
-CALL "ADD_REQUESTFLOW"(lv_extid,:it_req_flow,ev_response); 
+--CALL "ADD_REQUESTFLOW"(lv_extid,:it_req_flow,ev_response); 
 
 END

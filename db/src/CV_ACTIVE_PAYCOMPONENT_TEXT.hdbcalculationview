@@ -44,7 +44,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE"/>
-  
     <filter>&quot;IS_ACTIVE&quot;=1 and &quot;STARTDATE&quot; &lt;= format( NOW() ,'YYYYMMDD') and &quot;ENDDATE&quot; &gt;= format(NOW(),'YYYYMMDD') and &quot;ID&quot;='$$IP_PAY_COMPONENT$$'and &quot;IS_SPECIALRECOGNITIONTYPE&quot;=0
 
 </filter>
@@ -57,7 +56,6 @@
       <viewAttribute id="PAYCOMPONENT_ID"/></viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE_TEXT"/>
-  
     <filter>&quot;LANGUAGE&quot;='$$IP_LANGUAGE$$'</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT">

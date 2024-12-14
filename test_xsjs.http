@@ -7,8 +7,17 @@
 GET http://localhost:45159/odata/v4/catalog/VP_WAGETYPE
 Content-Type: application/json
 
+
+### call VP_WAGETYPE
+POST http://localhost:37769/odata/v4/catalog/saveTest
+Content-Type: application/json
+
+{
+  "val1": "test"
+}
+
 ### post Availability
-POST http://localhost:4004/odata/v4/catalog/saveAvailability
+POST http://localhost:34577/odata/v4/catalog/saveAvailability
 Content-Type: application/json
 
 {
@@ -37,7 +46,7 @@ Content-Type: application/json
         "cust_notes": "",
         "reqnextAgent": "",
         "effectiveStartDate": "/Date(1617667200000)/",
-        "reqexternalCode": "",
+        "reqexternalCode": "54CCEDF02982AB351900391A685FEF82",
         "cust_dailyWorkScheduleTxt": "",
         "cust_wsVariantTxt": "",
         "cust_dwsGroupingTxt": "",
