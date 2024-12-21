@@ -1,4 +1,5 @@
 const cds = require('@sap/cds');
+
 const { formatTime, formatDate, splitCSV } = require('./helper/formatter');
 
 module.exports = cds.service.impl(async function () {
@@ -72,927 +73,6 @@ module.exports = cds.service.impl(async function () {
     //              XSJS
     //===========================================
 
-    //Add_AuditLogs.xsjs
-    // Local function to process log entries and call the procedure
-    async function addLogs(tx, obj) {
-        const logLength = obj.length;
-        let errorMsg = '';
-        let task = [];
-
-        for (let j = 0; j < logLength; j++) {
-            task.push({
-                "id": obj[j].id,
-                "externalCode": obj[j].externalCode,
-                "action.id": obj[j].action,
-                "createdOn": formatTime(obj[j].createdOn),
-                "createdBy": obj[j].createdBy,
-                "requestType": obj[j].requestType,
-                "additionalInfo": obj[j].additionalInfo
-            });
-        }
-
-        // Load the procedure and call it
-        await tx(async (tx) => {
-            // Call the stored procedure with the table data as input
-            errorMsg = await tx.run('CALL ADD_TO_LOG(:it_audit_log)', { task });
-            return errorMsg.ev_response;
-        });
-
-    }
-
-    // Event handler for POSTing logs
-    this.on('postLogs', async (req) => {
-        const output = { error: [] };
-        let error_message = '';
-        const JSONObj = req.data; // Body of the request is automatically parsed by CAP
-
-        try {
-            const db = await cds.connect.to('db'); // Connect to the HANA database
-            const tx = await cds.transaction(); // Create a new transaction
-
-            const len = JSONObj.d.results.length;
-            if (len > 0) {
-                const payObject = JSONObj.d.results;
-                error_message = await addLogs(tx, payObject);
-
-                if (error_message && error_message.length !== 0) {
-                    output.error.push(error_message);
-                    req.error(400, JSON.stringify(output));
-                } else {
-                    // Commit transaction if no error
-                    await tx.commit();
-                    req.reply(output);
-                }
-            } else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-
-        } catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-
-    /**
-     *      Approve_Payments
-     */
-    async function approvePayments(db, obj) {
-        //obj.ID = 0;
-        const result = '';
-        if (obj.reqexternalCode === '') {
-            return 'Invalid Payload';
-        }
-        if (obj.reqcreatedOn.length === 0) {
-            obj.reqcreatedOn = new Date();
-        } else {
-            obj.reqcreatedOn = formatTime(obj.reqcreatedOn);
-        }
-        obj.reqlastModified = new Date();
-        let task = [];
-        task.push({
-            "id": 0,
-            "externalCode": obj.cust_externalCode,
-            "requestType": obj.reqrequestType,
-            "workflowSequence": parseInt(obj.reqworkflowSequence, 10) || 0,
-            "forwardSequence": parseInt(obj.reqforwardSequence, 10) || 0,
-            "createdOn": obj.reqcreatedOn,
-            "status.id": obj.reqstatus,
-            "agent": obj.reqagent,
-            "nextAgent": obj.reqnextAgent,
-            "changedBy": obj.reqchangedBy,
-            "lastModified": obj.reqlastModified,
-            "changedByUser": obj.reqchangedByUser,
-            "notificationAgent": obj.reqnotificationAgent,
-            "workflow.id": obj.reqworkflow_id
-        });
-        let additionalInfo = '';
-        if (obj.additionalInfo) {
-            additionalInfo = obj.additionalInfo;
-        }
-
-        if (obj.reqrequestType === 'IT15') {
-            await db.tx(async (tx) => {
-                // Call the stored procedure with the table data as input
-                result = await tx.run('CALL APPROVE_ONETIME(:it_req_flow, :iv_additionalInfo)', { task, additionalInfo });
-                return result.ev_response;
-            });
-        }
-        else if (obj.reqrequestType === '2004') {
-            await db.tx(async (tx) => {
-                // Call the stored procedure with the table data as input
-                result = await tx.run('CALL APPROVE_AVAILABILITY(:it_req_flow, :iv_additionalInfo)', { task, additionalInfo });
-                return result.ev_response;
-            });
-        }
-    }
-    this.on('postApprovePayments', async (req) => {
-        const output = { error: [] };
-        let error_message = '';
-        const JSONObj = req.data; // Body of the request is automatically parsed by CAP
-        try {
-            const db = await cds.connect.to('db'); // Connect to the HANA database           
-            const len = JSONObj.d.results.length;
-            if (len > 0) {
-                const payObject = JSONObj.d.results;
-                error_message = '';
-                for (let i; i < len; i++) {
-                    payObject = JSONObj.d.results[i];
-                    error_message = await approvePayments(db, payObject);
-
-                    if ((error_message.length !== 0) || (error_message !== '')) {
-                        error_message = error_message || ', External Code:' || payObject.reqexternalCode;
-                        output.error.push(error_message);
-                        break;
-                    }
-                }
-
-                if (output.error.length === 0) {
-                    // Commit transaction if no error
-                    await conn.commit();
-                    req.reply(output);
-
-                } else {
-                    req.error(400, JSON.stringify(output));
-                }
-
-            } else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-
-        } catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-    /**     CreateRBPGroups
-     * XSJS to create multiple RBP Employees in HANA
-     */
-    async function createRBPEmployees(db, obj) {
-        const groupLength = obj.length;
-        let errorMsg = '';
-        let task = [];
-
-        for (let j = 0; j < groupLength; j++) {
-            task.push({
-                "id.groupID": obj[j]["id.groupID"],
-                "userID": obj[j].userID
-            });
-        }
-        await db.tx(async (tx) => {
-            errorMsg = await tx.run('CALL CREATERBPEMPLOYEES(:it_employees)', { task });
-            return errorMsg.ev_response;
-        });
-    }
-    this.on('postCreateRBPEmployees', async (req) => {
-
-        const output = { error: [] };
-        let errorMessage = '';
-        const JSONObj = req.data;
-
-        try {
-            const conn = await cds.connect.to('db'); // Connect to the HANA database
-            let i = 0, groups = [];
-            const len = JSONObj.results.length;
-            if (len > 0) {
-                groups = JSONObj.results;
-                errorMessage = createRBPEmployees(conn, groups);
-
-                if (errorMessage && errorMessage.length !== 0) {
-                    output.error.push(errorMessage);
-                    req.error(400, JSON.stringify(output));
-                } else {
-                    await conn.commit();
-                    req.reply(output);
-                }
-            }
-            else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-        }
-
-        catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-    /**
-     *      CreateRBPGroups
-     */
-    async function createRBPGroups(db, obj) {
-        const groupLength = obj.length;
-        let errorMsg = '';
-        let task = [];
-        for (let j = 0; j < groupLength; j++) {
-            task.push({
-                "groupID": obj[j].groupID,
-                "groupName": obj[j].groupName,
-                "userID": obj[j].userID,
-                "today": obj[j].today,
-                "next": obj[j].next,
-                "role": obj[j].role
-            });
-        }
-        await db.tx(async (tx) => {
-            errorMsg = await tx.run('CALL CREATERBPGROUPS(:it_groups)', { task });
-            return errorMsg.ev_response;
-        });
-    }
-    this.on('postCreateRBPGroups', async (req) => {
-
-        const output = { error: [] };
-        let errorMessage = '';
-        const JSONObj = req.data;
-
-        try {
-            const db = await cds.connect.to('db'); // Connect to the HANA database
-
-            let i = 0, flag = 0, groups = [];
-            const len = JSONObj.results.length;
-            if (len > 0) {
-                groups = JSONObj.results;
-                errorMessage = await createRBPGroups(db, groups);
-
-                if ((errorMessage.length !== 0) || (errorMessage !== '')) {
-                    output.error.push(errorMessage);
-                    req.error(400, JSON.stringify(output));
-                }
-                else {
-                    await db.commit();
-                    req.reply(output);
-                }
-            }
-            else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-        }
-        catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-    /**     DeleteRBPEmployees   
-     * XSJS to delete multiple Employees in HANA
-     */
-
-    async function deleteRBPEmployees(db, obj) {
-        const groupLength = obj.length;
-        let errorMsg = '';
-        let task = [];
-
-        for (let j = 0; j < groupLength; j++) {
-            task.push({
-                "id.groupID": obj[j]["id.groupID"],
-                "userID": obj[j].userID
-            });
-        }
-        await db.tx(async (tx) => {
-            errorMsg = await tx.run('CALL DELETERBPEMPLOYEES(:it_employees)', { task });
-            return errorMsg.ev_response;
-        });
-    }
-    this.on('postDeleteRBPEmployees', async (req) => {
-        let output = { error: [] };
-        let error_message = '';
-        const JSONObj = req.data;
-
-        try {
-            conn = await cds.connect.to('db'); // Connect to the HANA database
-            let groups = [];
-            const len = JSONObj.results.length;
-            if (len > 0) {
-                groups = JSONObj.results;
-                error_message = await deleteRBPEmployees(conn, groups);
-
-                if (error_message && error_message.length !== 0) {
-                    output.error.push(error_message);
-                    req.error(400, JSON.stringify(output));
-                }
-                else {
-                    await conn.commit();
-                    req.reply(output);
-                }
-            }
-            else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-        }
-        catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-    /**
-     * deleteRBPGroups
-     * @param {*} db 
-     * @param {*} obj 
-     */
-    //XSJS to delete multiple RBP Groups in HANA
-    async function deleteRBPGroups(db, obj) {
-        const groupLength = obj.length;
-        let errorMsg = '';
-        let task = [];
-        for (let j = 0; j < groupLength; j++) {
-            task.push({
-                "groupID": obj[j].groupID,
-                "groupName": obj[j].groupName,
-                "userID": obj[j].userID,
-                "today": obj[j].today,
-                "next": obj[j].next,
-                "role": obj[j].role
-            });
-        }
-        await db.tx(async (tx) => {
-            errorMsg = await tx.run('CALL DELETERBPGROUPS(:it_groups)', { task });
-            return errorMsg.ev_response;
-        });
-    }
-
-    this.on('postDeleteRBPGroups', async (req) => {
-
-        const output = { error: [] };
-        let error_message = '';
-        const JSONObj = req.data;
-
-        try {
-            const conn = await cds.connect.to('db');
-            let groups = [];
-            const len = JSONObj.results.length;
-            if (len > 0) {
-                groups = JSONObj.results;
-                error_message = await deleteRBPGroups(conn, groups);
-
-                if (error_message && error_message.length !== 0) {
-                    output.error.push(error_message);
-                    req.error(400, JSON.stringify(output));
-                } else {
-                    // Commit transaction if no error
-                    await conn.commit();
-                    req.reply(output);
-                }
-            } else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-        }
-        catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-
-    /**         DeleteRBPGroupsbyID
-     * XSJS to delete multiple RBP Groups in HANA
-     */
-    async function deleteRBPGroupsbyID(connection, obj) {
-        const groupLength = obj.length;
-        let errorMsg = '';
-        let task = [];
-        for (let j = 0; j < groupLength; j++) {
-            task.push({
-                "groupID": obj[j].groupID
-            });
-        }
-        await db.tx(async (tx) => {
-            // Call the stored procedure with the table data as input
-            errorMsg = await tx.run('CALL DELETEGROUPSBYID(:it_groups)', { task });
-            return errorMsg.ev_response;
-        });
-    }
-
-
-
-    this.on('postDeleteRBPGroupsbyID', async (req) => {
-
-        let output = { error: [] };
-        let errorMessage = '';
-        const JSONObj = req.data
-
-        try {
-            const conn = $.hdb.getConnection();
-            const len = JSONObj.results.length;
-            if (len > 0) {
-                const groups = JSONObj.results;
-                errorMessage = await deleteRBPGroupsbyID(conn, groups);
-
-                if (errorMessage && errorMessage.length !== 0) {
-                    output.error.push(errorMessage);
-                    req.error(400, JSON.stringify(output));
-                } else {
-                    await conn.commit();
-                    req.reply(output);
-                }
-            } else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-
-        } catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-    /**
-     * 
-     */
-    //  function formatTime(ipDate) 
-    async function forwardPayments(db, obj) {
-        let result = '';
-
-        if (obj.reqexternalCode === '') {
-            return 'Invalid Payload';
-        }
-        if (obj.reqcreatedOn.length === 0) {
-            obj.reqcreatedOn = new Date();
-        } else {
-            obj.reqcreatedOn = formatTime(obj.reqcreatedOn);
-        }
-        obj.reqlastModified = new Date();
-        let task = [];
-        task.push({
-            "id": 0,
-            "externalCode": obj.cust_externalCode,
-            "requestType": obj.reqrequestType,
-            "workflowSequence": parseInt(obj.reqworkflowSequence, 10) || 0,
-            "forwardSequence": parseInt(obj.reqforwardSequence, 10) || 0,
-            "createdOn": obj.reqcreatedOn,
-            "status.id": obj.reqstatus,
-            "agent": obj.reqagent,
-            "nextAgent": obj.reqnextAgent,
-            "changedBy": obj.reqchangedBy,
-            "lastModified": obj.reqlastModified,
-            "changedByUser": obj.reqchangedByUser,
-            "notificationAgent": obj.reqnotificationAgent,
-            "workflow_id": obj.reqworkflow_id
-        });
-        let additionalInfo = '';
-        if (obj.additionalInfo) {
-            additionalInfo = obj.additionalInfo;
-        }
-        if (obj.reqrequestType === 'IT15') {
-            await db.tx(async (tx) => {
-                errorMsg = await tx.run('CALL FORWARD_ONETIMEPAY(:it_req_flow, :iv_additionalInfo)', { task, additionalInfo });
-                return errorMsg.ev_response;
-            });
-        }
-    }
-
-    /**
-     *      Forward_Payments.xsjs
-     */
-    this.on('postForwardPayments', async (req) => {
-
-        let output = { error: [] };
-        let errorMessage = '';
-        var JSONObj = req.data
-
-        try {
-            const conn = await cds.connect.to('db');
-            let i = 0, flag = 0, payObject = '';
-            var len = JSONObj.d.results.length;
-            if (len > 0) {
-                errorMessage = '';
-                for (i; i < len; i++) {
-                    payObject = JSONObj.d.results[i];
-                    errorMessage = await forwardPayments(conn, payObject);
-
-                    if (errorMessage && errorMessage.length !== 0) {
-                        errorMessage = errorMessage || ', External Code:' || payObject.reqexternalCode;
-                        output.error.push(errorMessage);
-                        req.error(400, JSON.stringify(output));
-                        break;
-                    }
-                }
-
-                if (output.error.length === 0) {
-                    await conn.commit();
-                    req.reply(output);
-                }
-                else {
-                    req.error(400, JSON.stringify(output));
-                }
-            }
-            else {
-                output.error.push('Invalid Payload');
-                req.error(400, JSON.stringify(output));
-            }
-
-        }
-
-        catch (e) {
-            req.error(400, '${e.name} : ${e.message}');
-        }
-    });
-
-    /**
-     *      Get_InfoTypes_WT_HCI.xsjs
-     */
-    this.on('POST', 'processPayComponents', async (req) => {
-        const output = { it14: [], it15: [], None: [], error: [] };
-        const contents = req.data;  // CSV content
-        const conn = await cds.connect.to('db');
-        try {
-            // Process CSV and call the stored procedure or custom logic
-            const records = splitCSV(contents);
-
-            const result = await fetchPayComponentData(conn, records);
-
-            // Handling result and populating the output
-            if (result.error) {
-                output.error.push(result.error);
-                return req.error(400, result.error);
-            }
-
-            // Process different types of results
-            result.et_infoType_14.forEach(item => output.it14.push(item.payComponent));
-            result.et_infoType_15.forEach(item => output.it15.push(item.payComponent));
-            result.et_infoType_None.forEach(item => output.None.push(item.payComponent));
-
-            // Return the results
-            return { Result: output };
-        } catch (err) {
-            output.error.push(`Error: ${err.message}`);
-            return req.error(400, err.message);
-        }
-    });
-
-    // Function to simulate calling a stored procedure (or custom logic)
-    async function fetchPayComponentData(db, records) {
-        //call HANA procedure
-        const results = await db.tx.run('CALL GET_WT_INFOTYPE(:it_infoType)', { records });
-
-        let et_infoType_14 = [], et_infoType_15 = [], et_infoType_None = [];
-
-        // Simulated response (replace with actual database call or procedure)
-        for (const record of results) {
-            if (record.payComponent.startsWith('14')) {
-                et_infoType_14.push({ payComponent: record.payComponent });
-            } else if (record.payComponent.startsWith('15')) {
-                et_infoType_15.push({ payComponent: record.payComponent });
-            } else {
-                et_infoType_None.push({ payComponent: record.payComponent });
-            }
-        }
-
-        return {
-            et_infoType_14,
-            et_infoType_15,
-            et_infoType_None
-        };
-    }
-
-    /**
-     *      Update_Users.xsjs
-     */
-    this.on('getPendingApprovalCount', async (req) => {
-        const output = { count: 0 };  // Default output
-
-        try {
-            const userName = req.data.userName;  // Getting the userName from the request
-
-            if (userName && userName.length > 0) {
-                // Establishing connection to the database (CAP handles this)
-                const db = await cds.connect.to('db');  // Replace 'hana' with the correct data source name if needed
-
-                // Call the stored procedure to get pending approval count (custom logic)
-                const procedureResult = await db.transaction(async (tx) => {
-                    const result = await tx.run('CALL GET_PENDINGAPPROVAL_COUNT(:iv_user)', { userName });
-                    return result[0].EV_COUNT;  // Assuming the procedure returns a result with the field EV_COUNT
-                });
-
-                output.count = procedureResult;
-
-                return { count: output.count };
-            } else {
-                // Invalid user name input
-                return req.error(400, 'Invalid userName');
-            }
-        } catch (err) {
-            // Error handling
-            return req.error(400, `Error: ${err.message}`);
-        }
-    });
-
-
-    /**
-     *      Update_Users.xsjs
-     */
-    this.on('upsertTimekeepers', async (req) => {
-        const usersArray = req.data.users; // Get the users array from the request body
-        const tx = await cds.transaction(); // Create a new transaction
-
-        try {
-            // Step 1: Delete non-existing users
-            const existingUsersQuery = SELECT.from(VP_TIMEKEEPER)
-                .where({ timeKeeper: { '=': usersArray[0]?.timekeeper } });
-
-            const existingUsers = await tx.run(existingUsersQuery);
-            let usersToDelete = [];
-
-            // Find users that are in the database but not in the usersArray
-            existingUsers.forEach(existingUser => {
-                const exist = usersArray.some(user =>
-                    user.timekeeper === existingUser.timeKeeper &&
-                    user.userid === existingUser.userID
-                );
-                if (!exist) {
-                    // Prepare users to delete
-                    usersToDelete.push(existingUser);
-                }
-            });
-
-            // Delete users not in the usersArray
-            for (const userToDelete of usersToDelete) {
-                await tx.delete(VP_TIMEKEEPER).where({
-                    userID: userToDelete.userID,
-                    timeKeeper: userToDelete.timeKeeper
-                });
-            }
-
-            // Step 2: Upsert new users
-            for (const user of usersArray) {
-                if (user.userid && user.timekeeper && user.timekeeper.length > 2 && user.userid.length > 2) {
-                    await tx.upsert(VP_TIMEKEEPER, {
-                        userID: user.userid,
-                        timeKeeper: user.timekeeper
-                    });
-                }
-            }
-
-            // Explicitly commit the transaction
-            await tx.commit();  // Commit the changes
-
-            return 'ok'; // Return success message
-        } catch (error) {
-            // Handle errors and rollback if necessary
-            await tx.rollback();  // Rollback in case of an error
-            req.error(500, 'Error processing upsertTimekeepers', error.message);
-        }
-    });
-
-    /**
-     *      Update_OneTimePay_HCILogs.xsjs
-     */
-    this.on('updateOneTimePayHCI', async (req) => {
-        let body = req.data.body;
-        let messages = [];
-        let errorRec = [];
-        let insCount = 0;
-        let updCount = 0;
-
-        try {
-            let rows = body.split(/\r\n|\n/);
-            let rowCount = rows.length;
-
-            // Remove empty rows if any
-            if (rows[rowCount - 1] === "") rowCount--;
-
-            for (let i = 0; i < rowCount; i++) {
-                let line = splitCSV(rows[i]);
-                let colCount = 4;
-
-                if (line.length !== colCount) {
-                    errorRec.push('Invalid columns for line : ${i + 1}:: ExternalCode (${line[0]})');
-                    continue;
-                }
-
-                // Fill missing values
-                if (line[2].length === 0) line[2] = "2";  // Default status - errorStatus
-                if (line[1].length === 0) line[1] = 'IT15'; // Default requestType
-
-                if (line[0].length === 0) {
-                    errorRec.push("Missing ExternalCode");
-                } else {
-                    let record = {
-                        externalCode: line[0],
-                        requestType: line[1],
-                        status: line[2],
-                        action: 9,  // Default action value - Complete
-                        comments: line[3]
-                    };
-
-                    // Call the stored procedure or your business logic here
-                    try {
-                        let res = await cds.tx(req).run('CALL UPDATE_ONETIMEPAY_HCI(:it_hci_logs)', { record });
-
-                        if (res.ev_response.length !== 0) {
-                            errorRec.push('${line[0]} ${res.ev_response}');
-                        } else {
-                            messages.push(line[0]);
-                            insCount += res.ev_ins_count;
-                            updCount += res.ev_upd_count;
-                        }
-                    } catch (e) {
-                        errorRec.push('Error processing ${line[0]}: ${e.message}');
-                    }
-                }
-            }
-
-            return {
-                success: { externalCode: messages, insertedCount: insCount, updatedCount: updCount },
-                error: { externalCode: errorRec }
-            };
-
-        } catch (err) {
-            throw new Error(`Error processing data: ${err.message}`);
-        }
-    });
-
-    /**
-     *      Update_Availability_HCILogs.xsjs
-     */
-    this.on('updateAvailabilityHCI', async (req) => {
-        let body = req.data.body;
-        let messages = [];
-        let errorRec = [];
-        let insCount = 0, updCount = 0;
-
-        try {
-            // Split incoming CSV data into rows
-            let rows = body.split(/\r\n|\n/);
-            let rowCount = rows.length;
-
-            // Remove empty rows if any
-            if (rows[rowCount - 1] === "") rowCount--;
-
-            // Iterate over each row
-            for (let i = 0; i < rowCount; i++) {
-                let line = splitCSV(rows[i]);
-                let colCount = 4;  // Expect 4 columns
-
-                if (line.length !== colCount) {
-                    errorRec.push(`Invalid columns for line ${i + 1}:: ExternalCode (${line[0]})`);
-                    continue;
-                }
-
-                // Default values
-                let [externalCode, requestType, status, comments] = line;
-                let reqAction = status == "3" ? 15 : 9;  // Action ID based on status
-                let entries = [];
-
-                // Query the database to check for audit logs when action = 3
-                if (status == "3") {
-                    const result = await cds.run(SELECT.from(VP_AUDIT_LOG)
-                        .where({ externalCode })
-                        .orderBy('createdOn DESC')
-                        .limit(1));
-
-                    // Process the result from the database
-                    if (result.length > 0 && result[0].actionId == 15) {
-                        entries.push(result[0]);
-                    }
-                }
-
-                // If there are no entries, proceed with the update logic
-                if (entries.length === 0) {
-                    let record = {
-                        externalCode,
-                        requestType: requestType || '2004',
-                        status: status || 2,  // Default to error status if empty
-                        action: reqAction,
-                        comments
-                    };
-
-                    try {
-                        // Call the stored procedure to update availability  
-                        const procedure = await cds.tx(req).run('CALL UPDATE_AVAILABILITY_HCI(:it_hci_logs)', { record });
-
-                        if (procedure.ev_response.length !== 0) {
-                            errorRec.push(`${externalCode} ${procedure.ev_response}`);
-                        } else {
-                            messages.push(externalCode);
-                            insCount += procedure.ev_ins_count;
-                            updCount += procedure.ev_upd_count;
-                        }
-                    } catch (err) {
-                        errorRec.push(`Error updating ${externalCode}: ${err.message}`);
-                    }
-                }
-            }
-
-            return {
-                success: { externalCode: messages, insertedCount: insCount, updatedCount: updCount },
-                error: { externalCode: errorRec }
-            };
-
-        } catch (err) {
-            throw new Error(`Error processing data: ${err.message}`);
-        }
-    });
-
-    /**
-     *      Submit_OneTimePay.xsjs.xsjs
-     */
-    this.on("POST", 'saveOneTimePay', async (req) => {
-        const data = req.data;
-        const response = {
-            error: []
-        };
-
-        // Function to save one-time payment data
-        async function saveOneTimePay(obj) {
-            obj.effectiveStartDate = formatDate(obj.effectiveStartDate);
-            obj.lastModified = new Date();
-            obj.createdOn = obj.createdOn.length === 0 ? new Date() : formatTime(obj.createdOn);
-
-            // Preparing the records for stored procedure
-            const record = [{
-                "cust_externalCode": obj.cust_externalCode,
-                "cust_userId": obj.cust_userId,
-                "cust_payComponent.id": obj.cust_payComponent,
-                "effectiveStartDate": obj.effectiveStartDate,
-                "cust_paycompvalue": obj.cust_paycompvalue.length !== 0 ? parseFloat(obj.cust_paycompvalue) : null,
-                "cust_currencyCode": obj.cust_currencyCode,
-                "cust_calculatedAmount": obj.cust_calculatedAmount.length !== 0 ? parseFloat(obj.cust_calculatedAmount) : null,
-                "cust_customString": obj.cust_customString,
-                "cust_sequenceNumber": parseInt(obj.cust_sequenceNumber, 10) || 0,
-                "cust_number": obj.cust_number.length !== 0 ? parseFloat(obj.cust_number) : null,
-                "cust_unit": obj.cust_unit,
-                "cust_notes": obj.cust_notes,
-                "cust_existingCode": obj.cust_existingCode,
-                "cust_alternativeCostCenter": obj.cust_alternativeCostCenter,
-                "status": obj.status,
-                "lastModified": obj.lastModified,
-                "createdBy": obj.createdBy,
-                "createdOn": obj.createdOn,
-                "autoApproved": obj.autoApproved,
-                "createdByUser": obj.createdByUser,
-                "cust_user": obj.cust_user,
-                "country.id": obj.country,
-                "initiatorLanguage": obj.initiatorLanguage,
-                "cust_alternativeCostCenter_txt": obj.cust_alternativeCostCenter_txt,
-                "cust_unit_txt": obj.cust_unit_txt,
-                "cust_payComponent_txt": obj.cust_payComponent_txt,
-                "specialRecognition": obj.specialRecognition.length !== 0 ? parseInt(obj.specialRecognition, 10) : 0,
-                "delimitIndicator": obj.delimitIndicator.length !== 0 ? parseInt(obj.delimitIndicator, 10) : 0,
-                "displayAmount": obj.displayAmount.length !== 0 ? obj.displayAmount : null
-            }];
-
-            const task = [{
-                "id": 0,
-                "externalCode": obj.reqexternalCode,
-                "requestType": obj.reqrequestType,
-                "workflowSequence": parseInt(obj.reqworkflowSequence, 10) || 0,
-                "forwardSequence": parseInt(obj.reqforwardSequence, 10) || 0,
-                "createdOn": obj.reqcreatedOn.length === 0 ? new Date() : formatTime(obj.reqcreatedOn),
-                "status.id": obj.reqstatus,
-                "agent": obj.reqagent,
-                "nextAgent": obj.reqnextAgent,
-                "changedBy": obj.reqchangedBy,
-                "lastModified": obj.reqlastModified,
-                "changedByUser": obj.reqchangedByUser,
-                "notificationAgent": obj.reqnotificationAgent,
-                "workflow.id": obj.reqworkflow_id
-            }];
-
-            try {
-                const procedure = await cds.tx(req).run('CALL "SAVE_APP_ONTIMEPAY"(?, ?)', [record, task]);
-
-                const errorMsg = procedure.ev_response;
-                return errorMsg;
-
-            } catch (err) {
-                throw new Error(`Error in procedure: ${err.message}`);
-            }
-        }
-
-        // Processing the incoming data
-        try {
-            const payObjects = data.d.results;
-            if (payObjects.length > 0) {
-                let errorMessage = '';
-                for (let i = 0; i < payObjects.length; i++) {
-                    const payObject = payObjects[i];
-                    errorMessage = await saveOneTimePay(payObject);
-
-                    if (errorMessage.length > 0) {
-                        errorMessage = errorMessage || `UserId: ${payObject.cust_userId}, PayComponent: ${payObject.cust_payComponent}`;
-                        response.error.push(errorMessage);
-                        break;
-                    }
-                }
-
-                if (response.error.length === 0) {
-                    return { success: true };
-                } else {
-                    return { error: response.error };
-                }
-            } else {
-                response.error.push('Invalid Payload');
-                return { error: response.error };
-            }
-
-        } catch (err) {
-            response.error.push(`${err.name}: ${err.message}`);
-            return { error: response.error };
-        }
-    });
-
-    /*TEST*/
-    this.on('saveTest', async (req) => {
-        const testval = req.data.val1;
-        console.log(testval);
-        let val2 = testval + " YUP";
-        return val2;
-    });
-
     // Implement the saveAppAvailability action
     this.on('saveAvailability', async (req) => {
 
@@ -1004,10 +84,10 @@ module.exports = cds.service.impl(async function () {
             cust_externalCode: record.cust_externalCode || '',
             cust_userId: record.cust_userId || '',
             cust_payComponent: record.cust_payComponent || '',
-            effectiveStartDate: '2025-01-01',//new Date(record.effectiveStartDate).toISOString().slice(0, 10),  // Format to YYYY-MM-DDTHH:MM:SS
-            cust_startTime: record.cust_startTime || '',
-            cust_endDate: '2025-01-01',//new Date(record.cust_endDate).toISOString().slice(0, 10),  // Format to YYYY-MM-DDTHH:MM:SS
-            cust_endTime: record.cust_endTime || '',
+            effectiveStartDate: formatDate(record.effectiveStartDate), // '2025-01-01',//new Date(record.effectiveStartDate).toISOString().slice(0, 10),  // Format to YYYY-MM-DDTHH:MM:SS
+            cust_startTime: formatTime(record.cust_startTime) || '',
+            cust_endDate: formatDate(record.cust_endDate),//'2025-01-01',//new Date(record.cust_endDate).toISOString().slice(0, 10),  // Format to YYYY-MM-DDTHH:MM:SS
+            cust_endTime: formatTime(record.cust_endTime) || '',
             cust_customString: record.cust_customString || '',
             cust_notes: record.cust_notes || '',
             cust_existingCode: record.cust_existingCode || '',
@@ -1048,10 +128,6 @@ module.exports = cds.service.impl(async function () {
 
         }));
 
-
-
-
-
         // Call the stored procedure or perform the database operations
         const tx = await cds.tx(req);
         let ev_response = '';
@@ -1062,7 +138,6 @@ module.exports = cds.service.impl(async function () {
                 `CALL "GEN_UUID" (?)`,  // Procedure call with output parameter placeholder
                 []  // No input parameters are needed in this case, only output
             );
-            // Call the 'processBooks' action defined in the CDS model
 
             const lv_extid = result.EV_UUID;
 
@@ -1151,7 +226,7 @@ module.exports = cds.service.impl(async function () {
             // Iterate over request flow data and insert directly into the database
             for (const row of it_req_flow) {
 
-                // Perform the insertion logic (mimicking the procedure logic)
+                // Perform the insertion logic
                 await tx.run(`
                         INSERT INTO "COM_STRADA_VP_REQUEST_FLOW"(
                             "ID", "EXTERNALCODE", "REQUESTTYPE", "WORKFLOWSEQUENCE",
@@ -1185,683 +260,723 @@ module.exports = cds.service.impl(async function () {
             return { error: `Error saving availability: ${error.message}` };
         }
 
-        /*
-        try {
-            // Call the stored procedure with the parsed inputs
-            await tx.run(
-                `CALL "SAVE_APP_AVAILABILITY"(?, ?, ?)`,
-                [it_recpay, it_req_flow, ev_response]
-            );
-            await tx.run(
-                `CALL "ADD_REQUESTFLOW"(?, ?, ?)`,
-                ['54CCEDF02982AB351900391A685FEF82', ltt_req_flow, ev_response]
-            );
-
-            // Return success response
-            return { message: "Availability saved successfully." };
-
-        } catch (error) {
-            // Handle errors and return appropriate message
-            return { error: `Error saving availability: ${error.message}` };
-        }*/
     });
 
-
-    /*
-    this.on('saveAvailability', async (req) => {
-        let payload = req.data.results;
-        let formattedRecPay = [];
-
-        console.log("hello: " + JSON.stringify(payload));
-
-        if (payload.length > 0) {
-
-            let formattedReqFlow = [];
-            for (let i = 0; i < payload.length; i++) {
-                const obj = payload[i];
-
-                formattedRecPay.push({
-                    "cust_externalCode": obj.cust_externalCode,
-                    "cust_userId": obj.cust_userId,
-                    "cust_payComponent_id": obj.cust_payComponent,
-                    "effectiveStartDate": obj.effectiveStartDate,
-                    "cust_startTime": obj.cust_startTime,
-                    "cust_endDate": obj.cust_endDate,
-                    "cust_endTime": obj.cust_endTime,
-                    "cust_customString": obj.cust_customString,
-                    "cust_notes": obj.cust_notes,
-                    "cust_existingCode": obj.cust_existingCode,
-                    "status": obj.status,
-                    "lastModified": obj.lastModified,
-                    "createdByUser": obj.createdByUser,
-                    "country_id": obj.country,
-                    "initiatorLanguage": obj.initiatorLanguage,
-                    "cust_payComponent_txt": obj.cust_payComponent_txt,
-                    "delimitIndicator": obj.delimitIndicator.length !== 0 ? parseInt(obj.delimitIndicator, 10) : 0,
-                    "autoApproved": obj.autoApproved,
-                    "createdAt": obj.createdOn,
-                    "createdBy": obj.createdBy,
-                    "cust_dailyWorkSchedule": obj.cust_dailyWorkSchedule,
-                    "cust_dailyWorkScheduleTxt": obj.cust_dailyWorkScheduleTxt,
-                    "cust_dwsGrouping": obj.cust_dwsGrouping,
-                    "cust_dwsGroupingTxt": obj.cust_dwsGroupingTxt,
-                    "cust_wsVariant": obj.cust_wsVariant,
-                    "cust_wsVariantTxt": obj.cust_wsVariantTxt,
-                    "cust_customVar1": obj.cust_customVar1,
-                    "cust_customVar2": obj.cust_customVar2,
-                    "cust_customVar3": obj.cust_customVar3,
-                    "cust_customVar4": obj.cust_customVar4,
-                    "cust_customVar5": obj.cust_customVar5,
-                    "cust_customVar6": obj.cust_customVar6
-                });
-
-            }
-
-            console.log("formattedRecPay: " + JSON.stringify(formattedRecPay));
-            console.log("formattedRecPay length: " + formattedRecPay.length);
-
-            for (let i = 0; i < payload.length; i++) {
-                const item = payload[i];
-                formattedReqFlow.push({
-                    "id": 0,
-                    "externalCode": item.cust_externalCode,
-                    "workflowSequence": parseInt(item.workflowSequence, 10) || 0,
-                    "forwardSequence": parseInt(item.forwardSequence, 10) || 0,
-                    "requestType": item.reqrequestType,
-                    "workflowSequence": parseInt(item.reqworkflowSequence, 10) || 0,
-                    "forwardSequence": parseInt(item.reqforwardSequence, 10) || 0,
-                    "createdOn": item.createdOn ? formatTime(item.createdOn) : new Date().toISOString(),
-                    "status_id": item.reqstatus,
-                    "agent": item.reqagent,
-                    "nextAgent": item.reqnextAgent,
-                    "changedBy": item.reqchangedBy,
-                    "lastModified": item.reqlastModified,
-                    "changedByUser": item.reqchangedByUser,
-                    "notificationAgent": item.reqnotificationAgent,
-                    "workflow_id": item.reqworkflow_id
-                });
-            }
-
-
-            console.log("formattedReqFlow: " + JSON.stringify(formattedReqFlow));
-            console.log("formattedReqFlow length: " + formattedReqFlow.length);
-
-            // Connect to HANA database
-            const db = await cds.connect.to('db');
-
-            // Call the stored procedure with the formatted tables
-            try {
-
-                //const lv_uuid = await cds.tx(req).run('CALL "GEN_UUID"()');
-                const result = await cds.tx(req).run(
-                    `CALL "GEN_UUID" (?)`,  // Procedure call with output parameter placeholder
-                    []  // No input parameters are needed in this case, only output
-                  );
-                // Call the 'processBooks' action defined in the CDS model
-                
-                return result.EV_UUID;
-
-            } catch (err) {
-                console.error('Error calling HANA procedure:', err);
-                return { success: false, error: err.message };  // Return failure response
-            }
-
-
-        }
-
-
-    });
-
-    */
     /**
-     *      Submit_Availability.xsjs
-    
-    this.on('saveAvailability', async (req) => {
-        
-        //const { VP_AVAILABILITY, VP_REQUEST_FLOW } = req.data.results;// Get input data from the request
-
-        let payload = req.data.results;
-
-        console.log("hello: "+ JSON.stringify(VP_AVAILABILITY));
-        console.log("hi: "+JSON.stringify(VP_REQUEST_FLOW));
-       
-
-        try {
-            // Format the date fields for the input records
-           
-           
-            if (payload.length > 0) {
-
-
-
-                let formattedReqFlow = [];
-                let formattedRecPay = [];
-                for (let i = 0; i < payload.length; i++) {
-                    const item = payload[i];
-                    console.log("date? " + item.effectiveStartDate);
-
-                    formattedRecPay.push({
-                        ...item,
-                        "effectiveStartDate": item.effectiveStartDat,//formatDate(item.effectiveStartDate),
-                        "cust_endDate": item.cust_endDate, //formatDate(item.cust_endDate),
-                        "lastModified": new Date(),
-                        "createdOn": item.createdOn ? formatTime(item.createdOn) : new Date().toISOString(),
-                    });
-                
-                }
-
-                for (let i = 0; i < payload.length; i++) {
-                    const item = payload[i];
-                    formattedReqFlow.push({
-                        ...item,
-                        "id": 0,
-                        "externalCode": item.cust_externalCode,
-                        "workflowSequence": parseInt(item.workflowSequence, 10) || 0,
-                        "forwardSequence": parseInt(item.forwardSequence, 10) || 0
-                    });
-                }     
-                
-                console.log("formattedReqFlow: " + JSON.stringify(formattedReqFlow));
-                console.log("formattedReqFlow length: " + formattedReqFlow.length);
-    
-                // Connect to HANA database
-                const db = await cds.connect.to('db');
-    
-                // Call the stored procedure with the formatted tables
-                const result = await db.run(
-                    `CALL SAVE_APP_AVAILABILITY(:it_recpay, :it_req_flow, :ev_response)`,
-                    {
-                        it_recpay: formattedRecPay,
-                        it_req_flow: formattedReqFlow,
-                        ev_response: null
-                    }
-                );
-    
-                // Return the response (ev_response from the procedure)
-                return result[0].EV_RESPONSE;
-
-            } 
-
-
-        } catch (err) {
-            // Handle any errors and return an appropriate response
-            return `Error: ${err.message}`;
-        }
-    }); */
-
-
-    /**
-     *      Reject_Payments.xsjs
+     *      Submit_OneTimePay.xsjs
      */
-    async function rejectPayments(req, obj) {
-        if (obj.reqexternalCode === '') {
-            return 'Invalid Payload';
-        }
-        if (obj.reqcreatedOn.length === 0) {
-            obj.reqcreatedOn = new Date();
-        } else {
-            obj.reqcreatedOn = formatTime(obj.reqcreatedOn);
-        }
-        obj.reqlastModified = new Date();
-
-        const task = {
-            id: 0,
-            externalCode: obj.cust_externalCode,
-            requestType: obj.reqrequestType,
-            workflowSequence: parseInt(obj.reqworkflowSequence, 10) || 0,
-            forwardSequence: parseInt(obj.reqforwardSequence, 10) || 0,
-            createdOn: obj.reqcreatedOn,
-            status: obj.reqstatus,
-            agent: obj.reqagent,
-            nextAgent: obj.reqnextAgent,
-            changedBy: obj.reqchangedBy,
-            lastModified: obj.reqlastModified,
-            changedByUser: obj.reqchangedByUser,
-            notificationAgent: obj.reqnotificationAgent,
-            workflow_id: obj.reqworkflow_id
+    this.on('saveOneTimePay', async (req) => {
+        // Get the incoming payload
+        const { results } = req.data;
+        const response = {
+            message: []
         };
 
-        const additionalInfo = obj.additionalInfo || '';
+        // Function to save one-time payment data
+        async function saveOneTimePay(obj, tx) {
 
-        let procedureResult;
-        if (obj.reqrequestType === 'IT15') {
-            procedureResult = await cds.tx(req).run('CALL "REJECT_ONETIMEPAY"(?, ?)', [obj, task]);
-        } else if (obj.reqrequestType === '2004') {
-            procedureResult = await cds.tx(req).run('CALL "REJECT_AVAILABILITY"(?, ?)', [obj, task]);
-        }
+            obj.effectiveStartDate = formatDate(obj.effectiveStartDate);
+            obj.lastModified = new Date();
+            obj.createdOn = obj.createdOn.length === 0 ? new Date() : formatTime(obj.createdOn);
 
-        return procedureResult.ev_response;
-    }
+            //Generate UUID
+            const uuid = await tx.run(
+                `CALL "GEN_UUID" (?)`,  // Procedure call with output parameter placeholder
+                []  // No input parameters are needed in this case, only output
+            );
 
-    this.on('rejectPayments', async (req) => {
-        const { data } = req; // incoming data from the request body
-        let errorMessage = '';
-        let errors = [];
+            const lv_extid = uuid.EV_UUID;
 
-        if (data.length > 0) {
-            for (const payObject of data) {
-                // Process the payment rejection
-                errorMessage = await rejectPayments(req.context, payObject);
+            // Preparing the records for stored procedure
+            const record = [{
+                "cust_externalCode": lv_extid,
+                "cust_userId": obj.cust_userId,
+                "cust_payComponent": obj.cust_payComponent,
+                "effectiveStartDate": obj.effectiveStartDate,
+                "cust_paycompvalue": obj.cust_paycompvalue.length !== 0 ? parseFloat(obj.cust_paycompvalue) : null,
+                "cust_currencyCode": obj.cust_currencyCode,
+                "cust_calculatedAmount": obj.cust_calculatedAmount.length !== 0 ? parseFloat(obj.cust_calculatedAmount) : null,
+                "cust_customString": obj.cust_customString,
+                "cust_sequenceNumber": parseInt(obj.cust_sequenceNumber, 10) || 0,
+                "cust_number": obj.cust_number.length !== 0 ? parseFloat(obj.cust_number) : null,
+                "cust_unit": obj.cust_unit,
+                "cust_notes": obj.cust_notes,
+                "cust_existingCode": obj.cust_existingCode,
+                "cust_alternativeCostCenter": obj.cust_alternativeCostCenter,
+                "status": obj.status,
+                "lastModified": obj.lastModified,
+                "createdBy": obj.createdBy,
+                "createdOn": obj.createdOn,
+                "autoApproved": obj.autoApproved,
+                "createdByUser": obj.createdByUser,
+                "cust_user": obj.cust_user,
+                "country_id": obj.country,
+                "initiatorLanguage": obj.initiatorLanguage,
+                "cust_alternativeCostCenter_txt": obj.cust_alternativeCostCenter_txt,
+                "cust_unit_txt": obj.cust_unit_txt,
+                "cust_payComponent_txt": obj.cust_payComponent_txt,
+                "specialRecognition": obj.specialRecognition.length !== 0 ? parseInt(obj.specialRecognition, 10) : 0,
+                "delimitIndicator": obj.delimitIndicator.length !== 0 ? parseInt(obj.delimitIndicator, 10) : 0,
+                "displayAmount": obj.displayAmount.length !== 0 ? obj.displayAmount : null
+            }];
 
-                if (errorMessage) {
-                    errorMessage = errorMessage || `, External Code: ${payObject.reqexternalCode}`;
-                    errors.push(errorMessage);
-                    break;
+            const task = [{
+                "id": 0,
+                "externalCode": lv_extid,
+                "requestType": obj.reqrequestType,
+                "workflowSequence": parseInt(obj.reqworkflowSequence, 10) || 0,
+                "forwardSequence": parseInt(obj.reqforwardSequence, 10) || 0,
+                "createdOn": obj.reqcreatedOn.length === 0 ? new Date() : formatTime(obj.reqcreatedOn),
+                "status_id": obj.reqstatus,
+                "agent": obj.reqagent,
+                "nextAgent": obj.reqnextAgent,
+                "changedBy": obj.reqchangedBy,
+                "lastModified": obj.reqlastModified,
+                "changedByUser": obj.reqchangedByUser,
+                "notificationAgent": obj.reqnotificationAgent,
+                "workflow_id": obj.reqworkflow_id
+            }];
+
+
+            try {
+
+
+                // Check for duplicates
+                //Generate UUID
+                const uuid = await tx.run(
+                    `CALL "GEN_UUID" (?)`,  // Procedure call with output parameter placeholder
+                    []  // No input parameters are needed in this case, only output
+                );
+
+                const lv_count = await tx.run(`
+                    SELECT COUNT(*) AS count
+                    FROM "COM_STRADA_VP_ONETIME_PAY"
+                    WHERE "CUST_PAYCOMPONENT_ID" = ?
+                    AND "CUST_USERID" = ?
+                    AND "EFFECTIVESTARTDATE" = ?
+                    AND "CUST_PAYCOMPVALUE" = ?
+                    AND ("STATUS" = 4 OR "STATUS" = 3)
+                `,
+                    [
+                        record[0].cust_payComponent,     // cust_payComponent_id
+                        record[0].cust_userId,           // cust_userId
+                        record[0].effectiveStartDate,    // effectiveStartDate
+                        record[0].cust_paycompvalue     // cust_paycompvalue
+                    ]);
+
+                console.log('Count:', lv_count);
+
+                if (lv_count[0].COUNT !== 0) {
+                    return { message: 'Duplicate record exists for the same start date, pay component, and amount.' };
                 }
+
+                // Insert into VP_ONETIME_PAY
+                const insertOneTimePayQuery = `
+    INSERT INTO "COM_STRADA_VP_ONETIME_PAY"(
+        "ID","CUST_EXTERNALCODE", "CUST_USERID", "CUST_PAYCOMPONENT_ID", "EFFECTIVESTARTDATE", "CUST_PAYCOMPVALUE",
+        "CUST_CURRENCYCODE", "CUST_CUSTOMSTRING", "CUST_SEQUENCENUMBER", "CUST_NUMBER", "CUST_UNIT",
+        "CUST_NOTES", "CUST_EXISTINGCODE", "STATUS", "MODIFIEDAT", "CREATEDBY", "CREATEDAT",
+        "AUTOAPPROVED", "CUST_CALCULATEDAMOUNT", "CREATEDBYUSER", "CUST_USER", "COUNTRY_ID", 
+        "INITIATORLANGUAGE", "CUST_ALTERNATIVECOSTCENTER_TXT", "CUST_UNIT_TXT", "CUST_PAYCOMPONENT_TXT",
+        "CUST_ALTERNATIVECOSTCENTER", "SPECIALRECOGNITION", "DELIMITINDICATOR", "DISPLAYAMOUNT"
+    )
+    VALUES (
+        "LOGGER".NEXTVAL,
+        '${record[0].cust_externalCode}', 
+        '${record[0].cust_userId}', 
+        '${record[0].cust_payComponent}', 
+        '${record[0].effectiveStartDate}', 
+        ${record[0].cust_paycompvalue},
+        '${record[0].cust_currencyCode}', 
+        '${record[0].cust_customString}', 
+        ${record[0].cust_sequenceNumber}, 
+        ${record[0].cust_number}, 
+        '${record[0].cust_unit}',
+        '${record[0].cust_notes}', 
+        '${record[0].cust_existingCode}', 
+        '${record[0].status}', 
+        CURRENT_TIMESTAMP, 
+        '${record[0].createdBy}', 
+        CURRENT_TIMESTAMP, 
+        ${record[0].autoApproved}, 
+        ${record[0].cust_calculatedAmount}, 
+        '${record[0].createdByUser}', 
+        '${record[0].cust_user}', 
+        '${record[0].country_id}', 
+        '${record[0].initiatorLanguage}', 
+        '${record[0].cust_alternativeCostCenter_txt}', 
+        '${record[0].cust_unit_txt}', 
+        '${record[0].cust_payComponent_txt}',
+        '${record[0].cust_alternativeCostCenter}', 
+        ${record[0].specialRecognition}, 
+        ${record[0].delimitIndicator}, 
+        ${record[0].displayAmount}
+    );`;
+
+                await tx.run(insertOneTimePayQuery);
+
+                const insertAuditLogQuery = `
+      INSERT INTO "COM_STRADA_VP_AUDIT_LOG"(
+          "ID", "EXTERNALCODE", "ACTION_ID", "CREATEDAT", "CREATEDBY", "REQUESTTYPE",
+          "ADDITIONALINFO", "CREATEDBYUSER"
+      )
+      VALUES
+      ( "LOGGER".NEXTVAL, ?, 
+              CASE WHEN ? = 1 THEN 2 ELSE 4 END, 
+              CURRENT_TIMESTAMP, ?, 'IT15', '', ?)
+    `;
+
+                // Prepare the values from the `task` array
+                const values = [
+                    task[0].externalCode, // External code
+                    task[0].autoApproved, // autoApproved field (used for the `action_id` case statement)
+                    task[0].createdBy, // Created By
+                    task[0].createdByUser // Created By User
+                ];
+
+                // Execute the query with the parameters inside the transaction
+                await tx.run(insertAuditLogQuery, values);
+
+                // Perform the insertion logic
+                await tx.run(`
+        INSERT INTO "COM_STRADA_VP_REQUEST_FLOW"(
+            "ID", "EXTERNALCODE", "REQUESTTYPE", "WORKFLOWSEQUENCE",
+            "FORWARDSEQUENCE", "CREATEDAT", "STATUS_ID", "AGENT",
+            "NEXTAGENT", "MODIFIEDBY", "MODIFIEDAT", "CREATEDBYUSER",
+            "NOTIFICATIONAGENT", "WORKFLOW_ID"
+        )
+        VALUES ("REQFLOW".NEXTVAL, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?)
+        `, [
+                    task[0].externalCode,
+                    task[0].requestType,
+                    task[0].workflowSequence,
+                    task[0].forwardSequence,
+                    task[0].status_id,
+                    task[0].agent,
+                    task[0].nextAgent,
+                    '',
+                    task[0].createdByUser,
+                    task[0].notificationAgent,
+                    task[0].workflow_id
+                ]);
+
+                tx.commit();
+
+
+                return { message: 'Record successfully inserted into the database: ' };
+
+
+            } catch (err) {
+                tx.rollback();
+                throw new Error(`Error in procedure: ${err.message}`);
             }
-        } else {
-            errors.push('Invalid Payload');
         }
 
-        if (errors.length > 0) {
-            return req.reject(400, errors.join(', '));
-        } else {
-            return { status: 'success' };
-        }
-    });
+        // Call the stored procedure or perform the database operations
+        const tx = await cds.tx(req);
+        let ev_response = '';
 
-
-    /**
-     *      Is_HRADMIN.xsjs
-     */
-    this.on('checkAdmin', async (req) => {
-        const { userID } = req.data;
-        let result = {};
-
+        // Processing the incoming data
         try {
-            if (!userID || userID.length === 0) {
-                // If the userID is empty or invalid, return false and status 400
-                result.isHRAdmin = false;
-                return req.error(400, 'Invalid userID provided');
-            }
+            if (results.length > 0) {
+                let msg = '';
+                for (let i = 0; i < results.length; i++) {
+                    const payObject = results[i];
+                    console.log("payObject: " + JSON.stringify(payObject));
 
-            // Load the connection from CDS context
-            const db = await cds.connect.to('db'); // Make sure db is configured in your CDS service configuration
-            const oProcedure = await cds.tx(req).run('CALL "IS_HRADM"(?, ?)', [userID]);
+                    // Assuming saveOneTimePay returns a message object
+                    msg = await saveOneTimePay(payObject, tx);
 
-            // Check the result from the procedure
-            if (oProcedure.ev_result === 0) {
-                result.isHRAdmin = false;
-            } else {
-                result.isHRAdmin = true;
-            }
+                    // Check if msg contains the success message
+                    if (msg && msg.message) {
+                        // Add additional info
+                        let successMsg = `${msg.message} UserId: ${payObject.cust_userId}, PayComponent: ${payObject.cust_payComponent}`;
+                        response.message.push(successMsg);
+                    }
+                }
 
-            return result;
-
-        } catch (error) {
-            // In case of any error, log it and return the error message
-            result.isHRAdmin = `${error.name} : ${error.message}`;
-            return req.error(400, result.isHRAdmin);
-        }
-    });
-
-    // Helper function to split CSV data
-    String.prototype.splitCSV2 = function (sep) {
-        let foo = this.split(sep || ",");
-        for (let x = foo.length - 1, tl; x >= 0; x--) {
-            if (foo[x].replace(/"\s+$/, '"').charAt(foo[x].length - 1) === '"') {
-                if ((tl = foo[x].replace(/^\s+"/, '"')).length > 1 && tl.charAt(0) === '"') {
-                    foo[x] = foo[x].replace(/^\s*"|"\s*$/g, '').replace(/""/g, '"');
-                } else if (x) {
-                    foo.splice(x - 1, 2, [foo[x - 1], foo[x]].join(sep));
+                if (response.message.length !== 0) {
+                    return { success: response.message };
                 } else {
-                    foo = foo.shift().split(sep).concat(foo);
+                    response.message.push('Payload not posted');
+                    return { error: response.message };
                 }
             } else {
-                foo[x].replace(/""/g, '"');
-            }
-        }
-        return foo;
-    };
-
-
-    /**
-     *      Ins_User_Dtls.xsjs
-     */
-    this.on('uploadUsers', async (req) => {
-        const fileContent = req.data.fileContent;
-        const messages = [];
-        const records = [];
-        const colCount = 14;
-        let rowCount = 0;
-
-        try {
-            // Split the input file content into lines
-            const arrLines = fileContent.split(/\r\n|\n/);
-            rowCount = arrLines.length;
-
-            // Remove any empty trailing line
-            if (arrLines[rowCount - 1] === "") {
-                rowCount -= 1;
+                response.message.push('Invalid Payload');
+                return { error: response.message };
             }
 
-            // Process each line
-            for (let i = 0; i < rowCount; i++) {
-                const line = arrLines[i].splitCSV2(',');
-                if (line.length !== colCount) {
-                    messages.push(`Invalid columns for line: ${i + 1}`);
-                    return req.error(400, messages.join(", "));
-                }
-
-                // Extract columns and map to the record format
-                const col = line.splice(0, colCount);
-                records.push({
-                    userID: col[0],
-                    userName: col[1],
-                    employeeID: col[2],
-                    firstName: col[3],
-                    lastName: col[4],
-                    middleName: col[5],
-                    email: col[6],
-                    custom15: col[7],
-                    defaultLocale: col[8],
-                    status: col[9],
-                    customManager: col[10],
-                    hr: col[11],
-                    manager: col[12],
-                    lastModified: col[13]
-                });
-            }
-
-            // Call stored procedure to insert records
-            const db = await cds.connect.to('db'); // Ensure database connection
-            const result = await cds.tx(req).run('CALL "CREATEUSER"(?)', [records]);
-
-            // Check for errors from the procedure response
-            if (result.et_error && result.et_error.length > 0) {
-                messages.push(result.et_error);
-                return req.error(400, messages.join(", "));
-            } else {
-                messages.push(`Upload successful, ${rowCount} Lines inserted`);
-                return { result: messages };
-            }
         } catch (err) {
-            // Handle any errors during the process
-            messages.push(`Error in line - ${rowCount}: ${err.message}`);
-            return req.error(400, messages.join(", "));
+            response.message.push(`${err.name}: ${err.message}`);
+            return { error: response.message };
         }
     });
+
+    //===========================================
+    //              SCPI SERVICES
+    //===========================================
 
     /**
      *     Ins_EmpJob_Dtls.xsjs
      */
-    this.on('uploadEmployees', async (req) => {
-        const fileContent = req.data.fileContent;
+    this.on('uploadEmpJobCPI', async (req) => {
+        const body = req.data.body;
         const messages = [];
-        const records = [];
+        const empJobs = [];
         const colCount = 4;
-        let rowCount = 0;
 
-        try {
-            // Split the input file content into lines
-            const arrLines = fileContent.split(/\r\n|\n/);
-            rowCount = arrLines.length;
+        // Split the input file content into lines and remove empty lines
+        const arrLines = body.split(/\r\n|\n/).filter(line => line.trim() !== "");
 
-            // Remove any empty trailing line
-            if (arrLines[rowCount - 1] === "") {
-                rowCount -= 1;
+        if (arrLines.length === 0) {
+            return req.error(400, "No valid data in the file.");
+        }
+
+
+
+        // Process each line and validate columns
+        arrLines.forEach((line, index) => {
+            const cols = line.split(','); // Assuming splitCSV is just splitting by commas
+
+            if (cols.length !== colCount) {
+                messages.push(`Invalid columns for line: ${index + 1}`);
+                return;
             }
 
-            // Process each line
-            for (let i = 0; i < rowCount; i++) {
-                const line = arrLines[i].splitCSV2(',');
-                if (line.length !== colCount) {
-                    messages.push(`Invalid columns for line: ${i + 1}`);
-                    return req.error(400, messages.join(", "));
-                }
+            empJobs.push({
+                userID: cols[0],
+                countryOfCompany: cols[1],
+                company: cols[2],
+                lastModified: cols[3]
+            });
+        });
 
-                // Extract columns and map to the record format
-                const col = line.splice(0, colCount);
-                records.push({
-                    userID: col[0],
-                    countryOfCompany: col[1],
-                    company: col[2],
-                    lastModified: col[3]
-                });
-            }
-
-            // Call stored procedure to insert records
-            const db = await cds.connect.to('db'); // Ensure database connection CREATEEMPJOB
-            const result = await cds.tx(req).run('CALL "CREATEEMPJOB"(?)', [records]);
-
-            // Check for errors from the procedure response
-            if (result.et_error && result.et_error.length > 0) {
-                messages.push(result.et_error);
-                return req.error(400, messages.join(", "));
-            } else {
-                messages.push(`Upload successful, ${rowCount} Lines inserted`);
-                return { result: messages };
-            }
-        } catch (err) {
-            // Handle any errors during the process
-            messages.push(`Error in line - ${rowCount}: ${err.message}`);
+        // If there were column validation errors, return the errors
+        if (messages.length > 0) {
             return req.error(400, messages.join(", "));
         }
-    });
 
-    /**
-     *     GetWagetypes.xsjs
-     */
-    this.on('getPayComponents', async (req) => {
-        const { company, infotype, country, initiator, language } = req.data;
+        // Start the transaction
+        const tx = await cds.tx(req);
 
-        const responseArray = [];
-        const payComponentsAvailableInLocalLanguage = {};
-
-        const db = await cds.connect.to('db'); // Ensure you're connected to the database
-
-        // Function to execute the query and process the result
-        const executeQuery = async (query, params) => {
-            const result = await db.run(query, params);
-            return result;
-        };
-
-        // Helper function to build query for 'en_US' data
-        const get_En_Data = async () => {
-            const query = `
-                SELECT 
-                    "currency",
-                    "description",
-                    "infoType",
-                    "isIndEval",
-                    "is_AmountType",
-                    "is_QuotaCompensation",
-                    "is_SpecialRecognitionType",
-                    "payComponent",
-                    "uom",
-                    "wagetype",
-                    "workflow_id",
-                    "language",
-                    "SUB_INFOTYPE",
-                    "delimitIndicator",
-                    "cust_frequency",
-                    "cust_frequency_txt"
-                FROM "CV_ACTIVE_WAGETYPES_TEXT_BasedOnLocale"
-                WHERE "language" = 'en_US' 
-                  AND "is_QuotaCompensation" = 0
-                  AND "SUB_INFOTYPE" = ''
-                  AND "company" = ? 
-                  AND "infotype" = ?
-                  AND "country" = ?
-                  AND "initiator" = ?`;
-
-            const result = await executeQuery(query, [company, infotype, country, initiator]);
-
-            result.forEach(row => {
-                const temp = {
-                    currency: row.currency,
-                    description: row.description,
-                    infoType: row.infoType,
-                    isIndEval: row.isIndEval,
-                    is_AmountType: row.is_AmountType ? parseInt(row.is_AmountType) : null,
-                    is_QuotaCompensation: row.is_QuotaCompensation,
-                    is_SpecialRecognitionType: row.is_SpecialRecognitionType,
-                    payComponent: row.payComponent,
-                    uom: row.uom,
-                    wagetype: row.wagetype,
-                    workflow_id: row.workflow_id,
-                    delimitIndicator: row.delimitIndicator,
-                    cust_frequency: row.cust_frequency,
-                    cust_frequency_txt: row.cust_frequency_txt
-                };
-
-                // Only add unique payComponents to the response
-                if (!payComponentsAvailableInLocalLanguage[temp.payComponent]) {
-                    payComponentsAvailableInLocalLanguage[temp.payComponent] = temp.payComponent;
-                    responseArray.push(temp);
-                }
-            });
-        };
-
-        // Helper function to build query for localized data
-        const get_Local_Data = async (locale) => {
-            const query = `
-                SELECT 
-                    "currency",
-                    "description",
-                    "infoType",
-                    "isIndEval",
-                    "is_AmountType",
-                    "is_QuotaCompensation",
-                    "is_SpecialRecognitionType",
-                    "payComponent",
-                    "uom",
-                    "wagetype",
-                    "workflow_id",
-                    "language",
-                    "SUB_INFOTYPE",
-                    "delimitIndicator",
-                    "cust_frequency",
-                    "cust_frequency_txt"
-                FROM CV_ACTIVE_WAGETYPES_TEXT_BasedOnLocale
-                WHERE "language" = ? 
-                  AND "is_QuotaCompensation" = 0
-                  AND "SUB_INFOTYPE" = ''
-                  AND "company" = ? 
-                  AND "infotype" = ?
-                  AND "country" = ?
-                  AND "initiator" = ?`;
-
-            const result = await executeQuery(query, [locale, company, infotype, country, initiator]);
-
-            result.forEach(row => {
-                const temp = {
-                    currency: row.currency,
-                    description: row.description,
-                    infoType: row.infoType,
-                    isIndEval: row.isIndEval,
-                    is_AmountType: row.is_AmountType ? parseInt(row.is_AmountType) : null,
-                    is_QuotaCompensation: row.is_QuotaCompensation,
-                    is_SpecialRecognitionType: row.is_SpecialRecognitionType,
-                    payComponent: row.payComponent,
-                    uom: row.uom,
-                    wagetype: row.wagetype,
-                    workflow_id: row.workflow_id,
-                    delimitIndicator: row.delimitIndicator,
-                    cust_frequency: row.cust_frequency,
-                    cust_frequency_txt: row.cust_frequency_txt
-                };
-
-                // Only add unique payComponents to the response
-                if (!payComponentsAvailableInLocalLanguage[temp.payComponent]) {
-                    payComponentsAvailableInLocalLanguage[temp.payComponent] = temp.payComponent;
-                    responseArray.push(temp);
-                }
-            });
-        };
-
-        // Main execution logic
         try {
-            if (language === 'en_US') {
-                await get_En_Data();
-                // Get available languages for the country and fetch local data
-                const langQuery = `
-                    SELECT DISTINCT "language"
-                    FROM CV_ACTIVE_WAGETYPES_TEXT_BasedOnLocale
-                    WHERE "language" != 'en_US'
-                      AND "company" = ?
-                      AND "infotype" = ?
-                      AND "country" = ?
-                      AND "initiator" = ?`;
+            // Loop through each empJob and check if the record exists before insert/update
+            for (const empJob of empJobs) {
+                // Check if record already exists by querying for USERID
+                const existingRecord = await tx.run(
+                    SELECT.from('COM_STRADA_VP_EMPJOB').where({ USERID: empJob.userID })
+                );
 
-                const availableLanguages = await executeQuery(langQuery, [company, infotype, country, initiator]);
-
-                if (availableLanguages.length > 0) {
-                    await get_Local_Data(availableLanguages[0].language);
+                if (existingRecord.length === 0) {
+                    // Insert if the record does not exist
+                    const insertQuery = `
+                    INSERT INTO "COM_STRADA_VP_EMPJOB"(
+                        "USERID", "COUNTRYOFCOMPANY", "COMPANY", "MODIFIEDAT"
+                    )
+                    VALUES(?, ?, ?, ?)
+                `;
+                    await tx.run(insertQuery, [
+                        empJob.userID,
+                        empJob.countryOfCompany,
+                        empJob.company,
+                        empJob.lastModified
+                    ]);
+                } else {
+                    // Update if the record exists
+                    const updateQuery = `
+                    UPDATE "COM_STRADA_VP_EMPJOB"
+                    SET "COUNTRYOFCOMPANY" = ?, "COMPANY" = ?, "MODIFIEDAT" = ?
+                    WHERE "USERID" = ?
+                `;
+                    await tx.run(updateQuery, [
+                        empJob.countryOfCompany,
+                        empJob.company,
+                        empJob.lastModified,
+                        empJob.userID
+                    ]);
                 }
-            } else {
-                // If the language is not 'en_US', fetch local and English data
-                await get_Local_Data(language);
-                await get_En_Data();
             }
 
-            return { results: responseArray };
-        } catch (e) {
-            req.error(500, `Error executing query: ${e.message}`);
+            messages.push(`${empJobs.length} lines processed successfully.`);
+            await tx.commit();  // Commit after all records are processed
+        } catch (error) {
+            // In case of error, roll back and return error message
+            await tx.rollback();
+            messages.push(`Error processing records: ${error.message}`);
+            return req.error(400, messages.join('; '));
         }
+
+        return { result: messages };
     });
 
     /**
-     *     Get_WageTypesV1_1.xsjs
+     *     Ins_UserDtls.xsjs
      */
-    const executeQuery = async (company, infotype, country, initiator, subInfoType, language) => {
-        const db = await cds.connect.to('db');  // Connecting to the database (HANA)
-        const query = `
-            SELECT "currency", "description", "infoType", "isIndEval", "is_AmountType",
-                   "is_QuotaCompensation", "is_SpecialRecognitionType", "payComponent", "uom", 
-                   "wagetype", "workflow_id", "language"
-            FROM "CV_ACTIVE_WAGETYPES_TEXT_V1_1"
-            (placeholder."$$IP_COMPANY_CODE$$" => ?, placeholder."$$IP_INFOTYPE$$" => ?, 
-             placeholder."$$IP_COUNTRY$$" => ?, placeholder."$$IP_INITIATOR$$" => ?, 
-             placeholder."$$IP_SUB_INFOTYPE$$" => ?)
-            WHERE "language" = ?`;
+    this.on('uploadUserCPI', async (req) => {
+        const body = req.data.body;
+        const messages = [];
+        const users = [];
+        const colCount = 14;  // Expected column count
 
-        try {
-            const result = await db.run(query, [company, infotype, country, initiator, subInfoType, language]);
-            return result;
-        } catch (err) {
-            console.error("Error executing query:", err);
-            throw new Error("Failed to execute query");
+        // Split the input file content into lines and filter out empty lines
+        const arrLines = body.split(/\r\n|\n/).filter(line => line.trim() !== "");
+
+        if (arrLines.length === 0) {
+            return req.error(400, "No valid data in the file.");
         }
-    };
 
-    // Define the service operation for the PayComponentService
-    this.on('getPayComponentData', async (req) => {
-        const { company, infotype, country, initiator, subInfoType, language } = req.data;
-        let responseArray = [];
+
+        // Process each line and validate columns
+        arrLines.forEach((line, index) => {
+            // Remove any leading/trailing whitespaces from each line
+            const trimmedLine = line.trim();
+
+            // Split the line by commas (CSV format)
+            const cols = trimmedLine.split(',');
+
+            // Check if the number of columns matches the expected count
+            if (cols.length !== colCount) {
+                messages.push(`Invalid columns for line: ${index + 1}`);
+                return;  // Skip processing if column count is incorrect
+            }
+
+            // Push the record to the users array
+            users.push({
+                userID: cols[0],
+                userName: cols[1],
+                employeeID: cols[2],
+                firstName: cols[3],
+                lastName: cols[4],
+                middleName: cols[5],
+                email: cols[6],
+                custom15: cols[7],
+                defaultLocale: cols[8],
+                status: cols[9],
+                customManager: cols[10],
+                hr: cols[11],
+                manager: cols[12],
+                lastModified: cols[13]
+            });
+        });
+
+        // If there were column validation errors, return the errors
+        if (messages.length > 0) {
+            return req.error(400, messages.join(", "));
+        }
+
+        // Start the transaction
+        const tx = await cds.tx(req);
 
         try {
-            // Fetch the data based on the input parameters
-            const results = await executeQuery(company, infotype, country, initiator, subInfoType, language);
-            // Process results to prepare response
-            results.forEach(row => {
-                let temp = {
-                    currency: row.currency,
-                    description: row.description,
-                    infoType: row.infoType,
-                    isIndEval: row.isIndEval,
-                    isAmountType: row.is_AmountType ? parseInt(row.is_AmountType) : null,
-                    isQuotaCompensation: row.is_QuotaCompensation,
-                    isSpecialRecognition: row.is_SpecialRecognitionType,
-                    payComponent: row.payComponent,
-                    uom: row.uom,
-                    wagetype: row.wagetype,
-                    workflow_id: row.workflow_id,
-                    language: row.language
-                };
+            // Loop through each user and check if the record exists before insert/update
+            for (const user of users) {
+                // Check if record already exists by querying for USERID
+                const existingRecord = await tx.run(
+                    SELECT.from('COM_STRADA_VP_USER').where({ userID: user.userID })
+                );
 
-                // Avoid duplicate pay components
-                if (!payComponentsAvailableInLocalLanguage[temp.payComponent]) {
-                    payComponentsAvailableInLocalLanguage[temp.payComponent] = temp.payComponent;
-                    responseArray.push(temp);
+                if (existingRecord.length === 0) {
+                    // Insert if the record does not exist
+                    const insertQuery = `
+                        INSERT INTO "COM_STRADA_VP_USER"(
+                            "USERID", "USERNAME", "EMPLOYEEID", "FIRSTNAME", "LASTNAME", 
+                            "MIDDLENAME", "EMAIL", "CUSTOM15", "DEFAULTLOCALE", "STATUS", 
+                            "CUSTOMMANAGER", "HR", "MANAGER", "MODIFIEDAT"
+                        )
+                        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    `;
+                    await tx.run(insertQuery, [
+                        user.userID,
+                        user.userName,
+                        user.employeeID,
+                        user.firstName,
+                        user.lastName,
+                        user.middleName,
+                        user.email,
+                        user.custom15,
+                        user.defaultLocale,
+                        user.status,
+                        user.customManager,
+                        user.hr,
+                        user.manager,
+                        user.lastModified
+                    ]);
+                } else {
+                    // Update if the record exists
+                    const updateQuery = `
+                        UPDATE "COM_STRADA_VP_USER"
+                        SET "USERNAME" = ?, "EMPLOYEEID" = ?, "FIRSTNAME" = ?, "LASTNAME" = ?, 
+                            "MIDDLENAME" = ?, "EMAIL" = ?, "CUSTOM15" = ?, "DEFAULTLOCALE" = ?, 
+                            "STATUS" = ?, "CUSTOMMANAGER" = ?, "HR" = ?, "MANAGER" = ?, "MODIFIEDAT" = ?
+                        WHERE "USERID" = ?
+                    `;
+                    await tx.run(updateQuery, [
+                        user.userName,
+                        user.employeeID,
+                        user.firstName,
+                        user.lastName,
+                        user.middleName,
+                        user.email,
+                        user.custom15,
+                        user.defaultLocale,
+                        user.status,
+                        user.customManager,
+                        user.hr,
+                        user.manager,
+                        user.lastModified,
+                        user.userID
+                    ]);
                 }
+            }
+
+            messages.push(`${users.length} user records processed successfully.`);
+            await tx.commit();  // Commit after all records are processed
+        } catch (error) {
+            // In case of error, roll back and return error message
+            await tx.rollback();
+            messages.push(`Error processing user records: ${error.message}`);
+            return req.error(400, messages.join('; '));
+        }
+
+        return { result: messages };
+    });
+
+    /**
+ *      Update_Availability_HCILogs.xsjs
+ */
+    this.on('updateAvailabilityCPI', async (req) => {
+        const body = req.data.body;
+        const messages = [];
+        const recs = [];
+        const colCount = 4;  // Expected column count
+
+        // Split the input file content into lines and filter out empty lines
+        const arrLines = body.split(/\r\n|\n/).filter(line => line.trim() !== "");
+
+        if (arrLines.length === 0) {
+            return req.error(400, "No valid data in the file.");
+        }
+
+        // Call the transaction object
+        const tx = await cds.tx(req);
+
+        // Process each line and validate columns
+        for (let index = 0; index < arrLines.length; index++) {
+            const line = arrLines[index].trim();
+
+            // Split the line by commas (CSV format)
+            const cols = line.split(',');
+
+            // Check if the number of columns matches the expected count
+            if (cols.length !== colCount) {
+                messages.push(`Invalid columns for line: ${index + 1}`);
+                continue;  // Skip processing if column count is incorrect
+            }
+
+            // Default values and validation
+            let entries = [];
+            let reqAction;
+
+            // Set default values
+            if (cols[1].length === 0) cols[1] = '2004'; // Default request type
+            if (cols[2].length === 0) cols[2] = 2;  // Default status if empty
+
+            if (cols[0].length === 0) {
+                messages.push(`Missing external code in line: ${index + 1}`);
+                continue;
+            }
+
+            // Query the database if action is 3
+            if (cols[2] == "3") {
+                reqAction = "15"; // Assuming "15" is the required action ID
+
+                // Query the audit log to check for the most recent action
+                const result = await tx.run(
+                    `SELECT * 
+                    FROM "COM_STRADA_VP_AUDIT_LOG"
+                    WHERE "EXTERNALCODE" = ?
+                    ORDER BY "CREATEDAT" DESC
+                    LIMIT 1`,
+                    [cols[0]]
+                );
+
+                // Check if action is 15 (to decide if further processing is needed)
+                if (result.length > 0 && result[0].action_id == 15) {
+                    entries.push(result[0]);
+                }
+            } else {
+                reqAction = "9";  // Completed action
+            }
+
+            // Add the record to be processed (update or insert later)
+            if (entries.length === 0) {
+                recs.push({
+                    externalCode: cols[0],
+                    requestType: cols[1] || '2004',
+                    status: cols[2],
+                    action_id: reqAction,
+                    comments: cols[3] || ''
+                });
+            }
+        }
+
+        // If there were column validation errors, return the errors
+        if (messages.length > 0) {
+            return req.error(400, messages.join(", "));
+        }
+
+        // Perform the database operations (Insert/Update)
+        try {
+            for (const rec of recs) {
+                // Update existing records in the availability table
+                const updateQuery = `
+                    UPDATE "COM_STRADA_VP_AVAILABILITY"
+                    SET "STATUS" = ?, "MODIFIEDAT" = CURRENT_TIMESTAMP
+                    WHERE "CUST_EXTERNALCODE" = ?
+                `;
+                let updateResult = await tx.run(updateQuery, [
+                    rec.status,
+                    rec.externalCode
+                ]);
+
+                if (updateResult) {
+                    // Insert an entry into the audit log if updated
+                    const insertAuditLogQuery = `
+                        INSERT INTO "COM_STRADA_VP_AUDIT_LOG"(
+                            "ID", "EXTERNALCODE", "ACTION_ID", "CREATEDAT", "CREATEDBY", "REQUESTTYPE",
+                            "ADDITIONALINFO", "CREATEDBYUSER"
+                        )
+                        VALUES
+                        ( "LOGGER".NEXTVAL, ?, ?, CURRENT_TIMESTAMP, 'HCI', ?, ?, 'HCI')
+                    `;
+
+                    const values = [
+                        rec.externalCode,  // External code
+                        rec.action_id,
+                        rec.requestType,
+                        rec.comments || ''
+                    ];
+
+                    await tx.run(insertAuditLogQuery, values);
+                }
+            }
+
+            messages.push(`${recs.length} lines processed successfully.`);
+            await tx.commit();  // Commit after all records are processed
+        } catch (error) {
+            // In case of error, rollback and return error message
+            await tx.rollback();
+            messages.push(`Error processing records: ${error.message}`);
+            return req.error(400, messages.join('; '));
+        }
+
+        return { result: messages };
+    });
+
+    this.on('updateOneTimePayCPI', async (req) => {
+        const body = req.data.body;
+        const messages = [];
+        const recs = [];
+        const colCount = 4;  // Expected column count
+
+        // Split the input file content into lines and filter out empty lines
+        const arrLines = body.split(/\r\n|\n/).filter(line => line.trim() !== "");
+
+        if (arrLines.length === 0) {
+            return req.error(400, "No valid data in the file.");
+        }
+
+        // Call the transaction object
+        const tx = await cds.tx(req);
+
+        // Process each line and validate columns
+        for (let index = 0; index < arrLines.length; index++) {
+            const line = arrLines[index].trim();
+
+            // Split the line by commas (CSV format)
+            const cols = line.split(',');
+
+            // Check if the number of columns matches the expected count
+            if (cols.length !== colCount) {
+                messages.push(`Invalid columns for line: ${index + 1}`);
+                continue;  // Skip processing if column count is incorrect
+            }
+
+            // Default values and validation
+            let entries = [];
+            let reqAction = 9; // Default action to "Completed"
+
+            // Set default values
+            if (cols[1].length === 0) cols[1] = 'IT15'; // Default request type is IT15
+            if (cols[2].length === 0) cols[2] = 2;  // Default status if empty
+
+            if (cols[0].length === 0) {
+                messages.push(`Missing external code in line: ${index + 1}`);
+                continue;
+            }
+
+            // Add the record to be processed (update or insert later)
+            recs.push({
+                externalCode: cols[0],
+                requestType: cols[1] || 'IT15',  // IT15 as default request type
+                status: cols[2],
+                action_id: reqAction,
+                comments: cols[3] || ''
             });
 
-            // Return the results in the expected format
-            return { results: responseArray };
-        } catch (err) {
-            req.error(500, `Error fetching data: ${err.message}`);
         }
+
+        // If there were column validation errors, return the errors
+        if (messages.length > 0) {
+            return req.error(400, messages.join(", "));
+        }
+
+        // Perform the database operations (Insert/Update)
+        try {
+            for (const rec of recs) {
+                // Update existing records in the "COM_STRADA_VP_ONETIMEPAY" table
+                const updateQuery = `
+                    UPDATE "COM_STRADA_VP_ONETIME_PAY"
+                    SET "STATUS" = ?, "MODIFIEDAT" = CURRENT_TIMESTAMP
+                    WHERE "CUST_EXTERNALCODE" = ?
+                `;
+                let updateResult = await tx.run(updateQuery, [
+                    rec.status,
+                    rec.externalCode
+                ]);
+
+                if (updateResult) {
+                    // Insert an entry into the audit log if updated
+                    const insertAuditLogQuery = `
+                        INSERT INTO "COM_STRADA_VP_AUDIT_LOG"(
+                            "ID", "EXTERNALCODE", "ACTION_ID", "CREATEDAT", "CREATEDBY", "REQUESTTYPE",
+                            "ADDITIONALINFO", "CREATEDBYUSER"
+                        )
+                        VALUES
+                        ( "LOGGER".NEXTVAL, ?, ?, CURRENT_UTCTIMESTAMP, 'HCI', ?, ?, 'HCI')
+                    `;
+
+                    const values = [
+                        rec.externalCode,  // External code
+                        rec.action_id,
+                        rec.requestType,
+                        rec.comments || ''
+                    ];
+
+                    await tx.run(insertAuditLogQuery, values);
+                }
+            }
+
+            messages.push(`${recs.length} lines processed successfully.`);
+            await tx.commit();  // Commit after all records are processed
+        } catch (error) {
+            // In case of error, rollback and return error message
+            await tx.rollback();
+            messages.push(`Error processing records: ${error.message}`);
+            return req.error(400, messages.join('; '));
+        }
+
+        return { result: messages };
     });
 
 

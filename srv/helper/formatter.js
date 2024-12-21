@@ -1,19 +1,31 @@
 // Function to format a date string into an ISO string
-function formatTime(s_date) {
-    const l_str = s_date.substring(6);
-    const l_parsedate = parseInt(l_str, 10);
-    const d = new Date(l_parsedate);
-    return d.toISOString();
+function formatTime(s_time) {
+    const [hours, minutes, seconds] = s_time.split(':').map(Number);
+    const date = new Date(Date.UTC(1970, 0, 1, hours, minutes, seconds));
+    // If the input is a JavaScript Date object, extract time as HH:mm:ss
+    const shours = String(date.getUTCHours()).padStart(2, '0');
+    const sminutes = String(date.getUTCMinutes()).padStart(2, '0');
+    const sseconds = String(date.getUTCSeconds()).padStart(2, '0');
+
+    return `${shours}:${sminutes}:${sseconds}`;
 }
 
 // Function to format a date string into YYYYMMDD format
-function formatDate(s_date) {
-    console.log("Here2");
-    const l_str = s_date.substring(6);
-    const l_parsedate = parseInt(l_str, 10);
-    const d = new Date(l_parsedate);
-    return d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2);
+function formatDate(jsonDate) {
+    // Extract the numeric timestamp using a regular expression
+    const timestamp = parseInt(jsonDate.match(/\/Date\((\d+)\)\//)[1], 10);
+
+    // Create a JavaScript Date object
+    const date = new Date(timestamp);
+
+    // Use UTC methods to avoid time zone issues
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getUTCDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }
+
 
 function splitCSV(input, sep = ',') {
     let result = input.split(sep);

@@ -1,91 +1,107 @@
 _schema-version: 3.3.0
 ID: variablepay
+description: A simple CAP project.
 version: 1.0.0
-description: "A simple CAP project."
-parameters:
-  enable-parallel-deployments: true
-  deploy_mode: html5-repo
-build-parameters:
-  before-all:
-    - builder: custom
-      commands:
-        - npm ci
-        - npx cds build --production
 modules:
+  # --------------------- SERVER MODULE ------------------------
   - name: variablepay-srv
+    # ------------------------------------------------------------
     type: nodejs
     path: gen/srv
-    parameters:
-      buildpack: nodejs_buildpack
-      readiness-health-check-type: http
-      readiness-health-check-http-endpoint: /health
-    build-parameters:
-      builder: npm
-    provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
-        properties:
-          srv-url: ${default-url}
     requires:
-      - name: variablepay-auth
-      - name: variablepay-db
+      - name: variablepay-xsuaa
+#      - name: variablepay-db
       - name: variablepay-connectivity
       - name: variablepay-destination
       - name: variablepay-logging
-
-  - name: variablepay-db-deployer
-    type: hdb
-    path: gen/db
+      - name: existing-hdi-container
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
     parameters:
       buildpack: nodejs_buildpack
-    requires:
-      - name: variablepay-db
-
+      readiness-health-check-http-endpoint: /health
+      readiness-health-check-type: http
+    build-parameters:
+      builder: npm
+  # -------------------- SIDECAR MODULE ------------------------
+  #- name: variablepay-db-deployer
+    # ------------------------------------------------------------ 
+  #  type: hdb
+  #  path: gen/db
+  #  parameters:
+  #    buildpack: nodejs_buildpack
+  #  requires:
+  #    - name: variablepay-db
+  #    - name: variablepay-xsuaa
+    
   - name: variablepay
     type: approuter.nodejs
     path: app/router
-    parameters:
-      keep-existing-routes: true
-      disk-quota: 256M
-      memory: 256M
     requires:
       - name: srv-api
         group: destinations
         properties:
-          name: srv-api # must be used in xs-app.json as well
-          url: ~{srv-url}
           forwardAuthToken: true
-      - name: variablepay-auth
+          name: srv-api
+          url: ~{srv-url}
+      - name: variablepay-xsuaa
       - name: variablepay-destination
       - name: variablepay-html5-runtime
       - name: variablepay-logging
+    parameters:
+      disk-quota: 256M
+      keep-existing-routes: true
+      memory: 256M
 
   - name: variablepay-app-deployer
     type: com.sap.application.content
-    path: gen
+    path: .
     requires:
       - name: variablepay-html5-repo-host
         parameters:
           content-target: true
     build-parameters:
-      build-result: app/
+      build-result: resources
       requires:
-
-
+        - artifacts:
+            - ngaxtendhrit1415.zip
+          name: ngaxtendhrit1415
+          target-path: resources/
+  - name: ngaxtendhrit1415
+    type: html5
+    path: app/it1415
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
 resources:
-  - name: variablepay-auth
-    type: org.cloudfoundry.managed-service
-    parameters:
-      service: xsuaa
-      service-plan: application
-      path: ./xs-security.json
-      config:
-        xsappname: variablepay-${org}-${space}
-        tenant-mode: dedicated
-  - name: variablepay-db
+  - name: existing-hdi-container
     type: com.sap.xs.hdi-container
     parameters:
-      service: hana
-      service-plan: hdi-shared
+     service-name: varpay-hanadb-qas
+  - name: variablepay-xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        tenant-mode: dedicated
+        xsappname: variablepay-${org}-${space}
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
+#  - name: variablepay-db
+#    type: com.sap.xs.hdi-container
+#    parameters:
+#      service: hana
+#      service-plan: hdi-shared
+#      hdi-name: varpay-hanadb-${space}
   - name: variablepay-connectivity
     type: org.cloudfoundry.managed-service
     parameters:
@@ -94,27 +110,35 @@ resources:
   - name: variablepay-destination
     type: org.cloudfoundry.managed-service
     parameters:
-      service: destination
-      service-plan: lite
       config:
-        HTML5Runtime_enabled: true
+        HTML5Runtime_enabled: false
         init_data:
           instance:
-            existing_destinations_policy: update
             destinations:
-              - Name: variablepay-srv-api
-                URL: ~{srv-api/srv-url}
-                Authentication: NoAuthentication
-                Type: HTTP
+              #              - Authentication: NoAuthentication
+              #                HTML5.DynamicDestination: true
+              #                HTML5.ForwardAuthToken: true
+              #                Name: variablepay-srv-api
+              #                ProxyType: Internet
+              #                Type: HTTP
+              #                URL: ~{srv-api/srv-url}
+              # Updated destination for SFODATA_TECH with Basic Authentication
+              - Authentication: BasicAuthentication
+                Name: SFODATA_TECH
                 ProxyType: Internet
-                HTML5.ForwardAuthToken: true
-                HTML5.DynamicDestination: true
+                Type: HTTP
+                URL: https://api2preview.sapsf.eu
+                Description: "SuccessFactors OData Destination"
+                User: ADMINRBP@solvaysaT6
+                Password: Xtendhr@2025
               - Name: ui5
-                URL: https://ui5.sap.com
                 Authentication: NoAuthentication
-                Type: HTTP
                 ProxyType: Internet
-
+                Type: HTTP
+                URL: https://ui5.sap.com
+            existing_destinations_policy: update
+      service: destination
+      service-plan: lite
   - name: variablepay-html5-repo-host
     type: org.cloudfoundry.managed-service
     parameters:
@@ -130,3 +154,12 @@ resources:
     parameters:
       service: application-logs
       service-plan: standard
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production

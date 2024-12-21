@@ -7,6 +7,9 @@
   "private": true,
   "dependencies": {
     "@cap-js/hana": "^1",
+    "@sap-cloud-sdk/connectivity": "^3.24.0",
+    "@sap-cloud-sdk/core": "^1.54.2",
+    "@sap-cloud-sdk/resilience": "^3.24.0",
     "@sap/cds": "^8",
     "@sap/cds-common-content": "^2.1.0",
     "@sap/hdi-deploy": "^5.3.2",
@@ -17,9 +20,30 @@
   "devDependencies": {
     "@cap-js/cds-types": "^0.7.0",
     "@cap-js/sqlite": "^1",
-    "@sap/cds-dk": "^8"
+    "@sap/cds-dk": "^8",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.29"
   },
   "scripts": {
-    "start": "cds-serve"
+    "start": "cds-serve",
+    "watch-it1415": "cds watch --open it1415/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy variablepay --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/variablepay_1.0.0.mtar --retries 1"
+  },
+  "cds": {
+    "sql": {
+      "native_hana_associations": false
+    },
+    "requires": {
+      "[production]": {
+        "db": {
+          "kind": "hana",
+          "service": "existing-hdi-container"
+        },
+        "auth": "xsuaa"
+      },
+      "html5-repo": true
+    }
   }
 }

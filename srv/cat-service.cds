@@ -89,28 +89,12 @@ service CatalogService {
     //      Funcitons xsjs
     //================================================
     function saveAvailability(results : array of object)                                       returns String;
-    function postLogs(task : object)                                                           returns String;
-    function postApprovePayments(task : object)                                                returns String; // ApprovePayments
-    function postCreateGroupPostman(task : object)                                             returns String; // Create_Group_Postman
-    function posCreateRBPEmployeesPostman(task : object)                                       returns String; // Create_RBP_Employees_Postman
-    function postCreateRBPEmployees(task : object)                                             returns String; // createRBPEmployees
-    function postCreateRBPGroups(task : object)                                                returns String; // CreateRBPGroups
-    function postDeleteRBPGroups(task : object)                                                returns String; // DeleteRBPGroups
-    function postForwardPayments(task : object)                                                returns String; // ForwardPayments
-    function processPayComponents(data : object)                                               returns String;
-    function getPendingApprovalCount(userName : String)                                        returns String;
-    function upsertTimekeepers(task : object)                                                  returns String;
-    function updateOneTimePayHCI(body : String)                                                returns String;
-    function updateAvailabilityHCI(body : String)                                              returns String;
-    function saveOneTimePay(data : object)                                                     returns object;
-    function rejectPayments(data : object)                                                     returns object;
-    function checkAdmin(data : String)                                                         returns String;
-    function uploadUsers(data : object)                                                        returns object;
-    function uploadEmployees(data : object)                                                    returns object;
-    function getPayComponents(data : object)                                                   returns object;
-    function getPayComponentData(data : object)                                                returns object;
-    function saveTest(val1 : String)                                                           returns String;
-    //================================================
+    function saveOneTimePay(results : array of object)                                         returns object;
+    function uploadEmpJobCPI(body : String)                                                    returns String;
+    function uploadUserCPI(body : String)                                                      returns String;
+    function updateAvailabilityCPI(body : String)                                              returns String;
+    function updateOneTimePayCPI(body : String)                                                returns String;
+   //================================================
     //      CV Views
     //================================================
     entity Pending_OneTimePayments    as projection on CV_PENDPOSTING_ONETIME_PAY;
