@@ -10,7 +10,7 @@ modules:
     path: gen/srv
     requires:
       - name: variablepay-xsuaa
-#      - name: variablepay-db
+      #      - name: variablepay-db
       - name: variablepay-connectivity
       - name: variablepay-destination
       - name: variablepay-logging
@@ -25,17 +25,17 @@ modules:
       readiness-health-check-type: http
     build-parameters:
       builder: npm
-  # -------------------- SIDECAR MODULE ------------------------
-  #- name: variablepay-db-deployer
+    # -------------------- SIDECAR MODULE ------------------------
+    #- name: variablepay-db-deployer
     # ------------------------------------------------------------ 
-  #  type: hdb
-  #  path: gen/db
-  #  parameters:
-  #    buildpack: nodejs_buildpack
-  #  requires:
-  #    - name: variablepay-db
-  #    - name: variablepay-xsuaa
-    
+    #  type: hdb
+    #  path: gen/db
+    #  parameters:
+    #    buildpack: nodejs_buildpack
+    #  requires:
+    #    - name: variablepay-db
+    #    - name: variablepay-xsuaa
+
   - name: variablepay
     type: approuter.nodejs
     path: app/router
@@ -82,11 +82,24 @@ modules:
         - npm run build
       supported-platforms:
         []
+
+  - name: variablepay-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+#      - name: variablepay-db
+      - name: existing-hdi-container
+
+
 resources:
   - name: existing-hdi-container
     type: com.sap.xs.hdi-container
     parameters:
-     service-name: varpay-hanadb-qas
+      service-name: varpay-hanadb-qas
+      service: hana
+      service-plan: hdi-shared
   - name: variablepay-xsuaa
     type: org.cloudfoundry.managed-service
     parameters:
@@ -96,12 +109,12 @@ resources:
       path: ./xs-security.json
       service: xsuaa
       service-plan: application
-#  - name: variablepay-db
-#    type: com.sap.xs.hdi-container
-#    parameters:
-#      service: hana
-#      service-plan: hdi-shared
-#      hdi-name: varpay-hanadb-${space}
+  #  - name: variablepay-db
+  #    type: com.sap.xs.hdi-container
+  #    parameters:
+  #      service: hana
+  #      service-plan: hdi-shared
+  #      hdi-name: varpay-hanadb-${space}
   - name: variablepay-connectivity
     type: org.cloudfoundry.managed-service
     parameters:

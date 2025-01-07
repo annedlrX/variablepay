@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_USER_DETAILS" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS">
 <descriptions defaultDescription="CV_USER_DETAILS"/>
-<localVariables>
-  <variable id="IP_USERID" parameter="true">
-    <descriptions defaultDescription="IP_USERID"/>
-    <variableProperties datatype="NVARCHAR" length="128" mandatory="true" defaultValue="">
-      <valueDomain type="empty"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
-</localVariables>
+<localVariables/>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_USER">
@@ -24,7 +16,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes>
       <viewAttribute id="USERID"/>
       <viewAttribute id="USERNAME"/>
@@ -41,9 +33,7 @@
       <viewAttribute id="MANAGER"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_USER"/>
-    <filter>&quot;USERID&quot;='$$IP_USERID$$'</filter>
-  </calculationView>
+    <input node="COM_STRADA_VP_USER"/></calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
       <viewAttribute id="CURRENCY_ID"/>
@@ -52,16 +42,14 @@
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_MAP_CURRENCY_COUNTRY"/>
   </calculationView>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3" filterExpressionLanguage="SQL">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_3">
     <viewAttributes>
       <viewAttribute id="USERID"/>
       <viewAttribute id="COUNTRYOFCOMPANY"/>
       <viewAttribute id="COMPANY"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_EMPJOB"/>
-    <filter>&quot;USERID&quot;='$$IP_USERID$$'</filter>
-  </calculationView>
+    <input node="COM_STRADA_VP_EMPJOB"/></calculationView>
   <calculationView xsi:type="Calculation:JoinView" id="Join_2" joinType="leftOuter">
     <viewAttributes>
       <viewAttribute id="USERID"/>

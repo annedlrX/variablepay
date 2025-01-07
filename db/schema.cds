@@ -181,7 +181,7 @@ context com.strada {
   entity VP_MAP_EMAIL_PARAMETERS {
     key id          : String(16);
     key parameterID : String(5);
-        fieldName   : String(64) not null;
+        fieldName   : String(64) not null;     
   };
 
   entity VP_LOG_ACTION {
@@ -725,18 +725,20 @@ entity CV_PEND_APPROVAL_AVAIL(IP_AGENT : String(100)) {
 }
 
 
-@cds.persistence.exists
-@cds.persistence.calcview
-entity CV_WORKFLOW_ID {
-  key PAYCOMPONENT_ID          : String(255) @title: 'PAYCOMPONENT_ID: PAYCOMPONENT_ID';
-      WORKFLOW_ID              : String(16)  @title: 'WORKFLOW_ID: WORKFLOW_ID';
-      TRIGGERWORKFLOW          : UInt8       @title: 'TRIGGERWORKFLOW: TRIGGERWORKFLOW';
-      SEQUENCE                 : Integer     @title: 'SEQUENCE: SEQUENCE';
-      AGENTROLE                : String(64)  @title: 'AGENTROLE: AGENTROLE';
-      MAXFORWARDS              : Integer     @title: 'MAXFORWARDS: MAXFORWARDS';
-      TRIGGEREMAILNOTIFICATION : UInt8       @title: 'TRIGGEREMAILNOTIFICATION: TRIGGEREMAILNOTIFICATION';
-      NOTIFICATIONAGENT_ROLE   : String(64)  @title: 'NOTIFICATIONAGENT_ROLE: NOTIFICATIONAGENT_ROLE';
-      EMAILTEMPLATE_ID         : String(10)  @title: 'EMAILTEMPLATE_ID: EMAILTEMPLATE_ID';
+@cds.persistence.exists 
+@cds.persistence.calcview 
+Entity CV_WORKFLOW_ID {
+key     PAYCOMPONENT_ID: String(255)  @title: 'PAYCOMPONENT_ID: PAYCOMPONENT_ID' ; 
+        WORKFLOW_ID: String(16)  @title: 'WORKFLOW_ID: WORKFLOW_ID' ; 
+        TRIGGERWORKFLOW: UInt8  @title: 'TRIGGERWORKFLOW: TRIGGERWORKFLOW' ; 
+        SEQUENCE: Integer  @title: 'SEQUENCE: SEQUENCE' ; 
+        AGENTROLE: String(64)  @title: 'AGENTROLE: AGENTROLE' ; 
+        MAXFORWARDS: Integer  @title: 'MAXFORWARDS: MAXFORWARDS' ; 
+        TRIGGEREMAILNOTIFICATION: UInt8  @title: 'TRIGGEREMAILNOTIFICATION: TRIGGEREMAILNOTIFICATION' ; 
+        NOTIFICATIONAGENT_ROLE: String(64)  @title: 'NOTIFICATIONAGENT_ROLE: NOTIFICATIONAGENT_ROLE' ; 
+        EMAILTEMPLATE_ID: String(10)  @title: 'EMAILTEMPLATE_ID: EMAILTEMPLATE_ID' ; 
+        INFOTYPE: String(5)  @title: 'INFOTYPE: INFOTYPE' ; 
+        INITIATORROLE: String(32)  @title: 'INITIATORROLE: INITIATORROLE' ; 
 }
 
 @cds.persistence.exists
@@ -926,7 +928,7 @@ entity CV_FWDUSER_POPULATION(IP_USERID : String(128)) {
 
 @cds.persistence.exists
 @cds.persistence.calcview
-entity CV_USER_DETAILS(IP_USERID : String(128)) {
+entity CV_USER_DETAILS{
   key USERID        : String(128) @title: 'USERID: USERID';
       USERNAME      : String(128) @title: 'USERNAME: USERNAME';
       EMPLOYEEID    : String(128) @title: 'EMPLOYEEID: EMPLOYEEID';

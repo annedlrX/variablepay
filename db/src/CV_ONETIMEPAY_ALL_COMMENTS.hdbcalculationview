@@ -60,7 +60,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_ONETIME_PAY">
-      <mapping xsi:type="Calculation:AttributeMapping" target="CUST_EXTERNALCODE" source="ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="LASTMODIFIED" source="MODIFIEDAT"/>
     </input>
   </calculationView>

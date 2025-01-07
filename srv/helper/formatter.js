@@ -1,3 +1,5 @@
+const axios = require('axios'); // Use Axios if you're dealing with HTTP requests
+
 // Function to format a date string into an ISO string
 function formatTime(s_time) {
     const [hours, minutes, seconds] = s_time.split(':').map(Number);
@@ -38,10 +40,47 @@ function splitCSV(input, sep = ',') {
     return result;
 }
 
+// Retry function to handle temporary issues
+async function retry(fn, retries = 3, delay = 2000) {
+    try {
+        return await fn();  // Try the function
+    } catch (error) {
+        if (retries <= 0) throw error;
+        console.log(`Retrying... ${retries} attempts left.`);
+        await new Promise(resolve => setTimeout(resolve, delay));  // Wait before retrying
+        return retry(fn, retries - 1, delay);
+    }
+}
 
+// Function to format a date string into YYYYMMDD format
+function formatDateNotif(jsonDate) {
+    // Convert the input string (yyyy-mm-dd) into a JavaScript Date object
+    const date = new Date(jsonDate);
+
+    // Check if the date is invalid
+    if (isNaN(date)) {
+        throw new Error("Invalid date format");
+    }
+
+    // Use UTC methods to avoid time zone issues
+    const year = date.getUTCFullYear();
+    const monthIndex = date.getUTCMonth(); // 0-based index for months
+    const day = String(date.getUTCDate()).padStart(2, '0');
+
+    // List of abbreviated month names
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    // Get the abbreviated month name
+    const month = monthNames[monthIndex];
+
+    // Return the formatted date string in "MMM dd yyyy" format
+    return `${month} ${day} ${year}`;
+}
 
 module.exports = {
     formatTime,
     formatDate,
-    splitCSV
+    splitCSV, 
+    retry,
+    formatDateNotif
 };

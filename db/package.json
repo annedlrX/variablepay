@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@sap/hdi-deploy": "^5.3.2"
+    "@sap/hdi-deploy": "^5.3.2",
+    "@sap/hana-client": "^2"
   }
 }

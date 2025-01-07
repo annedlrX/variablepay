@@ -1,0 +1,1126 @@
+{
+ "meta": {
+  "creator": "cds-dk 8.4.0"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "PLTRoleBasedPermissions": {
+   "kind": "service",
+   "@cds.external": true,
+   "@m.IsDefaultEntityContainer": "true"
+  },
+  "PLTRoleBasedPermissions.DGExpression": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Dynamic Group Expression",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "expressionID": {
+     "key": true,
+     "type": "cds.String",
+     "length": 200,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "expressionID",
+     "notNull": true
+    },
+    "operator": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "operator",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DGFieldOperator",
+     "keys": []
+    },
+    "values": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "values",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DGFieldValue",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.RBPRule": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "RBP Rule",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "true",
+   "@sap.deletable": "true",
+   "elements": {
+    "ruleId": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "ruleId",
+     "notNull": true
+    },
+    "accessGroupLevel": {
+     "type": "cds.Integer",
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "accessGroupLevel"
+    },
+    "accessUserType": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "accessUserType"
+    },
+    "excludeSelf": {
+     "type": "cds.Boolean",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "excludeSelf",
+     "notNull": true
+    },
+    "includeSelf": {
+     "type": "cds.Boolean",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "includeSelf"
+    },
+    "myFilter": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "myFilter"
+    },
+    "relationRole": {
+     "type": "cds.String",
+     "length": 20,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "relationRole"
+    },
+    "status": {
+     "type": "cds.Integer",
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "status"
+    },
+    "targetGroupLevel": {
+     "type": "cds.Integer",
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "targetGroupLevel"
+    },
+    "targetUserType": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "targetUserType"
+    },
+    "accessGroups": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "accessGroups",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DynamicGroup",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    },
+    "roles": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "roles",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.RBPRole",
+     "keys": []
+    },
+    "targetGroups": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "targetGroups",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DynamicGroup",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DynamicGroup": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Dynamic Group",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "true",
+   "@sap.deletable": "false",
+   "elements": {
+    "groupID": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "groupID",
+     "notNull": true
+    },
+    "activeMembershipCount": {
+     "type": "cds.Integer",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "false",
+     "@sap.label": "activeMembershipCount"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "createdBy"
+    },
+    "groupName": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "groupName",
+     "notNull": true
+    },
+    "groupType": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "groupType",
+     "notNull": true
+    },
+    "lastModifiedDate": {
+     "type": "cds.Date",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "lastModifiedDate"
+    },
+    "staticGroup": {
+     "type": "cds.Boolean",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "staticGroup",
+     "notNull": true
+    },
+    "totalMemberCount": {
+     "type": "cds.Integer",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "false",
+     "@sap.label": "totalMemberCount"
+    },
+    "userType": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "userType"
+    },
+    "dgExcludePools": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "dgExcludePools",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DGPeoplePool",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    },
+    "dgIncludePools": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "dgIncludePools",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DGPeoplePool",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DGFilter": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Dynamic Group Filter",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "filterId": {
+     "key": true,
+     "type": "cds.String",
+     "length": 200,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "filterId",
+     "notNull": true
+    },
+    "expressions": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "expressions",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DGExpression",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DGPeoplePool": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Dynamic Group People Pool",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "peoplePoolId": {
+     "key": true,
+     "type": "cds.String",
+     "length": 200,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "peoplePoolId",
+     "notNull": true
+    },
+    "filters": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "filters",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DGFilter",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DGFieldValue": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Dynamic Group FieldValue",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "fieldValue": {
+     "key": true,
+     "type": "cds.String",
+     "length": 200,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "fieldValue",
+     "notNull": true
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DynamicGroupDefinition": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Dynamic Group Definition",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "groupID": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "groupID",
+     "notNull": true
+    },
+    "excludedPeoplePool1": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "excludedPeoplePool1"
+    },
+    "excludedPeoplePool2": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "excludedPeoplePool2"
+    },
+    "excludedPeoplePool3": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "excludedPeoplePool3"
+    },
+    "includedPeoplePool1": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "includedPeoplePool1"
+    },
+    "includedPeoplePool2": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "includedPeoplePool2"
+    },
+    "includedPeoplePool3": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "includedPeoplePool3"
+    },
+    "group": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "group",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.DynamicGroup",
+     "keys": []
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.RBPBasicPermission": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "RBP Basic Permission",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "permissionId": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "permissionId",
+     "notNull": true
+    },
+    "permissionLongValue": {
+     "type": "cds.Integer64",
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "permissionLongValue"
+    },
+    "permissionStringValue": {
+     "type": "cds.String",
+     "length": 256,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "permissionStringValue",
+     "notNull": true
+    },
+    "permissionType": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "permissionType",
+     "notNull": true
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DGFieldOperator": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "Dynamic Group FieldOperator",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "false",
+   "@sap.deletable": "false",
+   "elements": {
+    "token": {
+     "key": true,
+     "type": "cds.String",
+     "length": 200,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "true",
+     "@sap.label": "token",
+     "notNull": true
+    },
+    "label": {
+     "type": "cds.String",
+     "length": 200,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "false",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "label",
+     "notNull": true
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.RBPRole": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "@sap.label": "RBP Role",
+   "@sap.creatable": "false",
+   "@sap.updatable": "false",
+   "@sap.upsertable": "true",
+   "@sap.deletable": "true",
+   "elements": {
+    "roleId": {
+     "key": true,
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "roleId",
+     "notNull": true
+    },
+    "lastModifiedBy": {
+     "type": "cds.String",
+     "length": 100,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "lastModifiedBy",
+     "notNull": true
+    },
+    "lastModifiedDate": {
+     "type": "cds.Date",
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.display.format": "Date",
+     "@sap.label": "lastModifiedDate",
+     "notNull": true
+    },
+    "roleDesc": {
+     "type": "cds.String",
+     "length": 4000,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "roleDesc"
+    },
+    "roleName": {
+     "type": "cds.String",
+     "length": 256,
+     "@sap.required": "true",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "roleName",
+     "notNull": true
+    },
+    "userType": {
+     "type": "cds.String",
+     "length": 32,
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "userType"
+    },
+    "permissions": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "permissions",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.RBPBasicPermission",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    },
+    "rules": {
+     "@sap.required": "false",
+     "@sap.creatable": "false",
+     "@sap.updatable": "false",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "true",
+     "@sap.filterable": "true",
+     "@sap.label": "rules",
+     "type": "cds.Association",
+     "target": "PLTRoleBasedPermissions.RBPRule",
+     "cardinality": {
+      "max": "*"
+     },
+     "keys": []
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DynamicGroupBean": {
+   "kind": "type",
+   "@cds.external": true,
+   "elements": {
+    "groupId": {
+     "type": "cds.Integer64",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "groupId"
+    },
+    "groupName": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "groupName"
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.DynamicGroupUserBean": {
+   "kind": "type",
+   "@cds.external": true,
+   "elements": {
+    "firstName": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "firstName"
+    },
+    "lastName": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "lastName"
+    },
+    "middleName": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "middleName"
+    },
+    "personGUID": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "personGUID"
+    },
+    "userId": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "userId"
+    },
+    "userName": {
+     "type": "cds.LargeString",
+     "@sap.required": "false",
+     "@sap.creatable": "true",
+     "@sap.updatable": "true",
+     "@sap.upsertable": "true",
+     "@sap.visible": "true",
+     "@sap.sortable": "false",
+     "@sap.filterable": "false",
+     "@sap.label": "userName"
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.checkUserPermission": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "accessUserId": {
+     "type": "cds.LargeString"
+    },
+    "permType": {
+     "type": "cds.LargeString"
+    },
+    "permStringValue": {
+     "type": "cds.LargeString"
+    },
+    "permLongValue": {
+     "type": "cds.Integer64"
+    },
+    "targetUserId": {
+     "type": "cds.LargeString"
+    },
+    "includeInactiveUser": {
+     "type": "cds.Boolean"
+    },
+    "includeTBHUser": {
+     "type": "cds.Boolean"
+    }
+   },
+   "returns": {
+    "type": "cds.Boolean"
+   }
+  },
+  "PLTRoleBasedPermissions.updateStaticGroup": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "groupId": {
+     "type": "cds.Integer64"
+    },
+    "action": {
+     "type": "cds.LargeString"
+    },
+    "userIds": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "type": "cds.Integer"
+   }
+  },
+  "PLTRoleBasedPermissions.getDynamicGroupsByUser": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "userId": {
+     "type": "cds.LargeString"
+    },
+    "groupSubType": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "items": {
+     "type": "PLTRoleBasedPermissions.DynamicGroupBean"
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.getUsersByDynamicGroup": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "groupId": {
+     "type": "cds.Integer64"
+    },
+    "activeOnly": {
+     "type": "cds.Boolean"
+    }
+   },
+   "returns": {
+    "items": {
+     "type": "PLTRoleBasedPermissions.DynamicGroupUserBean"
+    }
+   }
+  },
+  "PLTRoleBasedPermissions.getUserRolesReport": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "userIds": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "type": "cds.LargeString"
+   }
+  },
+  "PLTRoleBasedPermissions.getPermissionMetadata": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "locale": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "type": "cds.LargeString"
+   }
+  },
+  "PLTRoleBasedPermissions.getUsersPermissions": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "userIds": {
+     "type": "cds.LargeString"
+    },
+    "locale": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "type": "cds.LargeString"
+   }
+  },
+  "PLTRoleBasedPermissions.getRolesPermissions": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "roleIds": {
+     "type": "cds.LargeString"
+    },
+    "locale": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "type": "cds.LargeString"
+   }
+  },
+  "PLTRoleBasedPermissions.checkUserPermissions": {
+   "kind": "action",
+   "@cds.external": true,
+   "returns": {
+    "type": "cds.LargeString"
+   }
+  },
+  "PLTRoleBasedPermissions.getExpandedDynamicGroupByName": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "groupName": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "type": "PLTRoleBasedPermissions.DynamicGroup"
+   }
+  },
+  "PLTRoleBasedPermissions.getExpandedDynamicGroupByNameAndSubType": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "groupName": {
+     "type": "cds.LargeString"
+    },
+    "groupType": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "type": "PLTRoleBasedPermissions.DynamicGroup"
+   }
+  },
+  "PLTRoleBasedPermissions.getExpandedDynamicGroupById": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "groupId": {
+     "type": "cds.Integer64"
+    }
+   },
+   "returns": {
+    "type": "PLTRoleBasedPermissions.DynamicGroup"
+   }
+  },
+  "PLTRoleBasedPermissions.getUserRolesByUserId": {
+   "kind": "function",
+   "@cds.external": true,
+   "params": {
+    "userId": {
+     "type": "cds.LargeString"
+    }
+   },
+   "returns": {
+    "items": {
+     "type": "PLTRoleBasedPermissions.RBPRole"
+    }
+   }
+  }
+ }
+}

@@ -4,14 +4,14 @@
 <localVariables>
   <variable id="IP_INFOTYPE" parameter="true">
     <descriptions defaultDescription="IP_INFOTYPE"/>
-    <variableProperties datatype="NVARCHAR" length="5" mandatory="true" defaultValue="">
+    <variableProperties datatype="NVARCHAR" length="5" mandatory="false" defaultValue="">
       <valueDomain type="empty"/>
       <selection multiLine="false" type="SingleValue"/>
     </variableProperties>
   </variable>
   <variable id="IP_INITIATOR" parameter="true">
     <descriptions defaultDescription="IP_INITIATOR"/>
-    <variableProperties datatype="NVARCHAR" length="32" mandatory="true" defaultValue="">
+    <variableProperties datatype="NVARCHAR" length="32" mandatory="false" defaultValue="">
       <valueDomain type="empty"/>
       <selection multiLine="false" type="SingleValue"/>
     </variableProperties>
@@ -35,7 +35,7 @@
 </dataSources>
 <snapshotProcedures/>
 <calculationViews>
-  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1" filterExpressionLanguage="SQL">
+  <calculationView xsi:type="Calculation:ProjectionView" id="Projection_1">
     <viewAttributes>
       <viewAttribute id="INFOTYPE"/>
       <viewAttribute id="PAYCOMPONENT_ID"/>
@@ -43,9 +43,7 @@
       <viewAttribute id="WORKFLOW_ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
-    <filter>&quot;INFOTYPE&quot;='$$IP_INFOTYPE$$' and &quot;INITIATORROLE&quot;='$$IP_INITIATOR$$' and &quot;PAYCOMPONENT_ID&quot;='$$IP_WAGETYPE$$'</filter>
-  </calculationView>
+    <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/></calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2">
     <viewAttributes>
       <viewAttribute id="ID"/>
@@ -71,12 +69,16 @@
       <viewAttribute id="NOTIFICATIONAGENT_ROLE"/>
       <viewAttribute id="EMAILTEMPLATE_ID"/>
       <viewAttribute id="WORKFLOW_ID"/>
+      <viewAttribute id="INFOTYPE"/>
+      <viewAttribute id="INITIATORROLE"/>
       <viewAttribute hidden="true" id="JOIN$WORKFLOW_ID$ID"/>
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="Projection_1">
       <mapping xsi:type="Calculation:AttributeMapping" target="PAYCOMPONENT_ID" source="PAYCOMPONENT_ID"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="WORKFLOW_ID" source="WORKFLOW_ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INFOTYPE" source="INFOTYPE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="INITIATORROLE" source="INITIATORROLE"/>
       <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$WORKFLOW_ID$ID" source="WORKFLOW_ID"/>
     </input>
     <input node="Projection_2">
@@ -131,6 +133,18 @@
       <descriptions defaultDescription="EMAILTEMPLATE_ID"/>
       <keyMapping columnObjectName="Join_1" columnName="EMAILTEMPLATE_ID"/>
     </attribute>
+  
+    <attribute id="INFOTYPE" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INFOTYPE"/>
+  
+      <keyMapping columnObjectName="Join_1" columnName="INFOTYPE"/>
+  
+    </attribute>
+  
+    <attribute id="INITIATORROLE" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="INITIATORROLE"/>
+      <keyMapping columnObjectName="Join_1" columnName="INITIATORROLE"/>
+    </attribute>
   </attributes>
   <calculatedAttributes/>
   <baseMeasures/>
@@ -144,7 +158,7 @@
     </shape>
     
   
-    <shape expanded="true" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
+    <shape expanded="false" modelObjectName="Projection_1" modelObjectNameSpace="CalculationView">
       <upperLeftCorner x="-65" y="294"/>
       <rectangleSize height="30" width="160"/>
     </shape>

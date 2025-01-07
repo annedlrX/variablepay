@@ -1,0 +1,31 @@
+
+### Define Variables
+@port=46565
+
+### call RBPEmployee
+GET http://localhost:4004/odata/v4/process/RBPEmployee(role='HRADMIN')
+Content-Type: application/json
+
+### call RBPEmployee
+GET http://localhost:4004/odata/v4/process/RBPEmployee(role='HRSITE')
+Content-Type: application/json
+
+### call RBPGroup HRSITE
+GET http://localhost:4004/odata/v4/process/RBPGroup(role='HRSITE')
+Content-Type: application/json
+
+### call RBPGroup HRADMIN
+GET http://localhost:4004/odata/v4/process/RBPGroup(role='HRADMIN')
+Content-Type: application/json
+
+### call RBPEmployee
+GET http://localhost:35805/odata/v4/process/getUsersByDynamicGroup?role=HRSITE
+Content-Type: application/json
+
+### post SCPINotif
+POST http://localhost:35151/odata/v4/process/SCPINotif
+Content-Type: application/json
+
+{
+   "body": "7C0E26F12982AB351900391A685FEF82;IT15;POSTED|EE2626F12982AB351900391A685FEF82;IT15;POSTED"
+}

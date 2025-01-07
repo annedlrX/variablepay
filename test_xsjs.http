@@ -4,12 +4,12 @@
 
 
 ### call VP_WAGETYPE
-GET http://localhost:45159/odata/v4/catalog/VP_WAGETYPE
+GET http://localhost:45143/odata/v4/catalog/VP_WAGETYPE
 Content-Type: application/json
 
 
 ### call VP_WAGETYPE
-POST http://localhost:37769/odata/v4/catalog/saveTest
+POST http://localhost:39203/odata/v4/catalog/saveTest
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### post Availability
-POST http://localhost:41329/odata/v4/catalog/saveAvailability
+POST http://localhost:36649/odata/v4/catalog/saveAvailability
 Content-Type: application/json
 
 {
@@ -86,7 +86,7 @@ Content-Type: application/json
 
 
 ### Post OneTimePay
-POST http://localhost:41087/odata/v4/catalog/saveOneTimePay
+POST http://localhost:45143/odata/v4/catalog/saveOneTimePay
 Content-Type: application/json
 
 {
@@ -137,15 +137,16 @@ Content-Type: application/json
 }
 
 ### Post SCPI EmpJOb
-POST http://localhost:41241/odata/v4/catalog/uploadEmpJob
+POST http://localhost:33611/odata/v4/catalog/uploadEmpJobCPI
 Content-Type: application/json
 
 {
-    "body": "50085035,FRA,1245,2024-09-25T15:12:07.000\n30032145,USA,4290,2024-10-26T14:34:02.000"
+    "body": "50004042,FRA,1245,2023-09-25T15:12:07.000\n50096087,FRA,1245,2022-10-26T14:34:02.000"
 }
 
+
 ### SCPI Upload Users
-POST http://localhost:45351/odata/v4/catalog/uploadUser
+POST http://localhost:45351/odata/v4/catalog/uploadUserCPI
 Content-Type: application/json
 
 {
