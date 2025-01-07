@@ -114,6 +114,28 @@ async function getCurrentUser(userId, entity, tx) {
     }
 }
 
+// Helper function to simulate fetching user details
+async function getCurrentUserDetails(userId, entity, tx) {
+    try {
+        const response = await tx.run(
+            SELECT.from(entity).where({
+                USERID: userId
+            })
+        );
+
+
+        if (response.length > 0) {
+            const obj = response[0];
+            return obj;
+        }
+
+        return null;
+    } catch (error) {
+        console.log('Error fetching data from getCurrentUser:', error);
+        throw error;
+    }
+}
+
 async function processWorkflow(payload, workflowResponse, decision, requestType, userDetails, entity, tx) {
 
     let currentUser = userDetails.userID;
@@ -1085,5 +1107,6 @@ module.exports = {
     saveOneTimePay,
     sendReject,
     sendCompletion,
-    saveAvailability
+    saveAvailability,
+    getCurrentUserDetails
 };

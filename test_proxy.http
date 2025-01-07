@@ -2,6 +2,47 @@
 ### Define Variables
 @port=46565
 
+### call Currency
+GET http://localhost:4004/odata/v4/proxy/Currency
+Content-Type: application/json
+
+### call AltCostCenter
+GET http://localhost:4004/odata/v4/proxy/AltCostCenter
+Content-Type: application/json
+
+### call FOCompany
+GET http://localhost:4004/odata/v4/proxy/FOCompany
+Content-Type: application/json
+
+### call PayGroup
+GET http://localhost:4004/odata/v4/proxy/PayGroup
+Content-Type: application/json
+
+### call isExpat
+GET http://localhost:4004/odata/v4/proxy/isExpat
+Content-Type: application/json
+
+### call UOM
+GET http://localhost:4004/odata/v4/proxy/UOM(locale='en')
+Content-Type: application/json
+
+### call LoggedInUser
+GET http://localhost:4004/odata/v4/proxy/LoggedInUser
+Content-Type: application/json
+
+
+### call MassWTList
+GET http://localhost:4004/odata/v4/proxy/MassWTList(reqType='IT15')
+Content-Type: application/json
+
+### call ApprovalCount
+GET http://localhost:4004/odata/v4/proxy/ApprovalCount
+Content-Type: application/json
+
+### call isHRAdmin
+GET http://localhost:4004/odata/v4/proxy/isHRAdmin
+Content-Type: application/json
+
 ### call RBPEmployee
 GET http://localhost:35805/odata/v4/proxy/getUsersByDynamicGroup?role=HRSITE
 Content-Type: application/json

@@ -88,6 +88,7 @@ context com.strada {
         uom_HRX   : String(32);
         uom_EH    : String(10);
         is_Active : hana.TINYINT;
+        
   };
 
   entity VP_UOM_TEXT {
@@ -95,6 +96,7 @@ context com.strada {
     key locale  : String(5);
         uom_HRX : String(32);
         uom_EH  : String(10);
+        
   };
 
   entity VP_AVAILABILITY : cuid, managed {

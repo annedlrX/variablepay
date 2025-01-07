@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_MASS_WAGETYPES" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" application="BAS" defaultClient="$$client$$">
 <descriptions defaultDescription="CV_MASS_WAGETYPES"/>
-<localVariables>
-  <variable id="IP_INFOTYPE" parameter="true">
-    <descriptions defaultDescription="IP_INFOTYPE"/>
-    <variableProperties datatype="NVARCHAR" length="5" mandatory="true" defaultValue="">
-      <valueDomain type="empty"/>
-      <selection multiLine="false" type="SingleValue"/>
-    </variableProperties>
-  </variable>
-</localVariables>
+<localVariables/>
 <variableMappings/>
 <dataSources>
   <DataSource id="COM_STRADA_VP_WAGETYPE_MAPPING">
@@ -35,10 +27,7 @@
       <viewAttribute id="OPERATOR"/>
     </viewAttributes>
     <calculatedViewAttributes/>
-    <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/>
-  
-    <filter>&quot;INFOTYPE&quot;='$$IP_INFOTYPE$$'</filter>
-  </calculationView>
+    <input node="COM_STRADA_VP_WAGETYPE_MAPPING"/></calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="Projection_2" filterExpressionLanguage="COLUMN_ENGINE">
     <viewAttributes>
       <viewAttribute id="ID"/>
@@ -55,7 +44,6 @@
     </viewAttributes>
     <calculatedViewAttributes/>
     <input node="COM_STRADA_VP_WAGETYPE"/>
-  
     <filter>&quot;IS_ACTIVE&quot;=1 and &quot;STARTDATE&quot; &lt;= format(now(),'YYYYMMDD') and &quot;ENDDATE&quot; &gt;= format(now(),'YYYYMMDD')</filter>
   </calculationView>
   <calculationView xsi:type="Calculation:ProjectionView" id="WT_Texts">

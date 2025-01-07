@@ -67,6 +67,28 @@
             "password": "#Welcome2025!!"
           }
         }
+      },
+      "ECFoundationOrganization": {
+        "kind": "odata-v2",
+        "model": "srv/external/ECFoundationOrganization",
+        "[hybrid]": {
+          "credentials": {
+            "url": "https://api2.successfactors.eu/odata/v2",
+            "username": "ADMINRBP@solvaysaT4",
+            "password": "#Welcome2025!!"
+          }
+        }
+      },
+      "ECEmploymentInformation": {
+        "kind": "odata-v2",
+        "model": "srv/external/ECEmploymentInformation",
+        "[hybrid]": {
+          "credentials": {
+            "url": "https://api2.successfactors.eu/odata/v2",
+            "username": "ADMINRBP@solvaysaT4",
+            "password": "#Welcome2025!!"
+          }
+        }
       }
     }
   }
